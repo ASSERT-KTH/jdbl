@@ -1,0 +1,23 @@
+# Git ignore patterns
+# Author: Maxime Petazzoni <mpetazzoni@turn.com>
+
+# Ignore build output
+/build/*
+/target/*
+/release.properties
+
+# Ignore Javadoc output
+cli/doc/*
+core/doc/*
+
+# Ignore any eventual Eclipse project files, these don't belong in the
+# repository.
+/.classpath
+/.project
+/.settings
+
+# Ignore common editor swap files
+*.swp
+*.bak
+*~
+pom.xml.releaseBackup
