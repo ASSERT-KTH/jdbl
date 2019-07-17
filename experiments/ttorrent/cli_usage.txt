@@ -1,1 +1,0 @@
-java -jar ttorrent-cli-1.6-SNAPSHOT-shaded.jar -o . ubuntu-12.04.5-desktop-amd64.iso.torrent
