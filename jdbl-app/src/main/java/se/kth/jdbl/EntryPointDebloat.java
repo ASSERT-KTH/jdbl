@@ -117,7 +117,7 @@ public class EntryPointDebloat implements Debloat {
         String jacocoClassPath = classesDir.getAbsolutePath() + File.separator + "jacoco";
 
 
-        return jacocoClassPath
+        return jacocoClassPath;
 
     }
 

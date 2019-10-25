@@ -90,6 +90,16 @@
             <artifactId>maven-invoker</artifactId>
             <version>3.0.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-core</artifactId>
+            <version>3.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-project</artifactId>
+            <version>3.0-alpha-2</version>
+        </dependency>
 
         <!-- Utils-->
         <dependency>
@@ -143,17 +153,18 @@
         <dependency>
             <groupId>org.jacoco</groupId>
             <artifactId>org.jacoco.build</artifactId>
-            <version>0.8.4</version>
+            <version>0.8.5</version>
+            <type>pom</type>
         </dependency>
         <dependency>
             <groupId>org.jacoco</groupId>
             <artifactId>org.jacoco.report</artifactId>
-            <version>0.8.4</version>
+            <version>0.8.5</version>
         </dependency>
         <dependency>
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
-            <version>0.8.4</version>
+            <version>0.8.5</version>
         </dependency>
 
 
