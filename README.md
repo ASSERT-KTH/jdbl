@@ -4,27 +4,63 @@
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/teamed/qulice/blob/master/LICENSE.txt)
 
 
-[![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=castor-software_jdbl=alert_status)](https://sonarcloud.io/dashboard?id=castor-software_jdbl)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=castor-software_jdbl&metric=alert_status)](https://sonarcloud.io/dashboard?id=castor-software_jdbl)
+[![Coverage Status](https://coveralls.io/repos/github/castor-software/jdbl/badge.svg?branch=master)](https://coveralls.io/github/castor-software/jdbl?branch=master)
 [![Hits-of-Code](https://hitsofcode.com/github/castor-software/depclean)](https://hitsofcode.com/view/github/castor-software/depclean)
 
 ### What is JDbl?
 
-TODO
+JDbl is a tool for automatically specialize Java applications through dynamic and static debloat at build time. JDbl removes unused classes and methods from Maven projects (including its dependencies), as well as the Java Runtime Environment (JRE). To do so, JDbl collects execution traces by [instrumenting](https://en.wikipedia.org/wiki/Instrumentation_(computer_programming)) and transforming the bytecode on-the-fly during the distinct Maven building phases. JDbl can be used as a Maven plugin or executed out-of-the-box as a standalone Java application.
 
 ### How does it work?
 
-TODO
+JDbl is runs before executing the `package` phase of the Maven build lifecycle. It detects all the types referenced in the project under analysis, as well as in its declared dependencies, at run-time. Then, JDbl removes all the unused class members (i.e. classes and methos), depending on the debloating strategy utilized.
 
+DepClean supports three types of debloating strategies:
+
+- **entry-point debloat:** removes the class members that used after running the application from a given entry-point.
+- **test-based debloat:** removes the class members that are not covered by the test suite.
+- **conservative debloat:** removes the class members that are not referenced by the application, as determined statically.
+
+The **entry-point** strategy is the most aggressive approach. In this case, the bytecode is instrumented during the Maven `compile` phase, probes are inserted in the bytecode and the application is executed in order to collect the execution traces. Then, the class members that were not covered are removed from the bytecode and the transformed application is packaged as a specialized ad debloated JAR file.  
+
+The **test-based** strategy is similar to the **entry-point**, the difference is that the execution traces are collected based on the execution of the test suite of the project.
+
+The **conservative** strategy is the less aggressive approach. It relies on static analysis to construct a call graph of class members calls, which contains all the class members referenced by the application. Then, the members that are not referenced (a.k.a [dead code](https://en.wikipedia.org/wiki/Dead_code)) are removed from the bytecode. This approach is similar to shrinking technique performed by [Proguard](https://www.guardsquare.com/en/products/proguard), with the difference JDbl executed the debloat thorugh the Maven build phases.    
+
+Overall, JDbl produces a smaller, specialized, version of the Java application without modifying its source code. The modified version is automatically packaged as a JAR file as resulting from the Maven build lifecycle.
+ 
 ## Usage
 
-### Prerequisites
+To use JDbl as a Maven plugin, install it from source cloning this repo and running `mvn clean install`. Then, add the plugin to the `pom.xml` of the application to be debloated:
 
-- [Java OpenJDK 8](https://openjdk.java.net) or above
-- [Apache Maven](https://maven.apache.org/)
+```xml
+<plugin>
+    <groupId>se.kth.castor</groupId>
+    <artifactId>jdbl-maven-plugin</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <executions>
+        <execution>
+            <goals>
+                <goal>${strategy}</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin>
+```
 
-### Installing and building from source
+Where the property `${strategy}` can take one of the three debloating strategies supported by JDbl.
 
-ITODO
+
+### Optional parameters
+
+In the case of the **entry-point** strategy, the following additional configuration parameters are should be provided:
+
+| Name   |  Type |   Description      | 
+|:----------|:-------------:| :-------------| 
+| `<entryClass>` | `<String>` | Fully qualified name of the class used as the entry point of the application. **Typical value is:** `Main`./
+| `<entryMethod>` | `<String>` | Fully qualified name of the method in the `<entryClass>` used as the entry point of the application. **Typical value is:** `main`./|
+| `<entryParameters>` | `Set<String>` | Parameters of the `<entryMethod>` used provided. Only string values separated by commas are permitted.|
 
 ## License
 
