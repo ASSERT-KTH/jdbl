@@ -1,0 +1,42 @@
+language: java
+
+sudo: true
+
+os: linux
+
+dist: trusty
+
+jdk: openjdk8
+
+env:
+  global:
+    - M2_HOME="/usr/local/maven"
+  matrix:
+    - SCRIPT=jdbl-app.sh
+    - SCRIPT=jdbl-maven-plugin.sh
+
+before_cache: rm -rf $HOME/.m2/se/kth/castor
+
+cache:
+  directories:
+    - $HOME/.m2
+    - $HOME/.sonar/cache
+
+before_install:
+  - sudo apt-get update
+  - jdk_switcher use openjdk8
+  - java -version
+
+install: true
+
+addons:
+  sonarcloud:
+    organization: "castor-software"
+    token:
+      secure: "d4e78c2445a12545f5a8506438c8a2662ddca091"
+
+script: ./.travis/$SCRIPT
+
+# the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
+after_success:
+  - mvn clean test jacoco:report coveralls:report
