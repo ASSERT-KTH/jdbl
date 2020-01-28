@@ -25,6 +25,7 @@ before_install:
   - sudo apt-get update
   - jdk_switcher use openjdk8
   - java -version
+  - chmod +x ./.travis/jdbl.sh
 
 install: true
 
@@ -32,7 +33,7 @@ addons:
   sonarcloud:
     organization: "castor-software"
     token:
-      secure: "dAjCqWRRe+nYs6GjukVhpaQEAh77+loT1mR9QTLrG+4g1/UWcbp2Qec9K8yGj59p90SAE9msZ1optdeQLHqZsqkK19h/e9cLYCkICVqfIUI0Glmlg3mmevoFezeyqKXLTVU86gIH8mvd29nmCaArewXhnEwKnPCRkRmaqt1FDINwoOlaTZjB8ld6S1CZusj4YHuYHVe/uS3Wf+sTjlVqMOVlP8SapVYKxJH5F3FA/Q9MzMxAl1Ebj4liq0D2C5OIbuQjGLr+nnx5Xsvl0xn657PeVz7BWaWc/E5p9PsCxsAvTQqMAj3R2G+1xMDp9ED1uXvNLEyN5XzCL7+zQY96VwwmizJ7taXZeuVfN5lWjgyLu4ftwhKwJFgzClNKLsVxyWOCqALXpqll3dV0Y2rDhKyvOcgJeLRHnMQUA8tOKGwplfIPmApmG5MPIPqXCxwUozoCUclSQnZJG2qCsdMD6fGtt1C1gDwIYwPVZM8S5LPJJKK7pLbf1EYE0V+5v9WnOrF5lcMZhuVUoWHRhWj6Ex/PkcqwEO7aiwBxEfAB098zLd2euj4K8sZHMLJbPs98C3v09U7p+vDMWQrJNq2E3wVXYLq/61Tf1/6BqGuZYnBbREpEKEGQB/WvKdWj7XHIfkeL9ajDP2n/Xm+7KjUc11dCWjizbA3vgN8ES+Rzxbro="
+      secure: "BdKfqOO+ETtHLzJL1dP8vBoIVZGodzdQZEqVlVIqaC3t0F9M6HDp9ndJ4jzOFczAxw9TMRcKPCIxlDz+H3DLWCgcnN3I49WbgYpBEQ82mVrlA+EqaeXetfYaFE491BwgJu/z4WXjvAeud+LLor28Vm0LvdxlomSZErKbLW2El5pyO9DpofQ40QhwlyP0TW9OneHEkHHpLdK2VxVBUkI9WsnMcIDtFWz0ANpOoGxu7/x6w3bLlh6eprZvCCf7MtK13kFtAoOas/8BLA71lgsZa3uONEFePwiG5dODY0ylgrTev4AdguJ3KYITUIpqK9EWJotH4i/X5aRnIZa5Blje3ICn8QPf/LbLkkCJqLK/W7SQYXXDJ8fjb1mdmJMrI/MaAK++i8t2gM28IVTEk2EEe0CSBEXKap5EKCxo1rI9S7Q5Ia1PSUI/XIueACooRtdpkN5fQ3QjLqbh8KOM1mt0oIeQZXXiXItXLKfHbWqV3jZbap8pFfgnSw2mw5agaXZubW3ls6nk4vrX3BdC+TNU9Tun/EvxVu4WUSTY6Dupsjs1syS/v9VhiGzLaiITH19mWfnIpbm8alZ3n7IucoRQRGG4WFVzgQqF50PwX2B8i/anuw+rTF6HEzG/O7RfFXkKPT9EO2APbtZDuoFxEcDlau4w4Vz7PXiW/7qlMMvdpUI="
 
 script: ./.travis/$SCRIPT
 
