@@ -1,16 +1,24 @@
 package se.kth.castor.jdbl;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import se.kth.castor.jdbl.callgraph.JCallGraphModified;
+import se.kth.castor.jdbl.debloat.AbstractMethodDebloat;
+import se.kth.castor.jdbl.debloat.ConservativeMethodDebloat;
+import se.kth.castor.jdbl.util.FileUtils;
+import se.kth.castor.jdbl.util.JarUtils;
+import se.kth.castor.jdbl.util.MavenUtils;
 
 /**
  * This Maven mojo statically instruments the project and its dependencies in order to remove unused API members.
@@ -18,67 +26,70 @@ import java.util.Set;
 @Mojo(name = "conservative-debloat", defaultPhase = LifecyclePhase.PREPARE_PACKAGE, threadSafe = true)
 public class ConservativeDebloatMojo extends AbstractMojo {
 
-    //--------------------------------/
-    //-------- CLASS FIELD/S --------/
-    //------------------------------/
+   //--------------------------------/
+   //-------- CLASS FIELD/S --------/
+   //------------------------------/
 
-    /**
-     * The maven home file, assuming either an environment variable M2_HOME, or that mvn command exists in PATH.
-     */
-    private static final File mavenHome = new File(System.getenv().get("M2_HOME"));
+   /**
+    * The maven home file, assuming either an environment variable M2_HOME, or that mvn command exists in PATH.
+    */
+   private static final File mavenHome = new File(System.getenv().get("M2_HOME"));
 
-    @Parameter(defaultValue = "${project}", readonly = true)
-    private MavenProject project;
+   @Parameter(defaultValue = "${project}", readonly = true)
+   private MavenProject project;
 
-    //--------------------------------/
-    //------- PUBLIC METHOD/S -------/
-    //------------------------------/
+   //--------------------------------/
+   //------- PUBLIC METHOD/S -------/
+   //------------------------------/
 
-    @Override
-    public void execute() {
+   @Override
+   public void execute() {
 
-        String outputDirectory = project.getBuild().getOutputDirectory();
-        File baseDir = project.getBasedir();
+      String outputDirectory = this.project.getBuild().getOutputDirectory();
+      File baseDir = this.project.getBasedir();
 
-        getLog().info("***** STARTING CONSERVATIVE DEBLOAT *****");
+      this.getLog().info("***** STARTING CONSERVATIVE DEBLOAT *****");
 
-        se.kth.castor.jdbl.util.MavenUtils mavenUtils = new se.kth.castor.jdbl.util.MavenUtils(mavenHome, baseDir);
+      MavenUtils mavenUtils = new MavenUtils(ConservativeDebloatMojo.mavenHome, baseDir);
 
-        // copy the dependencies
-        mavenUtils.copyDependencies(outputDirectory);
+      // copy the dependencies
+      mavenUtils.copyDependencies(outputDirectory);
 
-        // copy the resources
-        mavenUtils.copyResources(outputDirectory);
+      // copy the resources
+      mavenUtils.copyResources(outputDirectory);
 
-        // decompress the copied dependencies
-        se.kth.castor.jdbl.util.JarUtils.decompressJars(outputDirectory);
+      // decompress the copied dependencies
+      JarUtils.decompressJars(outputDirectory);
 
-        se.kth.castor.jdbl.callgraph.JCallGraphModified jCallGraphModified = new se.kth.castor.jdbl.callgraph.JCallGraphModified();
+      JCallGraphModified jCallGraphModified = new JCallGraphModified();
 
-        // run de static usage analysis
-        Map<String, Set<String>> usageAnalysis = jCallGraphModified.runUsageAnalysis(project.getBuild().getOutputDirectory());
-        Set<String> classesUsed = usageAnalysis.keySet();
+      // run de static usage analysis
+      Map<String, Set<String>> usageAnalysis = jCallGraphModified.runUsageAnalysis(this.project.getBuild().getOutputDirectory());
+      Set<String> classesUsed = usageAnalysis.keySet();
 
-        getLog().info("#Total classes: " + usageAnalysis.entrySet().stream().count());
-        getLog().info("#Unused classes: " + usageAnalysis.entrySet().stream().filter(e -> e.getValue() == null).count());
-        getLog().info("#Unused methods: " + usageAnalysis.entrySet().stream().filter(e -> e.getValue() != null).map(Map.Entry::getValue).mapToInt(Set::size).sum());
+      this.getLog().info(String.format("#Total classes: %d",
+         (long) usageAnalysis.entrySet().size()));
+      this.getLog().info(String.format("#Unused classes: %d",
+         usageAnalysis.entrySet().stream().filter(e -> e.getValue() == null).count()));
+      this.getLog().info(String.format("#Unused methods: %d",
+         usageAnalysis.values().stream().filter(Objects::nonNull).mapToInt(Set::size).sum()));
 
-        // delete unused classes
-        se.kth.castor.jdbl.util.FileUtils fileUtils = new se.kth.castor.jdbl.util.FileUtils(outputDirectory, new HashSet<>(), classesUsed);
-        try {
-            fileUtils.deleteUnusedClasses(outputDirectory);
-        } catch (IOException e) {
-            getLog().error("Error deleting unused classes: " + e);
-        }
+      // delete unused classes
+      FileUtils fileUtils = new FileUtils(outputDirectory, new HashSet<>(), classesUsed);
+      try {
+         fileUtils.deleteUnusedClasses(outputDirectory);
+      } catch (IOException e) {
+         this.getLog().error(String.format("Error deleting unused classes: %s", e));
+      }
 
-        // delete unused methods
-        se.kth.castor.jdbl.debloat.AbstractMethodDebloat conservativeMethodDebloat = new se.kth.castor.jdbl.debloat.ConservativeMethodDebloat(outputDirectory, usageAnalysis);
-        try {
-            conservativeMethodDebloat.removeUnusedMethods();
-        } catch (IOException e) {
-            getLog().error("Error: " + e);
-        }
+      // delete unused methods
+      AbstractMethodDebloat conservativeMethodDebloat = new ConservativeMethodDebloat(outputDirectory, usageAnalysis);
+      try {
+         conservativeMethodDebloat.removeUnusedMethods();
+      } catch (IOException e) {
+         this.getLog().error(String.format("Error: %s", e));
+      }
 
-        getLog().info("***** CONSERVATIVE_DEBLOAT SUCCESS *****");
-    }
+      this.getLog().info("***** CONSERVATIVE DEBLOAT SUCCESS *****");
+   }
 }

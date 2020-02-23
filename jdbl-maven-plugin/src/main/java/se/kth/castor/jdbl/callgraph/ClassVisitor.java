@@ -28,12 +28,16 @@
 
 package se.kth.castor.jdbl.callgraph;
 
-import org.apache.bcel.classfile.*;
-import org.apache.bcel.generic.ConstantPoolGen;
-import org.apache.bcel.generic.MethodGen;
-
 import java.util.LinkedList;
 import java.util.List;
+
+import org.apache.bcel.classfile.Constant;
+import org.apache.bcel.classfile.ConstantPool;
+import org.apache.bcel.classfile.EmptyVisitor;
+import org.apache.bcel.classfile.JavaClass;
+import org.apache.bcel.classfile.Method;
+import org.apache.bcel.generic.ConstantPoolGen;
+import org.apache.bcel.generic.MethodGen;
 
 /**
  * The simplest of class visitors, invokes the method visitor class for each
@@ -41,67 +45,68 @@ import java.util.List;
  */
 public class ClassVisitor extends EmptyVisitor {
 
-    //--------------------------------/
-    //-------- CLASS FIELD/S --------/
-    //------------------------------/
+   //--------------------------------/
+   //-------- CLASS FIELD/S --------/
+   //------------------------------/
 
-    private JavaClass clazz;
-    private ConstantPoolGen constants;
-    private String classReferenceFormat;
-    private final DynamicCallManager dynamicCallManager = new DynamicCallManager();
-    private List<String> methodCalls = new LinkedList<>();
+   private JavaClass clazz;
+   private ConstantPoolGen constants;
+   private String classReferenceFormat;
+   private final DynamicCallManager dynamicCallManager = new DynamicCallManager();
+   private List<String> methodCalls = new LinkedList<>();
 
-    //--------------------------------/
-    //-------- CONSTRUCTOR/S --------/
-    //------------------------------/
+   //--------------------------------/
+   //-------- CONSTRUCTOR/S --------/
+   //------------------------------/
 
-    public ClassVisitor(JavaClass jc) {
-        clazz = jc;
-        constants = new ConstantPoolGen(clazz.getConstantPool());
-        classReferenceFormat = "C:" + clazz.getClassName() + " %s";
-    }
+   public ClassVisitor(JavaClass jc) {
+      clazz = jc;
+      constants = new ConstantPoolGen(clazz.getConstantPool());
+      classReferenceFormat = "C:" + clazz.getClassName() + " %s";
+   }
 
-    //--------------------------------/
-    //------- PUBLIC METHOD/S -------/
-    //------------------------------/
+   //--------------------------------/
+   //------- PUBLIC METHOD/S -------/
+   //------------------------------/
 
-    @Override
-    public void visitJavaClass(JavaClass jc) {
-        jc.getConstantPool().accept(this);
-        Method[] methods = jc.getMethods();
-        for (Method method : methods) {
-            dynamicCallManager.retrieveCalls(method, jc);
-            dynamicCallManager.linkCalls(method);
-            method.accept(this);
-        }
-    }
+   @Override
+   public void visitJavaClass(JavaClass jc) {
+      jc.getConstantPool().accept(this);
+      Method[] methods = jc.getMethods();
+      for (Method method : methods) {
+         dynamicCallManager.retrieveCalls(method, jc);
+         dynamicCallManager.linkCalls(method);
+         method.accept(this);
+      }
+   }
 
-    @Override
-    public void visitConstantPool(ConstantPool constantPool) {
-        for (int i = 0; i < constantPool.getLength(); i++) {
-            Constant constant = constantPool.getConstant(i);
-            if (constant == null)
-                continue;
-            if (constant.getTag() == 7) {
-                String referencedClass = constantPool.constantToString(constant);
-//                System.out.println(String.format(classReferenceFormat, referencedClass));
-            }
-        }
-    }
+   @Override
+   public void visitConstantPool(ConstantPool constantPool) {
+      for (int i = 0; i < constantPool.getLength(); i++) {
+         Constant constant = constantPool.getConstant(i);
+          if (constant == null) {
+              continue;
+          }
+         if (constant.getTag() == 7) {
+            String referencedClass = constantPool.constantToString(constant);
+            //                System.out.println(String.format(classReferenceFormat, referencedClass));
+         }
+      }
+   }
 
-    @Override
-    public void visitMethod(Method method) {
-        MethodGen mg = new MethodGen(method, clazz.getClassName(), constants);
-        MethodVisitor visitor = new MethodVisitor(mg, clazz);
-        methodCalls.addAll(visitor.start());
-    }
+   @Override
+   public void visitMethod(Method method) {
+      MethodGen mg = new MethodGen(method, clazz.getClassName(), constants);
+      MethodVisitor visitor = new MethodVisitor(mg, clazz);
+      methodCalls.addAll(visitor.start());
+   }
 
-    public ClassVisitor start() {
-        visitJavaClass(clazz);
-        return this;
-    }
+   public ClassVisitor start() {
+      visitJavaClass(clazz);
+      return this;
+   }
 
-    public List<String> methodCalls() {
-        return this.methodCalls;
-    }
+   public List<String> methodCalls() {
+      return this.methodCalls;
+   }
 }

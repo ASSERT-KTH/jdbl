@@ -5,6 +5,6 @@ mvn clean
 mvn -q install -DskipTests=true
 
 echo "----- RUNNING THE EXPERIMENTS ON dummy-project -----"
-cd experiments/clitools
+cd src/it/dummy-project
 mvn clean
-mvn -q package -DskipTests=true
+mvn package

@@ -1,0 +1,10 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+dummy-project,org.apache.commons.collections4.collection,AbstractCollectionDecorator,80,0,2,0,7,0,19,0,18,0
+dummy-project,org.apache.commons.collections4.set,UnmodifiableSet,44,0,2,0,6,0,10,0,9,0
+dummy-project,org.apache.commons.collections4.set,AbstractSerializableSetDecorator,12,0,0,0,2,0,3,0,3,0
+dummy-project,org.apache.commons.collections4.set,AbstractSetDecorator,20,0,0,0,3,0,5,0,5,0
+dummy-project,bag,BagClass,37,0,0,0,8,0,2,0,2,0
+dummy-project,calc,Calculator,23,0,0,0,5,0,4,0,4,0
+dummy-project,org.apache.commons.collections4.bag,AbstractMapBag,158,0,6,0,17,0,30,0,27,0
+dummy-project,org.apache.commons.collections4.bag,AbstractMapBag.MutableInteger,14,0,0,0,3,0,3,0,3,0
+dummy-project,org.apache.commons.collections4.bag,HashBag,18,0,0,0,2,0,4,0,4,0

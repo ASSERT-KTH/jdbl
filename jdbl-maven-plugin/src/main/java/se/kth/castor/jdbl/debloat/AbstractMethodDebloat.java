@@ -30,9 +30,9 @@ public abstract class AbstractMethodDebloat {
      * Iterate through the used classes and replace the body of methods with an exception.
      */
     public void removeUnusedMethods() throws IOException {
-        for (Map.Entry<String, Set<String>> entry : usageAnalysis.entrySet()) {
+        for (Map.Entry<String, Set<String>> entry : this.usageAnalysis.entrySet()) {
             if (entry.getValue() != null) {
-                removeMethod(entry.getKey().replace(".", "/"), entry.getValue());
+                this.removeMethod(entry.getKey().replace(".", "/"), entry.getValue());
             }
         }
     }

@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite tests="120" failures="0" name="com.google.gson.stream.JsonReaderTest" time="0.034" errors="0" skipped="0">
+  <properties>
+    <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
+    <property name="java.vm.version" value="13.0.2+8"/>
+    <property name="sun.boot.library.path" value="/usr/lib/jvm/java-13-oracle/lib"/>
+    <property name="maven.multiModuleProjectDirectory" value="/home/cesarsv/Documents/papers/2020_papers/jdbl/jdbl-maven-plugin/src/it/gson"/>
+    <property name="java.vm.vendor" value="Oracle Corporation"/>
+    <property name="java.vendor.url" value="https://java.oracle.com/"/>
+    <property name="guice.disable.misplaced.annotation.check" value="true"/>
+    <property name="path.separator" value=":"/>
+    <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM"/>
+    <property name="user.country" value="US"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="user.dir" value="/home/cesarsv/Documents/papers/2020_papers/jdbl/jdbl-maven-plugin/src/it/gson"/>
+    <property name="java.vm.compressedOopsMode" value="Zero based"/>
+    <property name="java.runtime.version" value="13.0.2+8"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.io.tmpdir" value="/tmp"/>
+    <property name="line.separator" value="
+"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="os.name" value="Linux"/>
+    <property name="classworlds.conf" value="/usr/share/maven/bin/m2.conf"/>
+    <property name="sun.jnu.encoding" value="UTF-8"/>
+    <property name="java.library.path" value="/usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib"/>
+    <property name="maven.conf" value="/usr/share/maven/conf"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="java.class.version" value="57.0"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="os.version" value="5.5.3-050503-generic"/>
+    <property name="library.jansi.path" value="/usr/share/maven/lib/jansi-native"/>
+    <property name="user.home" value="/home/cesarsv"/>
+    <property name="user.timezone" value="Europe/Stockholm"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="java.specification.version" value="13"/>
+    <property name="user.name" value="cesarsv"/>
+    <property name="java.class.path" value="/usr/share/maven/boot/plexus-classworlds-2.x.jar"/>
+    <property name="java.vm.specification.version" value="13"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher package"/>
+    <property name="java.home" value="/usr/lib/jvm/java-13-oracle"/>
+    <property name="user.language" value="en"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.vm.info" value="mixed mode, sharing"/>
+    <property name="java.version" value="13.0.2"/>
+    <property name="securerandom.source" value="file:/dev/./urandom"/>
+    <property name="java.vendor" value="Oracle Corporation"/>
+    <property name="maven.home" value="/usr/share/maven"/>
+    <property name="file.separator" value="/"/>
+    <property name="java.version.date" value="2020-01-14"/>
+    <property name="java.vendor.url.bug" value="https://bugreport.java.com/bugreport/"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="sun.cpu.endian" value="little"/>
+  </properties>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testIntegerMismatchFailuresDoNotAdvance" time="0.001"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testTopLevelValueTypeWithSkipValue" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testVeryLongUnquotedLiteral" time="0.001"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testStrictCommentsWithSkipValue" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testStrictVeryLongNumber" time="0.001"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testStrictMultipleTopLevelValues" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testUnescapingTruncatedSequence" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testLenientMultipleTopLevelValues" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testStrictSemicolonDelimitedNameValuePairWithSkipValue" time="0.001"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testSkipVeryLongUnquotedString" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testLenientSingleQuotedStrings" time="0.001"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testBooleans" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testSkipArray" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testBomIgnoredAsFirstCharacterOfDocument" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testUnterminatedStringFailure" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testDeeplyNestedArrays" time="0.001"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testBomForbiddenAsOtherCharacterInDocument" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testReadEmptyArray" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testStrictNonFiniteDoublesWithSkipValue" time="0.001"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testReadObject" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testPrematureEndOfInput" time="0.001"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testNullLiteralIsNotAString" time="0.001"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testLongs" time="0.004"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testNulls" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testPeekingUnquotedStringsPrefixedWithBooleans" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testMixedCaseLiterals" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testLenientNonExecutePrefixWithLeadingWhitespace" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testLongLargerThanMaxLongThatWrapsAround" time="0.001"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testFailWithPosition" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testStrictUnquotedStringsWithSkipValue" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testStrictNameValueSeparatorWithSkipValue" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testStrictMultipleTopLevelValuesWithSkipValue" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testLenientSemicolonDelimitedArray" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testSkipDouble" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testLenientUnquotedNames" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testMalformedNumbers" time="0.001"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testLenientSingleQuotedNames" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testSkipObject" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testLenientExtraCommasInMaps" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testTopLevelValueTypes" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testPeekLongMinValue" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testStringWithLeadingSlash" time="0.001"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testUnescapingInvalidCharacters" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testPeekMuchLargerThanLongMinValue" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testStringNullIsNotNull" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testCommentsInStringValue" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testStringAsNumberWithDigitAndNonDigitExponent" time="0.001"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testSkipObjectAfterPeek" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testEmptyStringName" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testReadArray" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testFailWithPositionOverUnquotedString" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testLenientPartialNonExecutePrefix" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testFailWithPositionOverSlashSlashEndOfLineComment" time="0.001"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testStringAsNumberWithNonDigitExponent" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testStrictUnnecessaryArraySeparatorsWithSkipValue" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testStringAsNumberWithTruncatedExponent" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testSkipInteger" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testStrictSemicolonDelimitedArrayWithSkipValue" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testFailWithPositionGreaterThanBufferSize" time="0.001"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testSkipTopLevelQuotedString" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testMissingValue" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testUnterminatedObject" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testVeryLongQuotedString" time="0.002"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testFailWithPositionDeepPath" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testStrictSingleQuotedNames" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testLenientUnquotedStrings" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testStrictSingleQuotedNamesWithSkipValue" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testStrictUnnecessaryArraySeparators" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testVeryLongUnquotedString" time="0.002"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testStrictExtraCommasInMaps" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testSkipArrayAfterPeek" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testDeeplyNestedObjects" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testLenientNonExecutePrefix" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testLenientUnnecessaryArraySeparators" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testCharacterUnescaping" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testNextFailuresDoNotAdvance" time="0.001"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testLongLargerThanMinLongThatWrapsAround" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testReadEmptyObject" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testMalformedDocuments" time="0.001"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testUnescapingTruncatedCharacters" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testLenientSemicolonDelimitedNameValuePair" time="0.001"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testSkipTopLevelObject" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testEmptyString" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testStrictSemicolonDelimitedArray" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testStrictSemicolonDelimitedNameValuePair" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testStrictSingleQuotedStringsWithSkipValue" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testDocumentWithCommentEndingInSlash" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testIntegersWithFractionalPartSpecified" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testStrictNonExecutePrefixWithSkipValue" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testLenientNonFiniteDoubles" time="0.001"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testStrictUnquotedStrings" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testFailWithEscapedNewlineCharacter" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testSkipVeryLongQuotedString" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testLenientVeryLongNumber" time="0.001"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testPeekLongMaxValue" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testStrictComments" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testStringEndingInSlash" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testStrictUnquotedNamesWithSkipValue" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testQuotedNumberWithEscape" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testPrematurelyClosed" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testSkipTopLevelUnquotedString" time="0.001"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testStrictNonExecutePrefix" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testInvalidJsonInput" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testVeryLongUnterminatedString" time="0.003"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testNegativeZero" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testDoubles" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testStrictNameValueSeparator" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testFailWithPositionOverQuotedString" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testStrictUnquotedNames" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testLenientComments" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testPeekingUnquotedStringsPrefixedWithIntegers" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testFailWithPositionOverCStyleComment" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testStrictSingleQuotedStrings" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testFailWithPositionOverHashEndOfLineComment" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testStrictQuotedNonFiniteDoubles" time="0.002"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testLenientQuotedNonFiniteDoubles" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testFailWithPositionIsOffsetByBom" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testHelloWorld" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testLenientNameValueSeparator" time="0"/>
+  <testcase classname="com.google.gson.stream.JsonReaderTest" name="testStrictNonFiniteDoubles" time="0"/>
+</testsuite>

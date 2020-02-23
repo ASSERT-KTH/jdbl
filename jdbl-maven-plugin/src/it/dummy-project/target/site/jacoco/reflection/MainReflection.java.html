@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MainReflection.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">dummy-project</a> &gt; <a href="index.source.html" class="el_package">reflection</a> &gt; <span class="el_source">MainReflection.java</span></div><h1>MainReflection.java</h1><pre class="source lang-java linenums">package reflection;
+
+import java.lang.reflect.*;
+import java.util.Arrays;
+
+<span class="nc" id="L6">public class MainReflection {</span>
+
+    public static void main(String[] args) throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
+
+        // Get Class using reflection
+<span class="nc" id="L11">        Class&lt;?&gt; concreteClass = ConcreteClass.class;</span>
+<span class="nc" id="L12">        concreteClass = new ConcreteClass().getClass();</span>
+
+
+        /*Get Class Object*/
+        try {
+            // below method is used most of the times in frameworks like JUnit
+            //Spring dependency injection, Tomcat web container
+            //Eclipse auto completion of method names, hibernate, Struts2 etc.
+            //because ConcreteClass is not available at compile time
+<span class="nc" id="L21">            concreteClass = Class.forName(&quot;reflection.ConcreteClass&quot;);</span>
+<span class="nc" id="L22">        } catch (ClassNotFoundException e) {</span>
+<span class="nc" id="L23">            e.printStackTrace();</span>
+<span class="nc" id="L24">        }</span>
+<span class="nc" id="L25">        System.out.println(concreteClass.getCanonicalName()); // prints com.journaldev.reflection.ConcreteClass</span>
+
+        // for primitive types, wrapper classes and arrays
+<span class="nc" id="L28">        Class&lt;?&gt; booleanClass = boolean.class;</span>
+
+<span class="nc" id="L30">        System.out.println(booleanClass.getCanonicalName()); // prints boolean</span>
+
+<span class="nc" id="L32">        Class&lt;?&gt; cDouble = Double.TYPE;</span>
+<span class="nc" id="L33">        System.out.println(cDouble.getCanonicalName()); // prints double</span>
+
+<span class="nc" id="L35">        Class&lt;?&gt; cDoubleArray = Class.forName(&quot;[D&quot;);</span>
+<span class="nc" id="L36">        System.out.println(cDoubleArray.getCanonicalName()); //prints double[]</span>
+
+<span class="nc" id="L38">        Class&lt;?&gt; twoDStringArray = String[][].class;</span>
+<span class="nc" id="L39">        System.out.println(twoDStringArray.getCanonicalName()); // prints java.lang.String[][]</span>
+
+
+        /*Get Super Class*/
+<span class="nc" id="L43">        Class&lt;?&gt; superClass = Class.forName(&quot;reflection.ConcreteClass&quot;).getSuperclass();</span>
+<span class="nc" id="L44">        System.out.println(superClass); // prints &quot;class com.journaldev.reflection.BaseClass&quot;</span>
+<span class="nc" id="L45">        System.out.println(Object.class.getSuperclass()); // prints &quot;null&quot;</span>
+<span class="nc" id="L46">        System.out.println(String[][].class.getSuperclass());// prints &quot;class java.lang.Object&quot;</span>
+
+
+        /*Get Public Member Classes*/
+<span class="nc" id="L50">        Class&lt;?&gt;[] classes = concreteClass.getClasses();</span>
+        //[class com.journaldev.reflection.ConcreteClass$ConcreteClassPublicClass,
+        //class com.journaldev.reflection.ConcreteClass$ConcreteClassPublicEnum,
+        //interface com.journaldev.reflection.ConcreteClass$ConcreteClassPublicInterface,
+        //class com.journaldev.reflection.BaseClass$BaseClassInnerClass,
+        //class com.journaldev.reflection.BaseClass$BaseClassMemberEnum]
+<span class="nc" id="L56">        System.out.println(Arrays.toString(classes));</span>
+
+
+        /*Get Declaring Class*/
+<span class="nc" id="L60">        Class&lt;?&gt; innerClass = Class.forName(&quot;reflection.ConcreteClass$ConcreteClassDefaultClass&quot;);</span>
+        //prints com.journaldev.reflection.ConcreteClass
+<span class="nc" id="L62">        System.out.println(innerClass.getDeclaringClass().getCanonicalName());</span>
+<span class="nc" id="L63">        System.out.println(innerClass.getEnclosingClass().getCanonicalName());</span>
+
+
+        /*Get Package Name*/
+        //prints &quot;com.journaldev.reflection&quot;
+<span class="nc" id="L68">        System.out.println(Class.forName(&quot;reflection.BaseInterface&quot;).getPackage().getName());</span>
+
+
+        /*Get Class Modifiers*/
+<span class="nc" id="L72">        System.out.println(Modifier.toString(concreteClass.getModifiers())); //prints &quot;public&quot;</span>
+        //prints &quot;public abstract interface&quot;
+<span class="nc" id="L74">        System.out.println(Modifier.toString(Class.forName(&quot;reflection.BaseInterface&quot;).getModifiers()));</span>
+
+
+
+        /*Get Type Parameters*/
+        //Get Type parameters (generics)
+<span class="nc" id="L80">        TypeVariable&lt;?&gt;[] typeParameters = Class.forName(&quot;java.util.HashMap&quot;).getTypeParameters();</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">        for (TypeVariable&lt;?&gt; t : typeParameters)</span>
+<span class="nc" id="L82">            System.out.print(t.getName() + &quot;,&quot;);</span>
+
+
+        /*Get Implemented Interfaces*/
+<span class="nc" id="L86">        Type[] interfaces = Class.forName(&quot;java.util.HashMap&quot;).getGenericInterfaces();</span>
+        //prints &quot;[java.util.Map&lt;K, V&gt;, interface java.lang.Cloneable, interface java.io.Serializable]&quot;
+<span class="nc" id="L88">        System.out.println(Arrays.toString(interfaces));</span>
+        //prints &quot;[interface java.util.Map, interface java.lang.Cloneable, interface java.io.Serializable]&quot;
+<span class="nc" id="L90">        System.out.println(Arrays.toString(Class.forName(&quot;java.util.HashMap&quot;).getInterfaces()));</span>
+
+
+        /*Get All Public Methods*/
+<span class="nc" id="L94">        Method[] publicMethods = Class.forName(&quot;reflection.ConcreteClass&quot;).getMethods();</span>
+        //prints public methods of ConcreteClass, BaseClass, Object
+<span class="nc" id="L96">        System.out.println(Arrays.toString(publicMethods));</span>
+
+
+        /*Get All Public Constructors*/
+        //Get All public constructors
+<span class="nc" id="L101">        Constructor&lt;?&gt;[] publicConstructors = Class.forName(&quot;reflection.ConcreteClass&quot;).getConstructors();</span>
+        //prints public constructors of ConcreteClass
+<span class="nc" id="L103">        System.out.println(Arrays.toString(publicConstructors));</span>
+
+        /*Get All Public Fields*/
+        //Get All public fields
+<span class="nc" id="L107">        Field[] publicFields = Class.forName(&quot;reflection.ConcreteClass&quot;).getFields();</span>
+        //prints public fields of ConcreteClass, it's superclass and super interfaces
+<span class="nc" id="L109">        System.out.println(Arrays.toString(publicFields));</span>
+
+        /*Get/Set Private Field Value*/
+<span class="nc" id="L112">        Field privateField = Class.forName(&quot;reflection.ConcreteClass&quot;).getDeclaredField(&quot;privateString&quot;);</span>
+        //turning off access check with below method call
+<span class="nc" id="L114">        privateField.setAccessible(true);</span>
+<span class="nc" id="L115">        ConcreteClass objTest = new ConcreteClass();</span>
+<span class="nc" id="L116">        System.out.println(privateField.get(objTest)); // prints &quot;private string&quot;</span>
+<span class="nc" id="L117">        privateField.set(objTest, &quot;private string updated&quot;);</span>
+<span class="nc" id="L118">        System.out.println(privateField.get(objTest)); //prints &quot;private string updated&quot;</span>
+<span class="nc" id="L119">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

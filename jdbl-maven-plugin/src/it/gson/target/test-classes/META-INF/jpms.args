@@ -1,0 +1,4 @@
+--patch-module
+com.google.gson=_
+--add-reads
+com.google.gson=ALL-UNNAMED
