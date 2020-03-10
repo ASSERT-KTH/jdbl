@@ -19,15 +19,15 @@ JDbl runs before executing the `package` phase of the Maven build lifecycle. It 
 
 DepClean supports three types of debloating strategies:
 
-- **entry-point debloat:** removes the class members that used after running the application from a given entry-point.
-- **test-based debloat:** removes the class members that are not covered by the test suite.
-- **conservative debloat:** removes the class members that are not referenced by the application, as determined statically.
+- **entry-point-debloat:** removes the class members that used after running the application from a given entry-point.
+- **test-based-debloat:** removes the class members that are not covered by the test suite.
+- **conservative-debloat:** removes the class members that are not referenced by the application, as determined statically.
 
-The **entry-point** strategy is the most aggressive approach. In this case, the bytecode is instrumented during the Maven `compile` phase, probes are inserted in the bytecode, and the application is executed in order to collect [execution traces](https://en.wikipedia.org/wiki/Tracing_(software)). Then, the class members that were not covered are removed from the bytecode, and the transformed application is packaged as a specialized ad debloated JAR file.  
+The **entry-point-debloat** strategy is the most aggressive approach. In this case, the bytecode is instrumented during the Maven `compile` phase, probes are inserted in the bytecode, and the application is executed in order to collect [execution traces](https://en.wikipedia.org/wiki/Tracing_(software)). Then, the class members that were not covered are removed from the bytecode, and the transformed application is packaged as a specialized ad debloated JAR file.  
 
-The **test-based** strategy is similar to the **entry-point**; the difference is that the execution traces are collected based on the execution of the test suite of the project.
+The **test-based-debloat** strategy is similar to the **entry-point**; the difference is that the execution traces are collected based on the execution of the test suite of the project.
 
-The **conservative** strategy is the less aggressive approach. It relies on static analysis to construct a call graph of class members calls, which contains all the class members referenced by the application. Then, the members that are not referenced (a.k.a [dead code](https://en.wikipedia.org/wiki/Dead_code)) are removed from the bytecode. This approach is similar to shrinking technique performed by [Proguard](https://www.guardsquare.com/en/products/proguard), with the difference JDbl executed the debloat thorough the Maven build phases.    
+The **conservative-debloat** strategy is the less aggressive approach. It relies on static analysis to construct a call graph of class members calls, which contains all the class members referenced by the application. Then, the members that are not referenced (a.k.a [dead code](https://en.wikipedia.org/wiki/Dead_code)) are removed from the bytecode. This approach is similar to shrinking technique performed by [Proguard](https://www.guardsquare.com/en/products/proguard), with the difference JDbl executed the debloat thorough the Maven build phases.    
 
 Overall, JDbl produces a smaller, specialized version of the Java application without modifying its source code. The modified version is automatically packaged as a JAR file as resulting from the Maven build lifecycle.
  
