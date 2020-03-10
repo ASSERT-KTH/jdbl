@@ -1,4 +1,4 @@
-<img src="https://cesarsotovalero.github.io/img/logos/jdbl_logo.png" height="100px" />
+<img src="https://cesarsotovalero.github.io/img/logos/JDbl_logo.svg" height="100px"  alt="TS-Classification"/>
 
 [![PDD status](http://www.0pdd.com/svg?name=castor-software/jdbl)](http://www.0pdd.com/p?name=castor-software/jdbl)
 [![Build Status](https://travis-ci.org/castor-software/jdbl.svg?branch=master)](https://travis-ci.org/castor-software/jdbl)
