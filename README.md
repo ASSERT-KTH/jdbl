@@ -6,8 +6,8 @@
 
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=castor-software_jdbl&metric=alert_status)](https://sonarcloud.io/dashboard?id=castor-software_jdbl)
-<!--[![Coverage Status](https://coveralls.io/repos/github/castor-software/jdbl/badge.svg?branch=master)](https://coveralls.io/github/castor-software/jdbl?branch=master)-->
 [![Hits-of-Code](https://hitsofcode.com/github/castor-software/jdbl)](https://hitsofcode.com/view/github/castor-software/jdbl)
+<!--[![Coverage Status](https://coveralls.io/repos/github/castor-software/jdbl/badge.svg?branch=master)](https://coveralls.io/github/castor-software/jdbl?branch=master)-->
 
 ### What is JDbl?
 

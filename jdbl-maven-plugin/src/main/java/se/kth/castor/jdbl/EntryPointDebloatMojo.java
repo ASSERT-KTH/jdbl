@@ -30,16 +30,14 @@ import se.kth.castor.jdbl.wrapper.JacocoWrapper;
  * Non covered elements are removed from the final bundled jar file.
  */
 @Mojo(name = "entry-point-debloat", defaultPhase = LifecyclePhase.PREPARE_PACKAGE, threadSafe = true)
-public class EntryPointDebloatMojo extends AbstractMojo {
-
-   //--------------------------------/
-   //-------- CLASS FIELD/S --------/
-   //------------------------------/
+public class EntryPointDebloatMojo extends AbstractMojo
+{
 
    /**
     * The maven home file, assuming either an environment variable M2_HOME, or that mvn command exists in PATH.
     */
    private static final File mavenHome = new File(System.getenv().get("M2_HOME"));
+   private static final String LINE_SEPARATOR = "------------------------------------------------------------------------";
 
    @Parameter(defaultValue = "${project}", readonly = true)
    private MavenProject project;
@@ -53,17 +51,13 @@ public class EntryPointDebloatMojo extends AbstractMojo {
    @Parameter(property = "entry.parameters", name = "entryParameters", defaultValue = " ")
    private String entryParameters = null;
 
-   //--------------------------------/
-   //------- PUBLIC METHOD/S -------/
-   //------------------------------/
-
    @Override
-   public void execute() {
+   public void execute()
+   {
+      printToConsole("S T A R T I N G    E N T R Y    P O I N T    D E B L O A T");
 
       String outputDirectory = this.project.getBuild().getOutputDirectory();
       File baseDir = this.project.getBasedir();
-
-      this.getLog().info("***** STARTING DEBLOAT FROM ENTRY POINT *****");
 
       MavenUtils mavenUtils = new MavenUtils(EntryPointDebloatMojo.mavenHome, baseDir);
 
@@ -101,7 +95,11 @@ public class EntryPointDebloatMojo extends AbstractMojo {
       }
 
       // remove unused classes
-      FileUtils fileUtils = new FileUtils(outputDirectory, new HashSet<>(), ClassesLoadedSingleton.INSTANCE.getClassesLoaded());
+
+      FileUtils fileUtils = new FileUtils(outputDirectory,
+         new HashSet<>(),
+         ClassesLoadedSingleton.INSTANCE.getClassesLoaded(),
+         new File(this.project.getBasedir().getAbsolutePath() + "/" + "debloat-report.csv"));
       try {
          fileUtils.deleteUnusedClasses(outputDirectory);
       } catch (IOException e) {
@@ -109,13 +107,24 @@ public class EntryPointDebloatMojo extends AbstractMojo {
       }
 
       // remove unused methods
-      AbstractMethodDebloat entryPointMethodDebloat = new EntryPointMethodDebloat(outputDirectory, usageAnalysis);
+      AbstractMethodDebloat entryPointMethodDebloat = new EntryPointMethodDebloat(outputDirectory,
+         usageAnalysis,
+         new File(this.project.getBasedir().getAbsolutePath() + "/" + "debloat-report.csv"));
       try {
          entryPointMethodDebloat.removeUnusedMethods();
       } catch (IOException e) {
          this.getLog().error(String.format("Error: %s", e));
       }
 
-      this.getLog().info("***** DEBLOAT FROM FROM ENTRY POINT SUCCESS *****");
+      printToConsole("E N T R Y    P O I N T    D E B L O A T    F I N I S H E D");
+   }
+
+   private void printToConsole(final String s)
+   {
+      this.getLog().info(LINE_SEPARATOR);
+      this.getLog().info(s);
+      this.getLog().info(LINE_SEPARATOR);
    }
 }
+
+

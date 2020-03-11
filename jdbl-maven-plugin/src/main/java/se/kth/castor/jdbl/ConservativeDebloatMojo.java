@@ -24,31 +24,25 @@ import se.kth.castor.jdbl.util.MavenUtils;
  * This Maven mojo statically instruments the project and its dependencies in order to remove unused API members.
  */
 @Mojo(name = "conservative-debloat", defaultPhase = LifecyclePhase.PREPARE_PACKAGE, threadSafe = true)
-public class ConservativeDebloatMojo extends AbstractMojo {
-
-   //--------------------------------/
-   //-------- CLASS FIELD/S --------/
-   //------------------------------/
+public class ConservativeDebloatMojo extends AbstractMojo
+{
 
    /**
     * The maven home file, assuming either an environment variable M2_HOME, or that mvn command exists in PATH.
     */
    private static final File mavenHome = new File(System.getenv().get("M2_HOME"));
+   private static final String LINE_SEPARATOR = "------------------------------------------------------------------------";
 
    @Parameter(defaultValue = "${project}", readonly = true)
    private MavenProject project;
 
-   //--------------------------------/
-   //------- PUBLIC METHOD/S -------/
-   //------------------------------/
-
    @Override
-   public void execute() {
+   public void execute()
+   {
+      printToConsole("S T A R T I N G    C O N S E R V A T I V E    D E B L O A T");
 
       String outputDirectory = this.project.getBuild().getOutputDirectory();
       File baseDir = this.project.getBasedir();
-
-      this.getLog().info("***** STARTING CONSERVATIVE DEBLOAT *****");
 
       MavenUtils mavenUtils = new MavenUtils(ConservativeDebloatMojo.mavenHome, baseDir);
 
@@ -75,7 +69,10 @@ public class ConservativeDebloatMojo extends AbstractMojo {
          usageAnalysis.values().stream().filter(Objects::nonNull).mapToInt(Set::size).sum()));
 
       // delete unused classes
-      FileUtils fileUtils = new FileUtils(outputDirectory, new HashSet<>(), classesUsed);
+      FileUtils fileUtils = new FileUtils(outputDirectory,
+         new HashSet<>(),
+         classesUsed,
+         new File(this.project.getBasedir().getAbsolutePath() + "/" + "debloat-report.csv"));
       try {
          fileUtils.deleteUnusedClasses(outputDirectory);
       } catch (IOException e) {
@@ -83,13 +80,22 @@ public class ConservativeDebloatMojo extends AbstractMojo {
       }
 
       // delete unused methods
-      AbstractMethodDebloat conservativeMethodDebloat = new ConservativeMethodDebloat(outputDirectory, usageAnalysis);
+      AbstractMethodDebloat conservativeMethodDebloat = new ConservativeMethodDebloat(outputDirectory,
+         usageAnalysis,
+         new File(this.project.getBasedir().getAbsolutePath() + "/" + "debloat-report.csv"));
       try {
          conservativeMethodDebloat.removeUnusedMethods();
       } catch (IOException e) {
          this.getLog().error(String.format("Error: %s", e));
       }
 
-      this.getLog().info("***** CONSERVATIVE DEBLOAT SUCCESS *****");
+      printToConsole("C O N S E R V A T I V E    D E B L O A T    F I N I S H E D");
+   }
+
+   private void printToConsole(final String s)
+   {
+      this.getLog().info(LINE_SEPARATOR);
+      this.getLog().info(s);
+      this.getLog().info(LINE_SEPARATOR);
    }
 }

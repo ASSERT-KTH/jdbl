@@ -13,7 +13,8 @@ import java.util.stream.Stream;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-public class FileUtils {
+public class FileUtils
+{
 
    //--------------------------------/
    //-------- CLASS FIELD/S --------/
@@ -40,6 +41,11 @@ public class FileUtils {
    private Set<String> classesUsed;
 
    /**
+    * Report path
+    */
+   private File reportFile;
+
+   /**
     * Class logger.
     */
    private static final Logger LOGGER = LogManager.getLogger(FileUtils.class.getName());
@@ -48,11 +54,13 @@ public class FileUtils {
    //-------- CONSTRUCTOR/S --------/
    //------------------------------/
 
-   public FileUtils(String outputDirectory, Set<String> exclusionSet, Set<String> classesUsed) {
+   public FileUtils(String outputDirectory, Set<String> exclusionSet, Set<String> classesUsed, File reportFile)
+   {
       this.nbClassesRemoved = 0;
       this.outputDirectory = outputDirectory;
       this.exclusionSet = exclusionSet;
       this.classesUsed = classesUsed;
+      this.reportFile = reportFile;
    }
 
    //--------------------------------/
@@ -64,7 +72,8 @@ public class FileUtils {
     *
     * @param pathToFile The exclusion list file which contains the list of classes that will not be deleted.
     */
-   public void setExclusionList(String pathToFile) {
+   public void setExclusionList(String pathToFile)
+   {
       Path path = Paths.get(pathToFile);
       try (Stream<String> lines = Files.lines(path)) {
          lines.forEach(s -> this.exclusionSet.add(s.replaceAll("/", ".")));
@@ -78,7 +87,8 @@ public class FileUtils {
     *
     * @param currentPath the start file path to delete.
     */
-   public void deleteUnusedClasses(String currentPath) throws IOException {
+   public void deleteUnusedClasses(String currentPath) throws IOException
+   {
       File file = new File(currentPath);
       File[] list = file.listFiles();
       assert list != null;
@@ -88,12 +98,7 @@ public class FileUtils {
             deleteUnusedClasses(classFile.getAbsolutePath());
          } else if (classFile.getName().endsWith(".class")) {
             String classFilePath = classFile.getAbsolutePath();
-
-            // get the binary name of the test file
-            String currentClassName = classFilePath
-               .replaceAll("/", ".")
-               .substring(outputDirectory.length() + 1, classFilePath.length() - 6);
-
+            String currentClassName = getBinaryNameOfTestFile(classFilePath);
             if (!classesUsed.contains(currentClassName) &&
                isRemovable(currentClassName.replace("/", ".")) &&
                !exclusionSet.contains(currentClassName)) {
@@ -101,6 +106,8 @@ public class FileUtils {
                File parent = new File(classFile.getParent());
                // remove the file
                LOGGER.info("Removed class: " + currentClassName);
+               // write report
+               org.apache.commons.io.FileUtils.writeStringToFile(this.reportFile, "BloatedClass, " + currentClassName + "\n", true);
                Files.delete(classFile.toPath());
                nbClassesRemoved++;
                // remove the parent folder if is empty
@@ -108,24 +115,28 @@ public class FileUtils {
                   deleteDirectory(parent);
                   parent = parent.getParentFile();
                }
+            } else {
+               // write report
+               org.apache.commons.io.FileUtils.writeStringToFile(this.reportFile, "UsedClass, " + currentClassName + "\n", true);
             }
          }
       }
    }
 
-   //--------------------------------/
-   //------- GETTER METHOD/S -------/
-   //------------------------------/
+   private String getBinaryNameOfTestFile(final String classFilePath)
+   {
+      return classFilePath
+         .replaceAll("/", ".")
+         .substring(outputDirectory.length() + 1, classFilePath.length() - 6);
+   }
 
-   public int getNbClassesRemoved() {
+   public int getNbClassesRemoved()
+   {
       return nbClassesRemoved;
    }
 
-   //--------------------------------/
-   //------ PRIVATE METHOD/S -------/
-   //------------------------------/
-
-   private boolean isRemovable(String className) throws IOException {
+   private boolean isRemovable(String className) throws IOException
+   {
       //
       //        System.out.println("The classname: " + className);
       //
@@ -157,7 +168,8 @@ public class FileUtils {
       //        return cv.isRemovable;
    }
 
-   private void deleteDirectory(final File directory) throws IOException {
+   private void deleteDirectory(final File directory) throws IOException
+   {
       if (!directory.exists()) {
          return;
       }
@@ -170,14 +182,16 @@ public class FileUtils {
       }
    }
 
-   private boolean isSymlink(final File file) throws IOException {
+   private boolean isSymlink(final File file) throws IOException
+   {
       if (file == null) {
          throw new NullPointerException("File must not be null");
       }
       return Files.isSymbolicLink(file.toPath());
    }
 
-   private void cleanDirectory(final File directory) throws IOException {
+   private void cleanDirectory(final File directory) throws IOException
+   {
       final File[] files = verifiedListFiles(directory);
       IOException exception = null;
       for (final File file : files) {
@@ -192,7 +206,8 @@ public class FileUtils {
       }
    }
 
-   private File[] verifiedListFiles(final File directory) throws IOException {
+   private File[] verifiedListFiles(final File directory) throws IOException
+   {
       if (!directory.exists()) {
          final String message = directory + " does not exist";
          throw new IllegalArgumentException(message);
@@ -208,7 +223,8 @@ public class FileUtils {
       return files;
    }
 
-   private void forceDelete(final File file) throws IOException {
+   private void forceDelete(final File file) throws IOException
+   {
       if (file.isDirectory()) {
          deleteDirectory(file);
       } else {
