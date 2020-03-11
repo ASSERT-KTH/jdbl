@@ -31,6 +31,7 @@ import se.kth.castor.jdbl.util.MavenUtils;
 
 public class JacocoWrapper
 {
+
    private static final Logger LOGGER = LogManager.getLogger(JacocoWrapper.class.getName());
    private MavenProject mavenProject;
    private String entryClass;
@@ -40,7 +41,7 @@ public class JacocoWrapper
    private File mavenHome;
    private File report;
    private DebloatTypeEnum debloatTypeEnum;
-   private boolean isJunit5;
+   private boolean isJunit5 = false;
 
    public JacocoWrapper(MavenProject mavenProject,
       File report,
@@ -50,7 +51,6 @@ public class JacocoWrapper
       this.report = report;
       this.debloatTypeEnum = debloatTypeEnum;
       this.tests = new ArrayList<>();
-      this.isJunit5 = false;
       if (report.exists()) {
          FileUtils.deleteQuietly(report);
       }
@@ -71,7 +71,6 @@ public class JacocoWrapper
       this.entryMethod = entryMethod;
       this.entryParameters = entryParameters;
       this.mavenHome = mavenHome;
-      this.isJunit5 = false;
       if (report.exists()) {
          FileUtils.deleteQuietly(report);
       }
@@ -152,23 +151,14 @@ public class JacocoWrapper
       StringBuilder entryParametersTest = new StringBuilder();
       for (String test : this.findTestFiles(this.mavenProject.getBuild().getTestOutputDirectory())) {
          StringBuilder testSb = new StringBuilder(test);
-         // do not consider inner classes in tests
-         if (!testSb.toString().contains("$")) {
+
+         // do not consider inner classes in test
+         if (!test.contains("$") && test.endsWith("Test")) {
             entryParametersTest.append(testSb.append(" "));
          }
       }
 
       // execute all the tests classes
-      Set<String> classesLoadedTestDebloat = executeAllTests(classpathTest, entryParametersTest);
-
-      // print info about the number of classes loaded
-      ClassesLoadedSingleton.INSTANCE.setClassesLoaded(classesLoadedTestDebloat);
-      // print the list of classes loaded
-      ClassesLoadedSingleton.INSTANCE.printClassesLoaded();
-   }
-
-   private Set<String> executeAllTests(final String classpathTest, final StringBuilder entryParametersTest)
-   {
       EntryPoint.JVMArgs = "-verbose:class";
       EntryPoint.persistence = true;
       EntryPoint.verbose = true;
@@ -191,7 +181,17 @@ public class JacocoWrapper
       } catch (TimeoutException e) {
          LOGGER.error("Error getting the loaded classes after executing the test cases.");
       }
-      return classesLoadedTestDebloat;
+
+      // CmdExec cmdExecTestDebloat = new CmdExec();
+      // Set<String> classesLoadedTestDebloat = cmdExecTestDebloat.execProcess(
+      //    classpathTest + ":" + this.mavenProject.getBuild().getOutputDirectory() + ":" + this.mavenProject.getBuild().getTestOutputDirectory(),
+      //    "org.junit.runner.JUnitCore",
+      //    entryParametersTest.toString().split(" "));
+
+      // print info about the number of classes loaded
+      ClassesLoadedSingleton.INSTANCE.setClassesLoaded(classesLoadedTestDebloat);
+      // print the list of classes loaded
+      ClassesLoadedSingleton.INSTANCE.printClassesLoaded();
    }
 
    private String addJacocoToClasspath(String file) throws IOException
