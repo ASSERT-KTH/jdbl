@@ -53,6 +53,29 @@ To use JDbl as a Maven plugin, first install it from source cloning this repo an
 Where the property `${strategy}` can take one of the three debloating strategies supported by JDbl.
 
 
+You also need to add the JaCoCo Maven plugin to your project:
+
+```xml
+ <plugin>
+    <groupId>org.jacoco</groupId>
+    <artifactId>jacoco-maven-plugin</artifactId>
+    <version>0.8.5</version>
+    <executions>
+      <execution>
+          <goals>
+              <goal>prepare-agent</goal>
+          </goals>
+      </execution>
+      <execution>
+          <id>report</id>
+          <phase>prepare-package</phase>
+          <goals>
+              <goal>report</goal>
+          </goals>
+      </execution>
+    </executions>
+</plugin>
+```
 ### Optional parameters
 
 In the case of the **entry-point** strategy, the following additional configuration parameters are should be provided:

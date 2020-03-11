@@ -29,7 +29,8 @@ import se.kth.castor.jdbl.util.CmdExec;
 import se.kth.castor.jdbl.util.JarUtils;
 import se.kth.castor.jdbl.util.MavenUtils;
 
-public class JacocoWrapper {
+public class JacocoWrapper
+{
 
    private static final Logger LOGGER = LogManager.getLogger(JacocoWrapper.class.getName());
    private MavenProject mavenProject;
@@ -44,7 +45,8 @@ public class JacocoWrapper {
 
    public JacocoWrapper(MavenProject mavenProject,
       File report,
-      DebloatTypeEnum debloatTypeEnum) {
+      DebloatTypeEnum debloatTypeEnum)
+   {
       this.mavenProject = mavenProject;
       this.report = report;
       this.debloatTypeEnum = debloatTypeEnum;
@@ -60,7 +62,8 @@ public class JacocoWrapper {
       String entryClass,
       String entryMethod,
       String entryParameters,
-      File mavenHome) {
+      File mavenHome)
+   {
       this.mavenProject = mavenProject;
       this.report = report;
       this.debloatTypeEnum = debloatTypeEnum;
@@ -73,7 +76,8 @@ public class JacocoWrapper {
       }
    }
 
-   public Map<String, Set<String>> analyzeUsages() throws IOException, ParserConfigurationException, SAXException {
+   public Map<String, Set<String>> analyzeUsages() throws IOException, ParserConfigurationException, SAXException
+   {
       MavenUtils mavenUtils = new MavenUtils(this.mavenHome, this.mavenProject.getBasedir());
       Properties propertyTestClasspath = new Properties();
       propertyTestClasspath.setProperty("mdep.outputFile", this.mavenProject.getBasedir().getAbsolutePath() + "/target/test-classpath");
@@ -120,7 +124,8 @@ public class JacocoWrapper {
       return reportReader.getUnusedClassesAndMethods(this.report);
    }
 
-   private void entryPointDebloat() throws IOException {
+   private void entryPointDebloat() throws IOException
+   {
       LOGGER.info("Output directory: " + mavenProject.getBuild().getOutputDirectory());
       LOGGER.info("entryClass: " + entryClass);
       LOGGER.info("entryParameters: " + entryParameters);
@@ -136,7 +141,8 @@ public class JacocoWrapper {
       ClassesLoadedSingleton.INSTANCE.printClassesLoaded();
    }
 
-   private void testBasedDebloat() throws IOException {
+   private void testBasedDebloat() throws IOException
+   {
       // add jacoco to the classpath
       String classpathTest = this.addJacocoToClasspath(String.format("%s/target/test-classpath",
          this.mavenProject.getBasedir().getAbsolutePath()));
@@ -145,7 +151,11 @@ public class JacocoWrapper {
       StringBuilder entryParametersTest = new StringBuilder();
       for (String test : this.findTestFiles(this.mavenProject.getBuild().getTestOutputDirectory())) {
          StringBuilder testSb = new StringBuilder(test);
-         entryParametersTest.append(testSb.append(" "));
+
+         // do not consider inner classes in test
+         if (!testSb.toString().contains("$")) {
+            entryParametersTest.append(testSb.append(" "));
+         }
       }
 
       // execute all the tests classes
@@ -184,7 +194,8 @@ public class JacocoWrapper {
       ClassesLoadedSingleton.INSTANCE.printClassesLoaded();
    }
 
-   private String addJacocoToClasspath(String file) throws IOException {
+   private String addJacocoToClasspath(String file) throws IOException
+   {
       StringBuilder rawFile;
       try (BufferedReader buffer = new BufferedReader(new FileReader(file))) {
          rawFile = new StringBuilder(this.mavenProject.getBasedir().getAbsolutePath() + "/target/classes/:");
@@ -196,7 +207,8 @@ public class JacocoWrapper {
       return rawFile.toString();
    }
 
-   private List<String> findTestFiles(String testOutputDirectory) {
+   private List<String> findTestFiles(String testOutputDirectory)
+   {
       File file = new File(testOutputDirectory);
       File[] list = file.listFiles();
       assert list != null;
