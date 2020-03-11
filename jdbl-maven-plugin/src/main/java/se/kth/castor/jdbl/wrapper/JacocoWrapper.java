@@ -153,7 +153,7 @@ public class JacocoWrapper
          StringBuilder testSb = new StringBuilder(test);
 
          // do not consider inner classes in test
-         if (!testSb.toString().contains("$")) {
+         if (!test.contains("$") && test.endsWith("Test")) {
             entryParametersTest.append(testSb.append(" "));
          }
       }
