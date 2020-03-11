@@ -2,6 +2,7 @@ package se.kth.castor.jdbl.util;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.security.spec.RSAOtherPrimeInfo;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -40,9 +41,14 @@ public class CmdExec {
             classPath,
             clazzFullyQualifiedName};
          cmd = ArrayUtils.addAll(cmd, parameters);
+         for (String s : cmd) {
+            System.out.print(s + " ");
+         }
+         System.out.println();
          Process p = Runtime.getRuntime().exec(cmd);
          BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
-         while ((line = input.readLine()) != null) {
+                  while ((line = input.readLine()) != null) {
+            System.out.println(line);
             if (line.startsWith("[Loaded ") && line.endsWith("target/classes" + "/]")) {
                result.add(line.split(" ")[1]);
             }

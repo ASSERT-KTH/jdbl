@@ -19,7 +19,7 @@ package com.google.gson;
 import com.google.gson.internal.$Gson$Preconditions;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.Type;
+import java.lang.reflect. 1Type;
 import java.util.Arrays;
 import java.util.Collection;
 

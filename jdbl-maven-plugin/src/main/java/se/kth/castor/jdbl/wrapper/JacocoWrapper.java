@@ -1,16 +1,20 @@
 package se.kth.castor.jdbl.wrapper;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.TimeoutException;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.LogManager;
@@ -18,6 +22,7 @@ import org.apache.log4j.Logger;
 import org.apache.maven.project.MavenProject;
 import org.xml.sax.SAXException;
 
+import eu.stamp_project.testrunner.EntryPoint;
 import javax.xml.parsers.ParserConfigurationException;
 import se.kth.castor.jdbl.util.ClassesLoadedSingleton;
 import se.kth.castor.jdbl.util.CmdExec;
@@ -25,10 +30,6 @@ import se.kth.castor.jdbl.util.JarUtils;
 import se.kth.castor.jdbl.util.MavenUtils;
 
 public class JacocoWrapper {
-
-   //--------------------------------/
-   //-------- CLASS FIELD/S --------/
-   //------------------------------/
 
    private static final Logger LOGGER = LogManager.getLogger(JacocoWrapper.class.getName());
    private MavenProject mavenProject;
@@ -39,12 +40,11 @@ public class JacocoWrapper {
    private File mavenHome;
    private File report;
    private DebloatTypeEnum debloatTypeEnum;
+   private boolean isJunit5 = false;
 
-   //--------------------------------/
-   //-------- CONSTRUCTOR/S --------/
-   //------------------------------/
-
-   public JacocoWrapper(MavenProject mavenProject, File report, DebloatTypeEnum debloatTypeEnum) {
+   public JacocoWrapper(MavenProject mavenProject,
+      File report,
+      DebloatTypeEnum debloatTypeEnum) {
       this.mavenProject = mavenProject;
       this.report = report;
       this.debloatTypeEnum = debloatTypeEnum;
@@ -54,7 +54,13 @@ public class JacocoWrapper {
       }
    }
 
-   public JacocoWrapper(MavenProject mavenProject, File report, DebloatTypeEnum debloatTypeEnum, String entryClass, String entryMethod, String entryParameters, File mavenHome) {
+   public JacocoWrapper(MavenProject mavenProject,
+      File report,
+      DebloatTypeEnum debloatTypeEnum,
+      String entryClass,
+      String entryMethod,
+      String entryParameters,
+      File mavenHome) {
       this.mavenProject = mavenProject;
       this.report = report;
       this.debloatTypeEnum = debloatTypeEnum;
@@ -66,10 +72,6 @@ public class JacocoWrapper {
          FileUtils.deleteQuietly(report);
       }
    }
-
-   //--------------------------------/
-   //------- PUBLIC METHOD/S -------/
-   //------------------------------/
 
    public Map<String, Set<String>> analyzeUsages() throws IOException, ParserConfigurationException, SAXException {
       MavenUtils mavenUtils = new MavenUtils(this.mavenHome, this.mavenProject.getBasedir());
@@ -136,7 +138,8 @@ public class JacocoWrapper {
 
    private void testBasedDebloat() throws IOException {
       // add jacoco to the classpath
-      String classpathTest = this.addJacocoToClasspath(String.format("%s/target/test-classpath", this.mavenProject.getBasedir().getAbsolutePath()));
+      String classpathTest = this.addJacocoToClasspath(String.format("%s/target/test-classpath",
+         this.mavenProject.getBasedir().getAbsolutePath()));
 
       // collect test classes
       StringBuilder entryParametersTest = new StringBuilder();
@@ -146,11 +149,34 @@ public class JacocoWrapper {
       }
 
       // execute all the tests classes
-      CmdExec cmdExecTestDebloat = new CmdExec();
-      Set<String> classesLoadedTestDebloat = cmdExecTestDebloat.execProcess(
-         classpathTest + ":" + this.mavenProject.getBuild().getOutputDirectory() + ":" + this.mavenProject.getBuild().getTestOutputDirectory(),
-         "org.junit.runner.JUnitCore",
-         entryParametersTest.toString().split(" "));
+      EntryPoint.JVMArgs = "-verbose:class";
+      EntryPoint.persistence = true;
+      EntryPoint.verbose = true;
+      EntryPoint.jUnit5Mode = this.isJunit5;
+
+      Set<String> classesLoadedTestDebloat = new HashSet<>();
+      try {
+         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+         PrintStream outPrint = new PrintStream(outStream);
+         EntryPoint.outPrintStream = outPrint;
+         EntryPoint.runTests(classpathTest + ":" +
+            this.mavenProject.getBuild().getOutputDirectory() + ":" +
+            this.mavenProject.getBuild().getTestOutputDirectory(), entryParametersTest.toString().split(" "));
+         final String[] lines = outStream.toString().split("\n");
+         for (String line : lines) {
+            if (line.startsWith("[Loaded ") && line.endsWith("target/classes" + "/]")) {
+               classesLoadedTestDebloat.add(line.split(" ")[1]);
+            }
+         }
+      } catch (TimeoutException e) {
+         LOGGER.error("Error getting the loaded classes after executing the test cases.");
+      }
+
+      // CmdExec cmdExecTestDebloat = new CmdExec();
+      // Set<String> classesLoadedTestDebloat = cmdExecTestDebloat.execProcess(
+      //    classpathTest + ":" + this.mavenProject.getBuild().getOutputDirectory() + ":" + this.mavenProject.getBuild().getTestOutputDirectory(),
+      //    "org.junit.runner.JUnitCore",
+      //    entryParametersTest.toString().split(" "));
 
       // print info about the number of classes loaded
       ClassesLoadedSingleton.INSTANCE.setClassesLoaded(classesLoadedTestDebloat);
@@ -180,7 +206,6 @@ public class JacocoWrapper {
          } else if (testFile.getName().endsWith(".class")) {
             String testName = testFile.getAbsolutePath();
             // Get the binary name of the test file
-            // System.out.println("added tests: " + testName);
             tests.add(testName.replaceAll("/", ".")
                .substring(mavenProject.getBuild().getTestOutputDirectory().length() + 1, testName.length() - 6));
          }

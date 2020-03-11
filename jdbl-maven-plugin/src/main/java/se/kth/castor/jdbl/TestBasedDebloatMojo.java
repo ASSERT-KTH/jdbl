@@ -40,15 +40,16 @@ public class TestBasedDebloatMojo extends AbstractMojo {
    @Parameter(defaultValue = "${project}", readonly = true)
    private MavenProject project;
 
+   private static final String LINE_SEPARATOR = "------------------------------------------------------------------------";
+
    @Override
    public void execute() {
-
       String outputDirectory = this.project.getBuild().getOutputDirectory();
       File baseDir = this.project.getBasedir();
 
-      this.getLog().info("------------------------------------------------------------------------");
+      this.getLog().info(LINE_SEPARATOR);
       this.getLog().info("S T A R T I N G    T E S T    B A S E D    D E B L O A T");
-      this.getLog().info("------------------------------------------------------------------------");
+      this.getLog().info(LINE_SEPARATOR);
 
       MavenUtils mavenUtils = new MavenUtils(TestBasedDebloatMojo.mavenHome, baseDir);
 
@@ -80,15 +81,15 @@ public class TestBasedDebloatMojo extends AbstractMojo {
       this.getLog().info("starting removing unused methods...");
       this.removeUnusedMethods(outputDirectory, jaCoCoUsageAnalysis);
 
-      this.getLog().info("------------------------------------------------------------------------");
+      this.getLog().info(LINE_SEPARATOR);
       this.getLog().info("T E S T S    B A S E D    D E B L O A T    F I N I S H E D");
-      this.getLog().info("------------------------------------------------------------------------");
+      this.getLog().info(LINE_SEPARATOR);
    }
 
    private void printClassesLoaded() {
       this.getLog().info("Loaded classes (" + ClassesLoadedSingleton.INSTANCE.getClassesLoaded().size() + ')');
       ClassesLoadedSingleton.INSTANCE.getClassesLoaded().stream().forEach(System.out::println);
-      this.getLog().info("-------------------------------------------------------");
+      this.getLog().info(LINE_SEPARATOR);
    }
 
    private void removeUnusedMethods(final String outputDirectory, final Map<String, Set<String>> usageAnalysis) {
@@ -141,6 +142,6 @@ public class TestBasedDebloatMojo extends AbstractMojo {
          usageAnalysis.entrySet().stream().filter(e -> e.getValue() == null).count()));
       this.getLog().info(String.format("Total unused methods: %d",
          usageAnalysis.values().stream().filter(Objects::nonNull).mapToInt(Set::size).sum()));
-      this.getLog().info("-------------------------------------------------------");
+      this.getLog().info(LINE_SEPARATOR);
    }
 }

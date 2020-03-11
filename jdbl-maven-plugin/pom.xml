@@ -123,8 +123,8 @@
          <version>3.8.1</version>
          <scope>test</scope>
       </dependency>
-      <!-- Dependencies required for Maven plugin construction-->
 
+      <!-- Dependencies required for Maven plugin construction-->
       <dependency>
          <groupId>org.apache.maven</groupId>
          <artifactId>maven-project</artifactId>
@@ -135,12 +135,12 @@
       <dependency>
          <groupId>org.apache.logging.log4j</groupId>
          <artifactId>log4j-api</artifactId>
-         <version>2.12.0</version>
+         <version>2.13.1</version>
       </dependency>
       <dependency>
          <groupId>org.apache.logging.log4j</groupId>
          <artifactId>log4j-core</artifactId>
-         <version>2.12.0</version>
+         <version>2.13.1</version>
       </dependency>
       <dependency>
          <groupId>log4j</groupId>
@@ -190,6 +190,15 @@
          <artifactId>maven-invoker</artifactId>
          <version>3.0.1</version>
       </dependency>
+
+      <!-- Used to execute the tests -->
+      <dependency>
+         <groupId>eu.stamp-project</groupId>
+         <artifactId>test-runner</artifactId>
+         <version>2.1.1</version>
+         <classifier>jar-with-dependencies</classifier>
+      </dependency>
+
    </dependencies>
 
    <profiles>
@@ -200,7 +209,7 @@
                <plugin>
                   <groupId>org.apache.maven.plugins</groupId>
                   <artifactId>maven-invoker-plugin</artifactId>
-                  <version>3.1.0</version>
+                  <version>3.2.1</version>
                   <configuration>
                      <debug>true</debug>
                      <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>

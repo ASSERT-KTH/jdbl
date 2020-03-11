@@ -1,0 +1,21 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+Commons CLI,org.apache.commons.cli,PatternOptionBuilder,5,160,1,43,2,45,2,29,1,4
+Commons CLI,org.apache.commons.cli,UnrecognizedOptionException,0,14,0,0,0,6,0,3,0,3
+Commons CLI,org.apache.commons.cli,PosixParser,0,266,0,44,0,59,0,29,0,7
+Commons CLI,org.apache.commons.cli,MissingArgumentException,0,22,0,0,0,6,0,3,0,3
+Commons CLI,org.apache.commons.cli,BasicParser,0,5,0,0,0,2,0,2,0,2
+Commons CLI,org.apache.commons.cli,CommandLine,20,266,1,31,5,59,3,33,2,18
+Commons CLI,org.apache.commons.cli,HelpFormatter,37,851,11,101,7,187,13,82,3,36
+Commons CLI,org.apache.commons.cli,GnuParser,0,145,0,20,0,28,0,12,0,2
+Commons CLI,org.apache.commons.cli,ParseException,0,4,0,0,0,2,0,1,0,1
+Commons CLI,org.apache.commons.cli,AlreadySelectedException,0,35,0,0,0,9,0,4,0,4
+Commons CLI,org.apache.commons.cli,Options,0,217,0,16,0,46,0,21,0,13
+Commons CLI,org.apache.commons.cli,OptionValidator,3,81,1,17,1,14,2,11,1,3
+Commons CLI,org.apache.commons.cli,Option,63,404,14,56,11,99,14,63,2,40
+Commons CLI,org.apache.commons.cli,MissingOptionException,0,56,0,6,0,15,0,7,0,4
+Commons CLI,org.apache.commons.cli,OptionBuilder,0,141,0,4,0,60,0,22,0,20
+Commons CLI,org.apache.commons.cli,OptionGroup,0,121,0,10,0,31,0,14,0,9
+Commons CLI,org.apache.commons.cli,Parser,9,343,6,60,2,95,5,40,0,12
+Commons CLI,org.apache.commons.cli,TypeHandler,11,163,1,19,4,42,2,18,1,9
+Commons CLI,org.apache.commons.cli,HelpFormatter.OptionComparator,0,12,0,0,0,3,0,1,0,1
+Commons CLI,org.apache.commons.cli,Util,3,50,0,10,1,12,1,7,1,2

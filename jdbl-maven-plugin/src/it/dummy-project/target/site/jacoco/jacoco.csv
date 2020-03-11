@@ -5,6 +5,7 @@ dummy-project,org.apache.commons.collections4.set,AbstractSerializableSetDecorat
 dummy-project,org.apache.commons.collections4.set,AbstractSetDecorator,20,0,0,0,3,0,5,0,5,0
 dummy-project,bag,BagClass,37,0,0,0,8,0,2,0,2,0
 dummy-project,calc,Calculator,23,0,0,0,5,0,4,0,4,0
+dummy-project,calc,CalculatorB,3,0,0,0,1,0,1,0,1,0
 dummy-project,org.apache.commons.collections4.bag,AbstractMapBag,158,0,6,0,17,0,30,0,27,0
 dummy-project,org.apache.commons.collections4.bag,AbstractMapBag.MutableInteger,14,0,0,0,3,0,3,0,3,0
 dummy-project,org.apache.commons.collections4.bag,HashBag,18,0,0,0,2,0,4,0,4,0

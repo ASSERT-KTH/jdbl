@@ -45,8 +45,10 @@ public class TestBasedMethodDebloat extends AbstractMethodDebloat {
       };
       cr.accept(cv, ClassReader.SKIP_DEBUG);
       byte[] code = cw.toByteArray();
-      OutputStream fos = new FileOutputStream(outputDirectory + "/" + clazz.replace(".", "/") + ".class");
-      fos.write(code);
-      fos.close();
+      try (OutputStream fos = new FileOutputStream(outputDirectory + "/" + clazz.replace(".", "/") + ".class")) {
+         fos.write(code);
+      } catch (Exception ignored) {
+         LOGGER.error("Error replacing class " + clazz + " with debloated methods ");
+      }
    }
 }

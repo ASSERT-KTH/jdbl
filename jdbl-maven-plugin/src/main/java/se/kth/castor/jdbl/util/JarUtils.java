@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Objects;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
@@ -14,10 +15,6 @@ import org.apache.log4j.Logger;
 
 public class JarUtils {
 
-   //--------------------------------/
-   //-------- CLASS FIELD/S --------/
-   //------------------------------/
-
    private static final Logger LOGGER = LogManager.getLogger(JarUtils.class.getName());
 
    /**
@@ -25,16 +22,8 @@ public class JarUtils {
     */
    private static final int BUFFER_SIZE = 16384;
 
-   //--------------------------------/
-   //-------- CONSTRUCTOR/S --------/
-   //------------------------------/
-
    private JarUtils() {
    }
-
-   //--------------------------------/
-   //------- PUBLIC METHOD/S -------/
-   //------------------------------/
 
    /**
     * Decompress all jar files located in a given directory.
@@ -47,17 +36,13 @@ public class JarUtils {
             try {
                JarUtils.decompressJarFile(f.getAbsolutePath(), outputDirectory);
                // delete the original dependency jar file
-               f.delete();
+               Files.delete(f.toPath());
             } catch (IOException e) {
                LOGGER.error(e);
             }
          }
       }
    }
-
-   //--------------------------------/
-   //------ PRIVATE METHOD/S -------/
-   //------------------------------/
 
    /**
     * Decompress a jar file in a path to a directory (will be created if it doesn't exists).
@@ -67,38 +52,38 @@ public class JarUtils {
       if (!destDir.exists()) {
          destDir.mkdir();
       }
-      JarInputStream jarIn = new JarInputStream(new FileInputStream(jarFilePath));
-      JarEntry entry = jarIn.getNextJarEntry();
-      // iterates over entries in the jar file
-      while (entry != null) {
-         String filePath = destDirectory + "/" + entry.getName();
-         if (!entry.isDirectory()) {
-            new File(filePath).getParentFile().mkdirs();
-            // if the entry is a file, extracts it
-            extractFile(jarIn, filePath);
-         }/* else {
-                System.out.println("New dir: " + filePath);
-                // if the entry is a directory, make the directory
-                File dir = new File(filePath);
-                dir.mkdir();
-                System.out.println(dir.canWrite());
-            }*/
-         jarIn.closeEntry();
-         entry = jarIn.getNextJarEntry();
+      try (JarInputStream jarIn = new JarInputStream(new FileInputStream(jarFilePath))) {
+         JarEntry entry = jarIn.getNextJarEntry();
+         // iterates over entries in the jar file
+         while (entry != null) {
+            String filePath = destDirectory + "/" + entry.getName();
+            if (!entry.isDirectory()) {
+               new File(filePath).getParentFile().mkdirs();
+               // if the entry is a file, extracts it
+               extractFile(jarIn, filePath);
+            }/* else {
+                   System.out.println("New dir: " + filePath);
+                   // if the entry is a directory, make the directory
+                   File dir = new File(filePath);
+                   dir.mkdir();
+                   System.out.println(dir.canWrite());
+               }*/
+            jarIn.closeEntry();
+            entry = jarIn.getNextJarEntry();
+         }
       }
-      jarIn.close();
    }
 
    /**
     * Extract an entry file.
     */
    private static void extractFile(JarInputStream jarIn, String filePath) throws IOException {
-      BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(filePath));
-      byte[] bytesIn = new byte[BUFFER_SIZE];
-      int read = 0;
-      while ((read = jarIn.read(bytesIn)) != -1) {
-         bos.write(bytesIn, 0, read);
+      try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(filePath))) {
+         byte[] bytesIn = new byte[BUFFER_SIZE];
+         int read = 0;
+         while ((read = jarIn.read(bytesIn)) != -1) {
+            bos.write(bytesIn, 0, read);
+         }
       }
-      bos.close();
    }
 }

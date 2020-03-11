@@ -1,6 +1,6 @@
 package calc;
 
-public class Calculator implements CalculatorInt {
+public class Calculator extends CalculatorB {
 
     int a;
     int b;
