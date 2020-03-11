@@ -54,7 +54,8 @@ import org.apache.bcel.classfile.Method;
  *
  * @author Matthieu Vergne <matthieu.vergne@gmail.com>
  */
-public class DynamicCallManager {
+public class DynamicCallManager
+{
 
    //--------------------------------/
    //-------- CLASS FIELD/S --------/
@@ -76,7 +77,8 @@ public class DynamicCallManager {
     * @param jc     {@link JavaClass} info, which contains the bootstrap methods
     * @see #linkCalls(Method)
     */
-   public void retrieveCalls(Method method, JavaClass jc) {
+   public void retrieveCalls(Method method, JavaClass jc)
+   {
       if (method.isAbstract() || method.isNative()) {
          // No code to consider
          return;
@@ -101,7 +103,8 @@ public class DynamicCallManager {
     * @param method {@link Method} to analyze
     * @see #retrieveCalls(Method, JavaClass)
     */
-   public void linkCalls(Method method) {
+   public void linkCalls(Method method)
+   {
       int nameIndex = method.getNameIndex();
       ConstantPool cp = method.getConstantPool();
       String methodName = ((ConstantUtf8) cp.getConstant(nameIndex)).getBytes();
@@ -118,14 +121,16 @@ public class DynamicCallManager {
    //------ PRIVATE METHOD/S -------/
    //------------------------------/
 
-   private String getMethodNameFromHandleIndex(ConstantPool cp, int callIndex) {
+   private String getMethodNameFromHandleIndex(ConstantPool cp, int callIndex)
+   {
       ConstantMethodHandle handle = (ConstantMethodHandle) cp.getConstant(callIndex);
       ConstantCP ref = (ConstantCP) cp.getConstant(handle.getReferenceIndex());
       ConstantNameAndType nameAndType = (ConstantNameAndType) cp.getConstant(ref.getNameAndTypeIndex());
       return nameAndType.getName(cp);
    }
 
-   private BootstrapMethod[] getBootstrapMethods(JavaClass jc) {
+   private BootstrapMethod[] getBootstrapMethods(JavaClass jc)
+   {
       for (Attribute attribute : jc.getAttributes()) {
          if (attribute instanceof BootstrapMethods) {
             return ((BootstrapMethods) attribute).getBootstrapMethods();

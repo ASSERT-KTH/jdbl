@@ -1,14 +1,21 @@
 package se.kth.castor.jdbl.debloat;
 
-import org.objectweb.asm.*;
-
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Map;
 import java.util.Set;
 
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
+
 public class ConservativeMethodDebloat extends AbstractMethodDebloat
 {
-
    public ConservativeMethodDebloat(String outputDirectory, Map<String, Set<String>> usageAnalysis, File fileReport)
    {
       super(outputDirectory, usageAnalysis, fileReport);
@@ -45,9 +52,9 @@ public class ConservativeMethodDebloat extends AbstractMethodDebloat
          cr.accept(cv, ClassReader.SKIP_DEBUG);
 
          byte[] code = cw.toByteArray();
-         OutputStream fos = new FileOutputStream(outputDirectory + "/" + clazz.replace(".", "/") + ".class");
-         fos.write(code);
-         fos.close();
+         try (OutputStream fos = new FileOutputStream(outputDirectory + "/" + clazz.replace(".", "/") + ".class")) {
+            fos.write(code);
+         }
 
       } catch (Exception e) {
       } // do nothing, just continue analyzing other classes
@@ -65,5 +72,4 @@ public class ConservativeMethodDebloat extends AbstractMethodDebloat
       }
       return false;
    }
-
 }

@@ -26,7 +26,6 @@ import se.kth.castor.jdbl.util.MavenUtils;
 @Mojo(name = "conservative-debloat", defaultPhase = LifecyclePhase.PREPARE_PACKAGE, threadSafe = true)
 public class ConservativeDebloatMojo extends AbstractMojo
 {
-
    /**
     * The maven home file, assuming either an environment variable M2_HOME, or that mvn command exists in PATH.
     */

@@ -18,7 +18,6 @@ import org.objectweb.asm.Opcodes;
 
 public class TestBasedMethodDebloat extends AbstractMethodDebloat
 {
-
    protected static final Logger LOGGER = LogManager.getLogger(TestBasedMethodDebloat.class);
 
    public TestBasedMethodDebloat(String outputDirectory, Map<String, Set<String>> usageAnalysis, File reportFile)
@@ -67,7 +66,7 @@ public class TestBasedMethodDebloat extends AbstractMethodDebloat
       try {
          org.apache.commons.io.FileUtils.writeStringToFile(reportFile, usageType + clazz + ":" + name + desc + "\n", true);
       } catch (IOException e) {
-         System.err.println("Error writing the methods report.");
+         LOGGER.error("Error writing the methods report.");
       }
    }
 }

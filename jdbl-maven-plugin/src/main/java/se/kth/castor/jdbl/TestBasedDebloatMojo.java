@@ -2,6 +2,8 @@ package se.kth.castor.jdbl;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
@@ -45,7 +47,9 @@ public class TestBasedDebloatMojo extends AbstractMojo
    @Override
    public void execute()
    {
-      printToConsole("S T A R T I N G    T E S T    B A S E D    D E B L O A T");
+      printCustomStringToConsole("S T A R T I N G    T E S T    B A S E D    D E B L O A T");
+
+      Instant start = Instant.now();
 
       cleanReportFile();
 
@@ -70,18 +74,34 @@ public class TestBasedDebloatMojo extends AbstractMojo
          this.printClassesLoaded();
          usedClasses = TestBasedDebloatMojo.getUsedClasses(jaCoCoUsageAnalysis);
       } catch (RuntimeException e) {
-         this.getLog().error("Error computing JaCoCo usage analysis");
+         this.getLog().error("Error computing JaCoCo usage analysis.");
       }
 
       // remove unused classes
-      this.getLog().info("starting removing unused classes...");
+      this.getLog().info("Starting removing unused classes...");
       this.removeUnusedClasses(outputDirectory, usedClasses);
 
       // remove unused methods
-      this.getLog().info("starting removing unused methods...");
+      this.getLog().info("Starting removing unused methods...");
       this.removeUnusedMethods(outputDirectory, jaCoCoUsageAnalysis);
 
-      printToConsole("T E S T S    B A S E D    D E B L O A T    F I N I S H E D");
+      writeTimeElapsedReportFile(start);
+
+      printCustomStringToConsole("T E S T S    B A S E D    D E B L O A T    F I N I S H E D");
+   }
+
+   private void writeTimeElapsedReportFile(final Instant start)
+   {
+      Instant finish = Instant.now();
+      double timeElapsed = Duration.between(start, finish).toMillis();
+      final String timeElapsedInSeconds = "Total debloat time: " + timeElapsed / 1000 + " s";
+      this.getLog().info(timeElapsedInSeconds);
+      try {
+         org.apache.commons.io.FileUtils.write(new File(this.project.getBasedir().getAbsolutePath() + "/" + "debloat-execution-time.log"),
+            timeElapsedInSeconds);
+      } catch (IOException e) {
+         this.getLog().error("Error creating time elapsed report file.");
+      }
    }
 
    private void cleanReportFile()
@@ -93,7 +113,7 @@ public class TestBasedDebloatMojo extends AbstractMojo
       }
    }
 
-   private void printToConsole(final String s)
+   private void printCustomStringToConsole(final String s)
    {
       this.getLog().info(LINE_SEPARATOR);
       this.getLog().info(s);

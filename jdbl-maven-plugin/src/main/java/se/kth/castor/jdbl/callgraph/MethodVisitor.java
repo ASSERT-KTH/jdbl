@@ -54,7 +54,8 @@ import org.apache.bcel.generic.Type;
  * <p>
  * Class copied with modifications from CJKM: http://www.spinellis.gr/sw/ckjm/
  */
-public class MethodVisitor extends EmptyVisitor {
+public class MethodVisitor extends EmptyVisitor
+{
 
    //--------------------------------/
    //-------- CLASS FIELD/S --------/
@@ -69,7 +70,8 @@ public class MethodVisitor extends EmptyVisitor {
    //-------- CONSTRUCTOR/S --------/
    //------------------------------/
 
-   public MethodVisitor(MethodGen m, JavaClass jc) {
+   public MethodVisitor(MethodGen m, JavaClass jc)
+   {
       mg = m;
       cp = mg.getConstantPool();
       format = "M:" + jc.getClassName() + ":" + mg.getName() + "(" + argumentList(mg.getArgumentTypes()) + ")"
@@ -80,44 +82,50 @@ public class MethodVisitor extends EmptyVisitor {
    //------- PUBLIC METHOD/S -------/
    //------------------------------/
 
-   public List<String> start() {
-       if (mg.isAbstract() || mg.isNative()) {
-           return Collections.emptyList();
-       }
+   public List<String> start()
+   {
+      if (mg.isAbstract() || mg.isNative()) {
+         return Collections.emptyList();
+      }
 
       for (InstructionHandle ih = mg.getInstructionList().getStart();
            ih != null; ih = ih.getNext()) {
          Instruction i = ih.getInstruction();
 
-          if (!visitInstruction(i)) {
-              i.accept(this);
-          }
+         if (!visitInstruction(i)) {
+            i.accept(this);
+         }
       }
       return methodCalls;
    }
 
    @Override
-   public void visitINVOKEVIRTUAL(INVOKEVIRTUAL i) {
+   public void visitINVOKEVIRTUAL(INVOKEVIRTUAL i)
+   {
       methodCalls.add(String.format(format, "M", i.getReferenceType(cp), i.getMethodName(cp), argumentList(i.getArgumentTypes(cp))));
    }
 
    @Override
-   public void visitINVOKEINTERFACE(INVOKEINTERFACE i) {
+   public void visitINVOKEINTERFACE(INVOKEINTERFACE i)
+   {
       methodCalls.add(String.format(format, "I", i.getReferenceType(cp), i.getMethodName(cp), argumentList(i.getArgumentTypes(cp))));
    }
 
    @Override
-   public void visitINVOKESPECIAL(INVOKESPECIAL i) {
+   public void visitINVOKESPECIAL(INVOKESPECIAL i)
+   {
       methodCalls.add(String.format(format, "O", i.getReferenceType(cp), i.getMethodName(cp), argumentList(i.getArgumentTypes(cp))));
    }
 
    @Override
-   public void visitINVOKESTATIC(INVOKESTATIC i) {
+   public void visitINVOKESTATIC(INVOKESTATIC i)
+   {
       methodCalls.add(String.format(format, "S", i.getReferenceType(cp), i.getMethodName(cp), argumentList(i.getArgumentTypes(cp))));
    }
 
    @Override
-   public void visitINVOKEDYNAMIC(INVOKEDYNAMIC i) {
+   public void visitINVOKEDYNAMIC(INVOKEDYNAMIC i)
+   {
       methodCalls.add(String.format(format, "D", i.getType(cp), i.getMethodName(cp),
          argumentList(i.getArgumentTypes(cp))));
    }
@@ -126,14 +134,16 @@ public class MethodVisitor extends EmptyVisitor {
    //------ PRIVATE METHOD/S -------/
    //------------------------------/
 
-   private boolean visitInstruction(Instruction i) {
+   private boolean visitInstruction(Instruction i)
+   {
       short opcode = i.getOpcode();
       return ((InstructionConst.getInstruction(opcode) != null)
          && !(i instanceof ConstantPushInstruction)
          && !(i instanceof ReturnInstruction));
    }
 
-   private String argumentList(Type[] arguments) {
+   private String argumentList(Type[] arguments)
+   {
       StringBuilder sb = new StringBuilder();
       for (int i = 0; i < arguments.length; i++) {
          if (i != 0) {

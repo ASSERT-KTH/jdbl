@@ -16,7 +16,6 @@ import org.objectweb.asm.Opcodes;
 
 public class EntryPointMethodDebloat extends AbstractMethodDebloat
 {
-
    public EntryPointMethodDebloat(String outputDirectory, Map<String, Set<String>> usageAnalysis, File reportFile)
    {
       super(outputDirectory, usageAnalysis, reportFile);
@@ -52,9 +51,9 @@ public class EntryPointMethodDebloat extends AbstractMethodDebloat
       cr.accept(cv, ClassReader.SKIP_DEBUG);
 
       byte[] code = cw.toByteArray();
-      OutputStream fos = new FileOutputStream(outputDirectory + "/" + clazz.replace(".", "/") + ".class");
-      fos.write(code);
-      fos.close();
+      try (OutputStream fos = new FileOutputStream(outputDirectory + "/" + clazz.replace(".", "/") + ".class")) {
+         fos.write(code);
+      }
    }
 
    private void writeReportToFile(final String name, final String desc, final String usageType, String clazz)

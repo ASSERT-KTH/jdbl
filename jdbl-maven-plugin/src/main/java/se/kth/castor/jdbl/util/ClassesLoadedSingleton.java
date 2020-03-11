@@ -2,21 +2,24 @@ package se.kth.castor.jdbl.util;
 
 import java.util.Set;
 
-public enum ClassesLoadedSingleton {
-
+public enum ClassesLoadedSingleton
+{
    INSTANCE;
 
    private Set<String> classesLoaded;
 
-   public void setClassesLoaded(Set<String> classesLoaded) {
+   public void setClassesLoaded(Set<String> classesLoaded)
+   {
       this.classesLoaded = classesLoaded;
    }
 
-   public Set<String> getClassesLoaded() {
+   public Set<String> getClassesLoaded()
+   {
       return this.classesLoaded;
    }
 
-   public void printClassesLoaded() {
+   public void printClassesLoaded()
+   {
       this.classesLoaded.forEach(s -> System.out.println("Loaded: " + s));
    }
 

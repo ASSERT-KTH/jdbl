@@ -2,7 +2,6 @@ package se.kth.castor.jdbl.util;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.security.spec.RSAOtherPrimeInfo;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,7 +9,8 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-public class CmdExec {
+public class CmdExec
+{
 
    //--------------------------------/
    //-------- CLASS FIELD/S --------/
@@ -31,7 +31,8 @@ public class CmdExec {
     * @param parameters              The parameters (i.e, -verbose:class)
     * @return The set of classes in the classpath that were loaded during the execution of the class
     */
-   public Set<String> execProcess(String classPath, String clazzFullyQualifiedName, String[] parameters) {
+   public Set<String> execProcess(String classPath, String clazzFullyQualifiedName, String[] parameters)
+   {
       Set<String> result = new HashSet<>();
       try {
          String line;
@@ -47,7 +48,7 @@ public class CmdExec {
          System.out.println();
          Process p = Runtime.getRuntime().exec(cmd);
          BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
-                  while ((line = input.readLine()) != null) {
+         while ((line = input.readLine()) != null) {
             System.out.println(line);
             if (line.startsWith("[Loaded ") && line.endsWith("target/classes" + "/]")) {
                result.add(line.split(" ")[1]);

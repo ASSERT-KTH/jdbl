@@ -32,7 +32,6 @@ import se.kth.castor.jdbl.wrapper.JacocoWrapper;
 @Mojo(name = "entry-point-debloat", defaultPhase = LifecyclePhase.PREPARE_PACKAGE, threadSafe = true)
 public class EntryPointDebloatMojo extends AbstractMojo
 {
-
    /**
     * The maven home file, assuming either an environment variable M2_HOME, or that mvn command exists in PATH.
     */
@@ -54,7 +53,7 @@ public class EntryPointDebloatMojo extends AbstractMojo
    @Override
    public void execute()
    {
-      printToConsole("S T A R T I N G    E N T R Y    P O I N T    D E B L O A T");
+      printCustomStringToConsole("S T A R T I N G    E N T R Y    P O I N T    D E B L O A T");
 
       String outputDirectory = this.project.getBuild().getOutputDirectory();
       File baseDir = this.project.getBasedir();
@@ -95,7 +94,6 @@ public class EntryPointDebloatMojo extends AbstractMojo
       }
 
       // remove unused classes
-
       FileUtils fileUtils = new FileUtils(outputDirectory,
          new HashSet<>(),
          ClassesLoadedSingleton.INSTANCE.getClassesLoaded(),
@@ -116,10 +114,10 @@ public class EntryPointDebloatMojo extends AbstractMojo
          this.getLog().error(String.format("Error: %s", e));
       }
 
-      printToConsole("E N T R Y    P O I N T    D E B L O A T    F I N I S H E D");
+      printCustomStringToConsole("E N T R Y    P O I N T    D E B L O A T    F I N I S H E D");
    }
 
-   private void printToConsole(final String s)
+   private void printCustomStringToConsole(final String s)
    {
       this.getLog().info(LINE_SEPARATOR);
       this.getLog().info(s);

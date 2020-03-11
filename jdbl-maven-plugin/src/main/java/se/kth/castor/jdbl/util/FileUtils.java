@@ -15,11 +15,6 @@ import org.apache.log4j.Logger;
 
 public class FileUtils
 {
-
-   //--------------------------------/
-   //-------- CLASS FIELD/S --------/
-   //------------------------------/
-
    /**
     * Counts the number of classes removed.
     */
@@ -50,10 +45,6 @@ public class FileUtils
     */
    private static final Logger LOGGER = LogManager.getLogger(FileUtils.class.getName());
 
-   //--------------------------------/
-   //-------- CONSTRUCTOR/S --------/
-   //------------------------------/
-
    public FileUtils(String outputDirectory, Set<String> exclusionSet, Set<String> classesUsed, File reportFile)
    {
       this.nbClassesRemoved = 0;
@@ -62,10 +53,6 @@ public class FileUtils
       this.classesUsed = classesUsed;
       this.reportFile = reportFile;
    }
-
-   //--------------------------------/
-   //------- PUBLIC METHOD/S -------/
-   //------------------------------/
 
    /**
     * Feed the list of non-removable classes.

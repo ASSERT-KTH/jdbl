@@ -2,14 +2,18 @@ package se.kth.castor.jdbl.wrapper;
 
 import java.util.Arrays;
 
-public enum DebloatTypeEnum {
+/**
+ * The debloat strategies supported by this plugin.
+ */
+public enum DebloatTypeEnum
+{
+   TEST_DEBLOAT,
+   ENTRY_POINT_DEBLOAT,
+   CONSERVATIVE_DEBLOAT;
 
-    TEST_DEBLOAT,
-    ENTRY_POINT_DEBLOAT,
-    CONSERVATIVE_DEBLOAT;
-
-    @Override
-    public String toString() {
-        return "Debloat methods: " + Arrays.toString(DebloatTypeEnum.values());
-    }
+   @Override
+   public String toString()
+   {
+      return "Debloat strategies: " + Arrays.toString(DebloatTypeEnum.values());
+   }
 }

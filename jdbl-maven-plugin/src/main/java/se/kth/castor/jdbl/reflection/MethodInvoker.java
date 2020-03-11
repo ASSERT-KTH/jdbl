@@ -3,13 +3,15 @@ package se.kth.castor.jdbl.reflection;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public final class MethodInvoker {
+public final class MethodInvoker
+{
 
    /**
     * Invoke method with parameters in a class with a custom {@link ClassLoader}.
     */
    @SuppressWarnings("unchecked")
-   public static void invokeMethod(ClassLoader cl, String entryClass, String entryMethod, String entryParameters) {
+   public static void invokeMethod(ClassLoader cl, String entryClass, String entryMethod, String entryParameters)
+   {
 
       try {
          System.out.println("Entry class: " + entryClass);

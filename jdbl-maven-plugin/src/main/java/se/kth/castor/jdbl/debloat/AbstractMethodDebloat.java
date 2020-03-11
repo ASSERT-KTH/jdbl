@@ -7,7 +7,6 @@ import java.util.Set;
 
 public abstract class AbstractMethodDebloat
 {
-
    protected String outputDirectory;
    protected Map<String, Set<String>> usageAnalysis;
    protected File reportFile;
@@ -20,7 +19,15 @@ public abstract class AbstractMethodDebloat
    }
 
    /**
-    * Iterate through the used classes and replace the body of bloated methods with
+    * Replace the body of bloated methods with <code>UnsupportedOperationException</code> in the class.
+    *
+    * @param clazz       The fully qualified name of the used  class.
+    * @param usedMethods The name of the used methods in this class.
+    */
+   public abstract void removeMethod(String clazz, Set<String> usedMethods) throws IOException;
+
+   /**
+    * Iterate through the used classes to replace the body of bloated methods with
     * an <code>UnsupportedOperationException</code>.
     */
    public void removeUnusedMethods() throws IOException
@@ -31,6 +38,4 @@ public abstract class AbstractMethodDebloat
          }
       }
    }
-
-   public abstract void removeMethod(String clazz, Set<String> usedMethods) throws IOException;
 }

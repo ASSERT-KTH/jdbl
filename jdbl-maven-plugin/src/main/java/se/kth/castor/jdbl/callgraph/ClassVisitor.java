@@ -43,7 +43,8 @@ import org.apache.bcel.generic.MethodGen;
  * The simplest of class visitors, invokes the method visitor class for each
  * method found.
  */
-public class ClassVisitor extends EmptyVisitor {
+public class ClassVisitor extends EmptyVisitor
+{
 
    //--------------------------------/
    //-------- CLASS FIELD/S --------/
@@ -59,7 +60,8 @@ public class ClassVisitor extends EmptyVisitor {
    //-------- CONSTRUCTOR/S --------/
    //------------------------------/
 
-   public ClassVisitor(JavaClass jc) {
+   public ClassVisitor(JavaClass jc)
+   {
       clazz = jc;
       constants = new ConstantPoolGen(clazz.getConstantPool());
       classReferenceFormat = "C:" + clazz.getClassName() + " %s";
@@ -70,7 +72,8 @@ public class ClassVisitor extends EmptyVisitor {
    //------------------------------/
 
    @Override
-   public void visitJavaClass(JavaClass jc) {
+   public void visitJavaClass(JavaClass jc)
+   {
       jc.getConstantPool().accept(this);
       Method[] methods = jc.getMethods();
       for (Method method : methods) {
@@ -81,12 +84,13 @@ public class ClassVisitor extends EmptyVisitor {
    }
 
    @Override
-   public void visitConstantPool(ConstantPool constantPool) {
+   public void visitConstantPool(ConstantPool constantPool)
+   {
       for (int i = 0; i < constantPool.getLength(); i++) {
          Constant constant = constantPool.getConstant(i);
-          if (constant == null) {
-              continue;
-          }
+         if (constant == null) {
+            continue;
+         }
          if (constant.getTag() == 7) {
             String referencedClass = constantPool.constantToString(constant);
             //                System.out.println(String.format(classReferenceFormat, referencedClass));
@@ -95,18 +99,21 @@ public class ClassVisitor extends EmptyVisitor {
    }
 
    @Override
-   public void visitMethod(Method method) {
+   public void visitMethod(Method method)
+   {
       MethodGen mg = new MethodGen(method, clazz.getClassName(), constants);
       MethodVisitor visitor = new MethodVisitor(mg, clazz);
       methodCalls.addAll(visitor.start());
    }
 
-   public ClassVisitor start() {
+   public ClassVisitor start()
+   {
       visitJavaClass(clazz);
       return this;
    }
 
-   public List<String> methodCalls() {
+   public List<String> methodCalls()
+   {
       return this.methodCalls;
    }
 }

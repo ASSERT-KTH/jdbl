@@ -3,17 +3,19 @@ package se.kth.castor.jdbl.debloat;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
-public class MethodExceptionThrower extends MethodVisitor {
-
+public class MethodExceptionThrower extends MethodVisitor
+{
    private final MethodVisitor target;
 
-   public MethodExceptionThrower(MethodVisitor methodVisitor) {
+   public MethodExceptionThrower(MethodVisitor methodVisitor)
+   {
       super(Opcodes.ASM6, null);
       this.target = methodVisitor;
    }
 
    @Override
-   public void visitCode() {
+   public void visitCode()
+   {
       target.visitCode();
       target.visitTypeInsn(Opcodes.NEW, "java/lang/UnsupportedOperationException");
       target.visitInsn(Opcodes.DUP);

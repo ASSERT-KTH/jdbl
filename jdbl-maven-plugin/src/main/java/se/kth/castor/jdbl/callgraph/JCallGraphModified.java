@@ -49,7 +49,8 @@ import org.apache.log4j.Logger;
  * Constructs a callgraph out of a set of directories, classes and JAR archives.
  * Can combine multiple archives into a single call graph.
  */
-public class JCallGraphModified {
+public class JCallGraphModified
+{
 
    //--------------------------------/
    //-------- CLASS FIELD/S --------/
@@ -63,7 +64,8 @@ public class JCallGraphModified {
    //-------- CONSTRUCTOR/S --------/
    //------------------------------/
 
-   public JCallGraphModified() {
+   public JCallGraphModified()
+   {
       this.allMethodsCalls = new LinkedList<>();
    }
 
@@ -71,12 +73,14 @@ public class JCallGraphModified {
    //------- PUBLIC METHOD/S -------/
    //------------------------------/
 
-   public List<String> getAllMethodsCallsFromFile(String classPath) {
+   public List<String> getAllMethodsCallsFromFile(String classPath)
+   {
       processFile(new File(classPath));
       return allMethodsCalls;
    }
 
-   public Map<String, Set<String>> runUsageAnalysis(String classPath) {
+   public Map<String, Set<String>> runUsageAnalysis(String classPath)
+   {
       Map<String, Set<String>> usageAnalysis = new HashMap<>();
       List<String> list = getAllMethodsCallsFromFile(classPath);
       for (String s : list) {
@@ -106,20 +110,23 @@ public class JCallGraphModified {
    //------ PRIVATE METHOD/S -------/
    //------------------------------/
 
-   private void processClass(String className) throws IOException {
+   private void processClass(String className) throws IOException
+   {
       ClassParser cp = new ClassParser(className);
       ClassVisitor visitor = new ClassVisitor(cp.parse());
       allMethodsCalls.addAll(visitor.start().methodCalls());
 
    }
 
-   private void processClass(String jarName, String className) throws IOException {
+   private void processClass(String jarName, String className) throws IOException
+   {
       ClassParser cp = new ClassParser(jarName, className);
       ClassVisitor visitor = new ClassVisitor(cp.parse());
       allMethodsCalls.addAll(visitor.start().methodCalls());
    }
 
-   private void processJar(JarFile jar) throws IOException {
+   private void processJar(JarFile jar) throws IOException
+   {
       Enumeration<JarEntry> entries = jar.entries();
       while (entries.hasMoreElements()) {
          JarEntry entry = entries.nextElement();
@@ -133,7 +140,8 @@ public class JCallGraphModified {
       }
    }
 
-   private void processFile(File file) {
+   private void processFile(File file)
+   {
       try {
          if (!file.exists()) {
             LOGGER.info("File " + file.getName() + " does not exist");

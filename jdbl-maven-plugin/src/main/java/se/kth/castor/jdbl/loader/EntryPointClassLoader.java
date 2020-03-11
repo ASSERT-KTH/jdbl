@@ -6,7 +6,8 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class EntryPointClassLoader extends ClassLoader {
+public class EntryPointClassLoader extends ClassLoader
+{
 
    //--------------------------------/
    //-------- CLASS FIELD/S --------/
@@ -19,7 +20,8 @@ public class EntryPointClassLoader extends ClassLoader {
    //-------- CONSTRUCTOR/S --------/
    //------------------------------/
 
-   public EntryPointClassLoader(String classDir, ClassLoader parent) {
+   public EntryPointClassLoader(String classDir, ClassLoader parent)
+   {
       this.classDir = classDir;
       this.parent = parent;
    }
@@ -29,7 +31,8 @@ public class EntryPointClassLoader extends ClassLoader {
    //------------------------------/
 
    @Override
-   public Class<?> loadClass(String name) {
+   public Class<?> loadClass(String name)
+   {
       try {
          System.out.println("[Parent] Loading class: " + name);
          return parent.loadClass(name);
@@ -48,7 +51,8 @@ public class EntryPointClassLoader extends ClassLoader {
    }
 
    @Override
-   public URL getResource(String name) {
+   public URL getResource(String name)
+   {
       System.out.println("[EntryPointClassLoader] getting resource: " + name);
       try {
          URL resource = new File(classDir + "/resources/" + name).toPath().toUri().toURL();
