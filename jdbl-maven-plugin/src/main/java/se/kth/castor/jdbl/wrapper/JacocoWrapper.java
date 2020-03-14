@@ -163,6 +163,7 @@ public class JacocoWrapper
       EntryPoint.persistence = true;
       EntryPoint.verbose = true;
       EntryPoint.jUnit5Mode = this.isJunit5;
+      EntryPoint.timeoutInMs = 900000; // 15min timeout (in ms)
 
       Set<String> classesLoadedTestDebloat = new HashSet<>();
       try {
