@@ -7,11 +7,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.apache.maven.project.MavenProject;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -30,17 +28,8 @@ import se.kth.castor.jdbl.wrapper.JacocoWrapper;
  * Non covered elements are removed from the final bundled jar file.
  */
 @Mojo(name = "entry-point-debloat", defaultPhase = LifecyclePhase.PREPARE_PACKAGE, threadSafe = true)
-public class EntryPointDebloatMojo extends AbstractMojo
+public class EntryPointDebloatMojo extends AbstractDebloatMojo
 {
-   /**
-    * The maven home file, assuming either an environment variable M2_HOME, or that mvn command exists in PATH.
-    */
-   private static final File mavenHome = new File(System.getenv().get("M2_HOME"));
-   private static final String LINE_SEPARATOR = "------------------------------------------------------------------------";
-
-   @Parameter(defaultValue = "${project}", readonly = true)
-   private MavenProject project;
-
    @Parameter(property = "entry.class", name = "entryClass", required = true)
    private String entryClass = "";
 
@@ -51,14 +40,14 @@ public class EntryPointDebloatMojo extends AbstractMojo
    private String entryParameters = null;
 
    @Override
-   public void execute()
+   public void doExecute()
    {
       printCustomStringToConsole("S T A R T I N G    E N T R Y    P O I N T    D E B L O A T");
 
-      String outputDirectory = this.project.getBuild().getOutputDirectory();
-      File baseDir = this.project.getBasedir();
+      String outputDirectory = getProject().getBuild().getOutputDirectory();
+      File baseDir = getProject().getBasedir();
 
-      MavenUtils mavenUtils = new MavenUtils(EntryPointDebloatMojo.mavenHome, baseDir);
+      MavenUtils mavenUtils = new MavenUtils(getMavenHome(), baseDir);
 
       // copy the dependencies
       mavenUtils.copyDependencies(outputDirectory);
@@ -71,13 +60,13 @@ public class EntryPointDebloatMojo extends AbstractMojo
 
       // getting the used methods
       JacocoWrapper jacocoWrapper = new JacocoWrapper(
-         this.project,
-         new File(this.project.getBasedir().getAbsolutePath() + "/target/report.xml"),
+         getProject(),
+         new File(getProject().getBasedir().getAbsolutePath() + "/target/report.xml"),
          DebloatTypeEnum.ENTRY_POINT_DEBLOAT,
          this.entryClass,
          this.entryMethod,
          this.entryParameters,
-         EntryPointDebloatMojo.mavenHome);
+         getMavenHome());
 
       Map<String, Set<String>> usageAnalysis = null;
 
@@ -97,7 +86,7 @@ public class EntryPointDebloatMojo extends AbstractMojo
       FileUtils fileUtils = new FileUtils(outputDirectory,
          new HashSet<>(),
          ClassesLoadedSingleton.INSTANCE.getClassesLoaded(),
-         new File(this.project.getBasedir().getAbsolutePath() + "/" + "debloat-report.csv"));
+         new File(getProject().getBasedir().getAbsolutePath() + "/" + "debloat-report.csv"));
       try {
          fileUtils.deleteUnusedClasses(outputDirectory);
       } catch (IOException e) {
@@ -107,7 +96,7 @@ public class EntryPointDebloatMojo extends AbstractMojo
       // remove unused methods
       AbstractMethodDebloat entryPointMethodDebloat = new EntryPointMethodDebloat(outputDirectory,
          usageAnalysis,
-         new File(this.project.getBasedir().getAbsolutePath() + "/" + "debloat-report.csv"));
+         new File(getProject().getBasedir().getAbsolutePath() + "/" + "debloat-report.csv"));
       try {
          entryPointMethodDebloat.removeUnusedMethods();
       } catch (IOException e) {
@@ -117,12 +106,7 @@ public class EntryPointDebloatMojo extends AbstractMojo
       printCustomStringToConsole("E N T R Y    P O I N T    D E B L O A T    F I N I S H E D");
    }
 
-   private void printCustomStringToConsole(final String s)
-   {
-      this.getLog().info(LINE_SEPARATOR);
-      this.getLog().info(s);
-      this.getLog().info(LINE_SEPARATOR);
-   }
+
 }
 
 

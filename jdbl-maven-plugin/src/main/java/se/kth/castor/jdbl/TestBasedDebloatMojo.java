@@ -9,11 +9,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.plugins.annotations.Parameter;
-import org.apache.maven.project.MavenProject;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -33,19 +30,10 @@ import se.kth.castor.jdbl.wrapper.JacocoWrapper;
  * methods is replaced by an <code>UnsupportedOperationException</code>.
  */
 @Mojo(name = "test-based-debloat", defaultPhase = LifecyclePhase.PREPARE_PACKAGE, threadSafe = true)
-public class TestBasedDebloatMojo extends AbstractMojo
+public class TestBasedDebloatMojo extends AbstractDebloatMojo
 {
-   /**
-    * The maven home file, assuming either an environment variable M2_HOME, or that mvn command exists in PATH.
-    */
-   private static final File mavenHome = new File(System.getenv().get("M2_HOME"));
-   private static final String LINE_SEPARATOR = "------------------------------------------------------------------------";
-
-   @Parameter(defaultValue = "${project}", readonly = true)
-   private MavenProject project;
-
    @Override
-   public void execute()
+   public void doExecute()
    {
       printCustomStringToConsole("S T A R T I N G    T E S T    B A S E D    D E B L O A T");
 
@@ -53,10 +41,10 @@ public class TestBasedDebloatMojo extends AbstractMojo
 
       cleanReportFile();
 
-      String outputDirectory = this.project.getBuild().getOutputDirectory();
-      File baseDir = this.project.getBasedir();
+      String outputDirectory = getProject().getBuild().getOutputDirectory();
+      File baseDir = getProject().getBasedir();
 
-      MavenUtils mavenUtils = new MavenUtils(TestBasedDebloatMojo.mavenHome, baseDir);
+      MavenUtils mavenUtils = new MavenUtils(getMavenHome(), baseDir);
 
       // copy the dependencies
       mavenUtils.copyDependencies(outputDirectory);
@@ -97,7 +85,8 @@ public class TestBasedDebloatMojo extends AbstractMojo
       final String timeElapsedInSeconds = "Total debloat time: " + timeElapsed / 1000 + " s";
       this.getLog().info(timeElapsedInSeconds);
       try {
-         org.apache.commons.io.FileUtils.write(new File(this.project.getBasedir().getAbsolutePath() + "/" + "debloat-execution-time.log"),
+         org.apache.commons.io.FileUtils.write(new File(getProject().getBasedir().getAbsolutePath() + "/" +
+               "debloat-execution-time.log"),
             timeElapsedInSeconds);
       } catch (IOException e) {
          this.getLog().error("Error creating time elapsed report file.");
@@ -107,17 +96,11 @@ public class TestBasedDebloatMojo extends AbstractMojo
    private void cleanReportFile()
    {
       try {
-         org.apache.commons.io.FileUtils.write(new File(this.project.getBasedir().getAbsolutePath() + "/" + "debloat-report.csv"), "");
+         org.apache.commons.io.FileUtils.write(new File(getProject().getBasedir().getAbsolutePath() + "/" +
+            "debloat-report.csv"), "");
       } catch (IOException e) {
          this.getLog().error("Error cleaning report file.");
       }
-   }
-
-   private void printCustomStringToConsole(final String s)
-   {
-      this.getLog().info(LINE_SEPARATOR);
-      this.getLog().info(s);
-      this.getLog().info(LINE_SEPARATOR);
    }
 
    private void printClassesLoaded()
@@ -125,14 +108,14 @@ public class TestBasedDebloatMojo extends AbstractMojo
       final int nbOfClassesLoaded = ClassesLoadedSingleton.INSTANCE.getClassesLoaded().size();
       this.getLog().info("Loaded classes (" + nbOfClassesLoaded + ')');
       ClassesLoadedSingleton.INSTANCE.getClassesLoaded().stream().forEach(System.out::println);
-      this.getLog().info(LINE_SEPARATOR);
+      this.getLog().info(getLineSeparator());
    }
 
    private void removeUnusedMethods(final String outputDirectory, final Map<String, Set<String>> usageAnalysis)
    {
       AbstractMethodDebloat testBasedMethodDebloat = new TestBasedMethodDebloat(outputDirectory,
          usageAnalysis,
-         new File(this.project.getBasedir().getAbsolutePath() + "/" + "debloat-report.csv"));
+         new File(getProject().getBasedir().getAbsolutePath() + "/" + "debloat-report.csv"));
       try {
          testBasedMethodDebloat.removeUnusedMethods();
       } catch (IOException e) {
@@ -145,7 +128,7 @@ public class TestBasedDebloatMojo extends AbstractMojo
       FileUtils fileUtils = new FileUtils(outputDirectory,
          new HashSet<>(),
          usedClasses,
-         new File(this.project.getBasedir().getAbsolutePath() + "/" + "debloat-report.csv"));
+         new File(getProject().getBasedir().getAbsolutePath() + "/" + "debloat-report.csv"));
       try {
          fileUtils.deleteUnusedClasses(outputDirectory);
       } catch (IOException e) {
@@ -167,8 +150,8 @@ public class TestBasedDebloatMojo extends AbstractMojo
 
    private Map<String, Set<String>> getJaCoCoUsageAnalysis()
    {
-      JacocoWrapper jacocoWrapper = new JacocoWrapper(this.project,
-         new File(this.project.getBasedir().getAbsolutePath() + "/target/report.xml"),
+      JacocoWrapper jacocoWrapper = new JacocoWrapper(getProject(),
+         new File(getProject().getBasedir().getAbsolutePath() + "/target/report.xml"),
          DebloatTypeEnum.TEST_DEBLOAT);
       Map<String, Set<String>> usageAnalysis = null;
       try {
@@ -187,6 +170,6 @@ public class TestBasedDebloatMojo extends AbstractMojo
          usageAnalysis.entrySet().stream().filter(e -> e.getValue() == null).count()));
       this.getLog().info(String.format("Total unused methods: %d",
          usageAnalysis.values().stream().filter(Objects::nonNull).mapToInt(Set::size).sum()));
-      this.getLog().info(LINE_SEPARATOR);
+      this.getLog().info(getLineSeparator());
    }
 }
