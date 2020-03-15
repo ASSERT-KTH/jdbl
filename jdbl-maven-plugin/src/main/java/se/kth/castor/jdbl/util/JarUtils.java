@@ -5,7 +5,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
@@ -16,6 +17,10 @@ import org.apache.log4j.Logger;
 public class JarUtils
 {
    private static final Logger LOGGER = LogManager.getLogger(JarUtils.class.getName());
+
+   private static HashSet<DependencyFileMapper> dependencyFileMappers = new HashSet<>();
+   private static DependencyFileMapper currentDependencyFileMapper;
+   private static String currentJarName = "";
 
    /**
     * Size of the buffer to read/write data.
@@ -34,11 +39,19 @@ public class JarUtils
       File files = new File(outputDirectory);
       for (File f : Objects.requireNonNull(files.listFiles())) {
          if (f.getName().endsWith(".jar")) {
-            LOGGER.info("Decompressing:" + f.getName());
+            LOGGER.info("Decompressing:" + f.getName() + "in " + outputDirectory);
             try {
+               currentDependencyFileMapper = new DependencyFileMapper();
+               currentJarName = f.getName();
+               currentDependencyFileMapper.addDependencyJar(currentJarName);
+
                JarUtils.decompressJarFile(f.getAbsolutePath(), outputDirectory);
+
+               dependencyFileMappers.add(currentDependencyFileMapper);
+               cleanupTheLocalFields();
+
                // delete the original dependency jar file
-               Files.delete(f.toPath());
+               f.delete();
             } catch (IOException e) {
                LOGGER.error(e);
             }
@@ -49,7 +62,7 @@ public class JarUtils
    /**
     * Decompress a jar file in a path to a directory (will be created if it doesn't exists).
     */
-   private static void decompressJarFile(String jarFilePath, String destDirectory) throws IOException
+   public static void decompressJarFile(String jarFilePath, String destDirectory) throws IOException
    {
       File destDir = new File(destDirectory);
       if (!destDir.exists()) {
@@ -64,17 +77,22 @@ public class JarUtils
                new File(filePath).getParentFile().mkdirs();
                // if the entry is a file, extracts it
                extractFile(jarIn, filePath);
-            }/* else {
-                   System.out.println("New dir: " + filePath);
-                   // if the entry is a directory, make the directory
-                   File dir = new File(filePath);
-                   dir.mkdir();
-                   System.out.println(dir.canWrite());
-               }*/
+            }
             jarIn.closeEntry();
             entry = jarIn.getNextJarEntry();
          }
       }
+   }
+
+   public static HashSet<DependencyFileMapper> getDependencyFileMappers()
+   {
+      return dependencyFileMappers;
+   }
+
+   private static void cleanupTheLocalFields()
+   {
+      currentDependencyFileMapper = null;
+      currentJarName = null;
    }
 
    /**
@@ -82,6 +100,11 @@ public class JarUtils
     */
    private static void extractFile(JarInputStream jarIn, String filePath) throws IOException
    {
+      // add
+      if (filePath.endsWith(".class")) {
+         currentDependencyFileMapper.addClassFileToDependencyJar(currentJarName, filePath);
+      }
+
       try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(filePath))) {
          byte[] bytesIn = new byte[BUFFER_SIZE];
          int read = 0;
@@ -89,5 +112,40 @@ public class JarUtils
             bos.write(bytesIn, 0, read);
          }
       }
+
+
    }
+
+   /**
+    * This class stores the dependencies and their classes (Useful to keep a record of classes that were debloated in
+    * each dependency)
+    */
+   public static class DependencyFileMapper
+   {
+      /**
+       * Map: dependency jar -> Set< path of the jar files inside the jar >
+       */
+      private HashMap<String, HashSet<String>> dependencyClassMap;
+
+      public DependencyFileMapper()
+      {
+         dependencyClassMap = new HashMap<>();
+      }
+
+      public void addDependencyJar(String dependencyJar)
+      {
+         dependencyClassMap.put(dependencyJar, new HashSet<>());
+      }
+
+      public void addClassFileToDependencyJar(String dependencyJar, String classFile)
+      {
+         dependencyClassMap.get(dependencyJar).add(classFile);
+      }
+
+      public HashMap<String, HashSet<String>> getDependencyClassMap()
+      {
+         return dependencyClassMap;
+      }
+   }
+
 }

@@ -86,7 +86,7 @@ public class EntryPointDebloatMojo extends AbstractDebloatMojo
       FileUtils fileUtils = new FileUtils(outputDirectory,
          new HashSet<>(),
          ClassesLoadedSingleton.INSTANCE.getClassesLoaded(),
-         new File(getProject().getBasedir().getAbsolutePath() + "/" + "debloat-report.csv"));
+         new File(getProject().getBasedir().getAbsolutePath() + File.pathSeparator + getReportFileName()));
       try {
          fileUtils.deleteUnusedClasses(outputDirectory);
       } catch (IOException e) {
@@ -96,7 +96,7 @@ public class EntryPointDebloatMojo extends AbstractDebloatMojo
       // remove unused methods
       AbstractMethodDebloat entryPointMethodDebloat = new EntryPointMethodDebloat(outputDirectory,
          usageAnalysis,
-         new File(getProject().getBasedir().getAbsolutePath() + "/" + "debloat-report.csv"));
+         new File(getProject().getBasedir().getAbsolutePath() + File.pathSeparator + getReportFileName()));
       try {
          entryPointMethodDebloat.removeUnusedMethods();
       } catch (IOException e) {
@@ -105,8 +105,6 @@ public class EntryPointDebloatMojo extends AbstractDebloatMojo
 
       printCustomStringToConsole("E N T R Y    P O I N T    D E B L O A T    F I N I S H E D");
    }
-
-
 }
 
 

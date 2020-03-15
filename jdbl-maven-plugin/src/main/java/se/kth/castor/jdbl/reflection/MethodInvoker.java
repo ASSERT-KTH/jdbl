@@ -5,14 +5,12 @@ import java.lang.reflect.Method;
 
 public final class MethodInvoker
 {
-
    /**
     * Invoke method with parameters in a class with a custom {@link ClassLoader}.
     */
    @SuppressWarnings("unchecked")
    public static void invokeMethod(ClassLoader cl, String entryClass, String entryMethod, String entryParameters)
    {
-
       try {
          System.out.println("Entry class: " + entryClass);
          Class entryClassLoaded = cl.loadClass(entryClass);

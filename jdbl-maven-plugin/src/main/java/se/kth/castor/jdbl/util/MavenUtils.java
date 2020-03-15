@@ -33,7 +33,7 @@ public class MavenUtils
     * Execute the maven plugin dependency:copy-dependencies.
     * Resolve direct and transitive dependencies.
     *
-    * @param outputDirectory Directory to put the dependencies in.
+    * @param outputDirectory The directory to put the dependencies in.
     */
    public void copyDependencies(String outputDirectory)
    {

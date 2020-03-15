@@ -183,12 +183,6 @@ public class JacocoWrapper
          LOGGER.error("Error getting the loaded classes after executing the test cases.");
       }
 
-      // CmdExec cmdExecTestDebloat = new CmdExec();
-      // Set<String> classesLoadedTestDebloat = cmdExecTestDebloat.execProcess(
-      //    classpathTest + ":" + this.mavenProject.getBuild().getOutputDirectory() + ":" + this.mavenProject.getBuild().getTestOutputDirectory(),
-      //    "org.junit.runner.JUnitCore",
-      //    entryParametersTest.toString().split(" "));
-
       // print info about the number of classes loaded
       ClassesLoadedSingleton.INSTANCE.setClassesLoaded(classesLoadedTestDebloat);
       // print the list of classes loaded

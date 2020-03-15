@@ -20,7 +20,6 @@ import javax.xml.parsers.ParserConfigurationException;
 
 public class JacocoReportReader
 {
-
    private Map<String, Set<String>> unusedClassesAndMethods;
    private DocumentBuilder dBuilder;
 
