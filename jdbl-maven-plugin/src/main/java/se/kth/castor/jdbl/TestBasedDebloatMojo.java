@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -55,11 +56,6 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
       // decompress the copied dependencies
       JarUtils.decompressJars(outputDirectory);
 
-      HashSet<JarUtils.DependencyFileMapper> dependencyFileMappers = JarUtils.getDependencyFileMappers();
-      for (JarUtils.DependencyFileMapper fileMapper : dependencyFileMappers) {
-         fileMapper.getDependencyClassMap().forEach((key, value) -> System.out.println(key + " " + value));
-      }
-
       // run JaCoCo usage analysis
       Map<String, Set<String>> jaCoCoUsageAnalysis = this.getJaCoCoUsageAnalysis();
       Set<String> usedClasses = null;
@@ -70,9 +66,32 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
          this.getLog().error("Error computing JaCoCo usage analysis.");
       }
 
+      HashSet<JarUtils.DependencyFileMapper> dependencyFileMappers = JarUtils.getDependencyFileMappers();
+      for (JarUtils.DependencyFileMapper fileMapper : dependencyFileMappers) {
+         Iterator<String> dependencyIterator = fileMapper.getDependencyClassMap().keySet().iterator();
+         while (dependencyIterator.hasNext()) {
+            String dependencyJarName = dependencyIterator.next();
+            System.out.println(dependencyJarName);
+            Iterator<String> classIterator = fileMapper.getDependencyClassMap().get(dependencyJarName).iterator();
+            while (classIterator.hasNext()) {
+               String classInTheDependency = classIterator.next();
+               if(usedClasses.contains(classInTheDependency)){
+                  System.out.println("\t" + "UsedClass, " + classInTheDependency);
+               }else{
+                  System.out.println("\t" + "BloatedClass, " + classInTheDependency);
+               }
+            }
+         }
+      }
+
+
       // remove unused classes
       this.getLog().info("Starting removing unused classes...");
       this.removeUnusedClasses(outputDirectory, usedClasses);
+
+      System.out.println("+" + usedClasses);
+
+
 
       // remove unused methods
       this.getLog().info("Starting removing unused methods...");

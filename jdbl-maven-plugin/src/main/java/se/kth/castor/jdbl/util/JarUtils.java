@@ -76,7 +76,7 @@ public class JarUtils
             if (!entry.isDirectory()) {
                new File(filePath).getParentFile().mkdirs();
                // if the entry is a file, extracts it
-               extractFile(jarIn, filePath);
+               extractFile(jarIn, filePath, destDirectory);
             }
             jarIn.closeEntry();
             entry = jarIn.getNextJarEntry();
@@ -98,13 +98,13 @@ public class JarUtils
    /**
     * Extract an entry file.
     */
-   private static void extractFile(JarInputStream jarIn, String filePath) throws IOException
+   private static void extractFile(JarInputStream jarIn, String filePath, String destDir) throws IOException
    {
-      // add
+      // add class to the currentDependencyFileMapper
       if (filePath.endsWith(".class")) {
-         currentDependencyFileMapper.addClassFileToDependencyJar(currentJarName, filePath);
+         String classInDependency = filePath.replace(destDir + "/", "").replace("/", ".").replace(".class", "");
+         currentDependencyFileMapper.addClassFileToDependencyJar(currentJarName, classInDependency);
       }
-
       try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(filePath))) {
          byte[] bytesIn = new byte[BUFFER_SIZE];
          int read = 0;
@@ -112,8 +112,6 @@ public class JarUtils
             bos.write(bytesIn, 0, read);
          }
       }
-
-
    }
 
    /**

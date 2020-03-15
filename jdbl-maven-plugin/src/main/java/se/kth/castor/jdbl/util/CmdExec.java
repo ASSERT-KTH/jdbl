@@ -24,7 +24,8 @@ public class CmdExec
 
    /**
     * Creates a system process to execute a Java class with its parameters via command line.
-    * E.g, java -verbose:class -jar target/clitools-1.0.0-SNAPSHOT-jar-with-dependencies.jar whoami | grep "\[Loaded " | grep -v " from /usr/lib" | cut -d ' ' -f2 | sort > loaded-classes
+    * E.g, java -verbose:class -jar target/clitools-1.0.0-SNAPSHOT-jar-with-dependencies.jar whoami | grep "\[Loaded " |
+    * grep -v " from /usr/lib" | cut -d ' ' -f2 | sort > loaded-classes
     *
     * @param classPath               Path to the .class file
     * @param clazzFullyQualifiedName Fully qualified name of the class to execute

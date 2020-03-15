@@ -94,7 +94,8 @@ public class FileUtils
                // remove the file
                LOGGER.info("Removed class: " + currentClassName);
                // write report
-               org.apache.commons.io.FileUtils.writeStringToFile(this.reportFile, "BloatedClass, " + currentClassName + "\n", true);
+               org.apache.commons.io.FileUtils.writeStringToFile(this.reportFile, "BloatedClass, " + currentClassName +
+                  "\n", true);
                Files.delete(classFile.toPath());
                nbClassesRemoved++;
                // remove the parent folder if is empty
@@ -104,7 +105,8 @@ public class FileUtils
                }
             } else {
                // write report
-               org.apache.commons.io.FileUtils.writeStringToFile(this.reportFile, "UsedClass, " + currentClassName + "\n", true);
+               org.apache.commons.io.FileUtils.writeStringToFile(this.reportFile, "UsedClass, " + currentClassName +
+                  "\n", true);
             }
          }
       }
@@ -132,7 +134,7 @@ public class FileUtils
       //        BufferedReader reader;
       //        try {
       //            reader = new BufferedReader(new FileReader(
-      //                    "/home/cesarsv/Documents/papers/2019_papers/royal-debloat/jicocowrapper/experiments/clitools/loaded-classes"));
+      //  "/home/cesarsv/Documents/papers/2019_papers/royal-debloat/jicocowrapper/experiments/clitools/loaded-classes"));
       //            String line = reader.readLine();
       //            while (line != null) {
       //                if (line.equals(className)) {
