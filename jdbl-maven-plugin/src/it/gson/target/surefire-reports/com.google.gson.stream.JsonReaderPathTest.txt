@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.google.gson.stream.JsonReaderPathTest
--------------------------------------------------------------------------------
-Tests run: 20, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 0.026 sec
