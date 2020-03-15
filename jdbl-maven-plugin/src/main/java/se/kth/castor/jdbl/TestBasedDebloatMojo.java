@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -66,32 +65,12 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
          this.getLog().error("Error computing JaCoCo usage analysis.");
       }
 
-      HashSet<JarUtils.DependencyFileMapper> dependencyFileMappers = JarUtils.getDependencyFileMappers();
-      for (JarUtils.DependencyFileMapper fileMapper : dependencyFileMappers) {
-         Iterator<String> dependencyIterator = fileMapper.getDependencyClassMap().keySet().iterator();
-         while (dependencyIterator.hasNext()) {
-            String dependencyJarName = dependencyIterator.next();
-            System.out.println(dependencyJarName);
-            Iterator<String> classIterator = fileMapper.getDependencyClassMap().get(dependencyJarName).iterator();
-            while (classIterator.hasNext()) {
-               String classInTheDependency = classIterator.next();
-               if(usedClasses.contains(classInTheDependency)){
-                  System.out.println("\t" + "UsedClass, " + classInTheDependency);
-               }else{
-                  System.out.println("\t" + "BloatedClass, " + classInTheDependency);
-               }
-            }
-         }
-      }
-
+      // write to a file with the status of classes (Used or Bloated) in each dependency
+      writeClassStatusPerDependency(usedClasses);
 
       // remove unused classes
       this.getLog().info("Starting removing unused classes...");
       this.removeUnusedClasses(outputDirectory, usedClasses);
-
-      System.out.println("+" + usedClasses);
-
-
 
       // remove unused methods
       this.getLog().info("Starting removing unused methods...");
@@ -103,17 +82,47 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
       printCustomStringToConsole("T E S T S    B A S E D    D E B L O A T    F I N I S H E D");
    }
 
+   private void writeClassStatusPerDependency(final Set<String> usedClasses)
+   {
+      final String reportClassStatusPerDependencyFileName = "debloat-dependencies-report.csv";
+      this.getLog().info("Writing " + reportClassStatusPerDependencyFileName + " to " +
+         new File(getProject().getBasedir().getAbsolutePath() + "/"));
+
+      StringBuilder s = new StringBuilder();
+      HashSet<JarUtils.DependencyFileMapper> dependencyFileMappers = JarUtils.getDependencyFileMappers();
+      for (JarUtils.DependencyFileMapper fileMapper : dependencyFileMappers) {
+         for (final String dependencyJarName : fileMapper.getDependencyClassMap().keySet()) {
+            s.append(dependencyJarName).append("\n");
+            for (final String classInTheDependency : fileMapper.getDependencyClassMap().get(dependencyJarName)) {
+               if (usedClasses.contains(classInTheDependency)) {
+                  s.append("\t" + "UsedClass, ").append(classInTheDependency).append("\n");
+               } else {
+                  s.append("\t" + "BloatedClass, ").append(classInTheDependency).append("\n");
+               }
+            }
+         }
+      }
+      try {
+         org.apache.commons.io.FileUtils.write(new File(getProject().getBasedir().getAbsolutePath() + "/" +
+            reportClassStatusPerDependencyFileName), s);
+      } catch (IOException e) {
+         this.getLog().error("Error creating dependency bloat report file.");
+      }
+   }
+
    private void writeTimeElapsedReportFile(final Instant start)
    {
+      this.getLog().info("Writing dependency-bloat-report.csv to " +
+         new File(getProject().getBasedir().getAbsolutePath() + "/"));
+
       Instant finish = Instant.now();
       double timeElapsed = Duration.between(start, finish).toMillis();
       final String timeElapsedInSeconds = "Total debloat time: " + timeElapsed / 1000 + " s";
       this.getLog().info(timeElapsedInSeconds);
       try {
          final String reportExecutionTimeFileName = "debloat-execution-time.log";
-         org.apache.commons.io.FileUtils.write(new File(getProject().getBasedir().getAbsolutePath() + File.pathSeparator +
-               reportExecutionTimeFileName),
-            timeElapsedInSeconds);
+         org.apache.commons.io.FileUtils.write(new File(getProject().getBasedir().getAbsolutePath() + "/" +
+            reportExecutionTimeFileName), timeElapsedInSeconds);
       } catch (IOException e) {
          this.getLog().error("Error creating time elapsed report file.");
       }
@@ -122,7 +131,7 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
    private void cleanReportFile()
    {
       try {
-         org.apache.commons.io.FileUtils.write(new File(getProject().getBasedir().getAbsolutePath() + File.pathSeparator +
+         org.apache.commons.io.FileUtils.write(new File(getProject().getBasedir().getAbsolutePath() + "/" +
             getReportFileName()), "");
       } catch (IOException e) {
          this.getLog().error("Error cleaning report file.");
@@ -141,7 +150,7 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
    {
       AbstractMethodDebloat testBasedMethodDebloat = new TestBasedMethodDebloat(outputDirectory,
          usageAnalysis,
-         new File(getProject().getBasedir().getAbsolutePath() + File.pathSeparator + getReportFileName()));
+         new File(getProject().getBasedir().getAbsolutePath() + "/" + getReportFileName()));
       try {
          testBasedMethodDebloat.removeUnusedMethods();
       } catch (IOException e) {
@@ -154,7 +163,7 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
       FileUtils fileUtils = new FileUtils(outputDirectory,
          new HashSet<>(),
          usedClasses,
-         new File(getProject().getBasedir().getAbsolutePath() + File.pathSeparator + getReportFileName()));
+         new File(getProject().getBasedir().getAbsolutePath() + "/" + getReportFileName()));
       try {
          fileUtils.deleteUnusedClasses(outputDirectory);
       } catch (IOException e) {
