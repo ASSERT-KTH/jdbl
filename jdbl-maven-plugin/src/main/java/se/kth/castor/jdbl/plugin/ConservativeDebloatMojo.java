@@ -10,12 +10,12 @@ import java.util.Set;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 
-import se.kth.castor.jdbl.core.callgraph.JCallGraphModified;
-import se.kth.castor.jdbl.core.debloat.AbstractMethodDebloat;
-import se.kth.castor.jdbl.core.debloat.ConservativeMethodDebloat;
-import se.kth.castor.jdbl.core.util.FileUtils;
-import se.kth.castor.jdbl.core.util.JarUtils;
-import se.kth.castor.jdbl.core.util.MavenUtils;
+import se.kth.castor.jdbl.app.callgraph.JCallGraphModified;
+import se.kth.castor.jdbl.app.debloat.AbstractMethodDebloat;
+import se.kth.castor.jdbl.app.debloat.ConservativeMethodDebloat;
+import se.kth.castor.jdbl.app.util.FileUtils;
+import se.kth.castor.jdbl.app.util.JarUtils;
+import se.kth.castor.jdbl.app.util.MavenUtils;
 
 /**
  * This Maven mojo statically instruments the project and its dependencies in order to remove unused API members.

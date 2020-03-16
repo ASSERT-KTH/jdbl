@@ -19,6 +19,14 @@
    </properties>
 
    <dependencies>
+      <!-- Internal module -->
+      <dependency>
+         <groupId>se.kth.castor</groupId>
+         <artifactId>jdbl-core</artifactId>
+         <version>1.0-SNAPSHOT</version>
+         <scope>compile</scope>
+      </dependency>
+
       <!-- Maven dependencies -->
       <dependency>
          <groupId>org.apache.maven</groupId>

@@ -14,14 +14,14 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
-import se.kth.castor.jdbl.core.debloat.AbstractMethodDebloat;
-import se.kth.castor.jdbl.core.debloat.TestBasedMethodDebloat;
-import se.kth.castor.jdbl.core.util.ClassesLoadedSingleton;
-import se.kth.castor.jdbl.core.util.FileUtils;
-import se.kth.castor.jdbl.core.util.JarUtils;
-import se.kth.castor.jdbl.core.util.MavenUtils;
-import se.kth.castor.jdbl.core.DebloatTypeEnum;
-import se.kth.castor.jdbl.core.wrapper.JacocoWrapper;
+import se.kth.castor.jdbl.app.debloat.AbstractMethodDebloat;
+import se.kth.castor.jdbl.app.debloat.TestBasedMethodDebloat;
+import se.kth.castor.jdbl.app.util.ClassesLoadedSingleton;
+import se.kth.castor.jdbl.app.util.FileUtils;
+import se.kth.castor.jdbl.app.util.JarUtils;
+import se.kth.castor.jdbl.app.util.MavenUtils;
+import se.kth.castor.jdbl.app.DebloatTypeEnum;
+import se.kth.castor.jdbl.app.wrapper.JacocoWrapper;
 
 /**
  * This Mojo instruments the project according to the coverage of its test suite.

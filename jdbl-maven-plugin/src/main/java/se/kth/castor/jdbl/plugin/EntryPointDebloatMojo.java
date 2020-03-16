@@ -13,14 +13,14 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
-import se.kth.castor.jdbl.core.debloat.AbstractMethodDebloat;
-import se.kth.castor.jdbl.core.debloat.EntryPointMethodDebloat;
-import se.kth.castor.jdbl.core.util.ClassesLoadedSingleton;
-import se.kth.castor.jdbl.core.util.FileUtils;
-import se.kth.castor.jdbl.core.util.JarUtils;
-import se.kth.castor.jdbl.core.util.MavenUtils;
-import se.kth.castor.jdbl.core.DebloatTypeEnum;
-import se.kth.castor.jdbl.core.wrapper.JacocoWrapper;
+import se.kth.castor.jdbl.app.debloat.AbstractMethodDebloat;
+import se.kth.castor.jdbl.app.debloat.EntryPointMethodDebloat;
+import se.kth.castor.jdbl.app.util.ClassesLoadedSingleton;
+import se.kth.castor.jdbl.app.util.FileUtils;
+import se.kth.castor.jdbl.app.util.JarUtils;
+import se.kth.castor.jdbl.app.util.MavenUtils;
+import se.kth.castor.jdbl.app.DebloatTypeEnum;
+import se.kth.castor.jdbl.app.wrapper.JacocoWrapper;
 
 /**
  * This Maven mojo instruments the project according to an entry point provided as parameters in Maven configuration.
