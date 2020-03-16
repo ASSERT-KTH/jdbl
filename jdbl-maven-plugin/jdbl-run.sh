@@ -6,5 +6,5 @@ mvn install -DskipTests=true
 
 
 echo "----- RUNNING THE EXPERIMENTS ON dummy-project -----"
-cd src/it/commons-cli
+cd src/it/dummy-project
 mvn clean package -e

@@ -57,8 +57,9 @@
 
     <!-- List of modules -->
     <modules>
-        <module>jdbl-app</module>
+        <module>jdbl-core</module>
         <module>jdbl-maven-plugin</module>
+        <module>jdbl-app</module>
     </modules>
 
     <!-- Build options -->
