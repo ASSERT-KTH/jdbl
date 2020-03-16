@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Objects;
@@ -44,14 +46,11 @@ public class JarUtils
                currentDependencyFileMapper = new DependencyFileMapper();
                currentJarName = f.getName();
                currentDependencyFileMapper.addDependencyJar(currentJarName);
-
                JarUtils.decompressJarFile(f.getAbsolutePath(), outputDirectory);
-
                dependencyFileMappers.add(currentDependencyFileMapper);
                cleanupTheLocalFields();
-
                // delete the original dependency jar file
-               f.delete();
+               Files.delete(Paths.get(f.getAbsolutePath()));
             } catch (IOException e) {
                LOGGER.error(e);
             }
