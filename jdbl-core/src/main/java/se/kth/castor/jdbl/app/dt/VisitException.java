@@ -2,7 +2,6 @@ package se.kth.castor.jdbl.app.dt;
 
 public class VisitException extends Exception
 {
-
    /**
     *
     */
@@ -26,5 +25,4 @@ public class VisitException extends Exception
    {
       super(message, cause);
    }
-
 }

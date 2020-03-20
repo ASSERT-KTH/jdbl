@@ -2,7 +2,6 @@ package se.kth.castor.jdbl.app.dt;
 
 public class ParseException extends Exception
 {
-
    private static final long serialVersionUID = -5422097493752660982L;
 
    public ParseException()
@@ -23,5 +22,4 @@ public class ParseException extends Exception
    {
       super(message, cause);
    }
-
 }

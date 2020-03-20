@@ -8,27 +8,14 @@ import java.nio.file.Paths;
 
 public class EntryPointClassLoader extends ClassLoader
 {
-
-   //--------------------------------/
-   //-------- CLASS FIELD/S --------/
-   //------------------------------/
-
    private ClassLoader parent;
    private String classDir;
-
-   //--------------------------------/
-   //-------- CONSTRUCTOR/S --------/
-   //------------------------------/
 
    public EntryPointClassLoader(String classDir, ClassLoader parent)
    {
       this.classDir = classDir;
       this.parent = parent;
    }
-
-   //--------------------------------/
-   //------- PUBLIC METHOD/S -------/
-   //------------------------------/
 
    @Override
    public Class<?> loadClass(String name)

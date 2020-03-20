@@ -13,13 +13,13 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
+import se.kth.castor.jdbl.app.DebloatTypeEnum;
 import se.kth.castor.jdbl.app.debloat.AbstractMethodDebloat;
 import se.kth.castor.jdbl.app.debloat.EntryPointMethodDebloat;
 import se.kth.castor.jdbl.app.util.ClassesLoadedSingleton;
 import se.kth.castor.jdbl.app.util.JDblFileUtils;
 import se.kth.castor.jdbl.app.util.JarUtils;
 import se.kth.castor.jdbl.app.util.MavenUtils;
-import se.kth.castor.jdbl.app.DebloatTypeEnum;
 import se.kth.castor.jdbl.app.wrapper.JacocoWrapper;
 
 /**
@@ -83,12 +83,11 @@ public class EntryPointDebloatMojo extends AbstractDebloatMojo
       }
 
       // remove unused classes
-      JDblFileUtils JDblFileUtils = new JDblFileUtils(outputDirectory,
-         new HashSet<>(),
+      JDblFileUtils jDblFileUtils = new JDblFileUtils(outputDirectory, new HashSet<>(),
          ClassesLoadedSingleton.INSTANCE.getClassesLoaded(),
          new File(getProject().getBasedir().getAbsolutePath() + "/" + getReportFileName()));
       try {
-         JDblFileUtils.deleteUnusedClasses(outputDirectory);
+         jDblFileUtils.deleteUnusedClasses(outputDirectory);
       } catch (IOException e) {
          this.getLog().error(String.format("Error deleting unused classes: %s", e));
       }

@@ -25,7 +25,7 @@ public abstract class AbstractTextVisitor implements Visitor
          for (Node child : node.getChildNodes()) {
             visit(child);
          }
-      } catch (IOException e) {
+      } catch (IOException ignored) {
       }
    }
 
@@ -66,11 +66,11 @@ public abstract class AbstractTextVisitor implements Visitor
          sbw.flush();
          return sbw.toString();
       } catch (IOException e) {
-         return null;
+         return "";
       } finally {
          try {
             bw.close();
-         } catch (IOException e) {
+         } catch (IOException ignored) {
          }
          sbw.close();
       }

@@ -78,15 +78,4 @@ public abstract class AbstractDebloatMojo extends AbstractMojo
    {
       return reportFileName;
    }
-
-   public void setOptionalDependenciesAsTestScope()
-   {
-      List<Dependency> dependencyList = getProject().getDependencies();
-      for (Dependency dependency : dependencyList) {
-         if (dependency.isOptional()) {
-
-            dependency.setScope("test");
-         }
-      }
-   }
 }

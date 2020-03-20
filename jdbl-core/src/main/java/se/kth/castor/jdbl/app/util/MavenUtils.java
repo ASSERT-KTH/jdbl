@@ -37,20 +37,9 @@ public class MavenUtils
     */
    public void copyDependencies(String outputDirectory)
    {
-
-      // optionalDependencies.forEach(s -> System.out.println(s));
-      //
-      // StringBuilder optionalDependenciesArtifactIds = new StringBuilder();
-      // optionalDependencies.forEach(s -> optionalDependenciesArtifactIds.append(s.split(":")[1]).append(","));
-      //
-      // LOGGER.info("Dependencies " + removeLastComma(optionalDependenciesArtifactIds.toString()) + "are optional, they will not be " +
-      //    "copied to the bundle JAR.");
-
       Properties copyDependenciesProperties = new Properties();
       copyDependenciesProperties.setProperty("outputDirectory", outputDirectory);
       copyDependenciesProperties.setProperty("includeScope", "compile");
-      // copyDependenciesProperties.setProperty("excludeArtifactIds",
-      //    removeLastComma(optionalDependenciesArtifactIds.toString()));
       copyDependenciesProperties.setProperty("prependGroupId", "true");
       runMaven(Collections.singletonList("dependency:copy-dependencies"), copyDependenciesProperties);
    }
@@ -63,14 +52,6 @@ public class MavenUtils
       copyProperties.setProperty("outputType", "text");
       runMaven(Collections.singletonList("dependency:tree"), copyProperties);
    }
-
-   // private String removeLastComma(String str)
-   // {
-   //    if (str != null && str.length() > 0 && str.charAt(str.length() - 1) == ',') {
-   //       str = str.substring(0, str.length() - 2);
-   //    }
-   //    return str;
-   // }
 
    /**
     * Copy the resources to the specified directory.

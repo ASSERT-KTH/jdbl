@@ -120,7 +120,7 @@ public class Node implements Serializable
       final int prime = 31;
       int result = 1;
       result = prime * result + ((artifactId == null) ? 0 : artifactId.hashCode());
-      result = prime * result + ((childNodes == null) ? 0 : childNodes.hashCode());
+      result = prime * result + childNodes.hashCode();
       result = prime * result + ((classifier == null) ? 0 : classifier.hashCode());
       result = prime * result + ((description == null) ? 0 : description.hashCode());
       result = prime * result + ((groupId == null) ? 0 : groupId.hashCode());
@@ -151,11 +151,7 @@ public class Node implements Serializable
       } else if (!artifactId.equals(other.artifactId)) {
          return false;
       }
-      if (childNodes == null) {
-         if (other.childNodes != null) {
-            return false;
-         }
-      } else if (!childNodes.equals(other.childNodes)) {
+      if (!childNodes.equals(other.childNodes)) {
          return false;
       }
       if (classifier == null) {
@@ -197,13 +193,10 @@ public class Node implements Serializable
          return false;
       }
       if (version == null) {
-         if (other.version != null) {
-            return false;
-         }
-      } else if (!version.equals(other.version)) {
-         return false;
+         return other.version == null;
+      } else {
+         return version.equals(other.version);
       }
-      return true;
    }
 
    @Override

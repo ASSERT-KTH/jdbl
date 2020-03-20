@@ -2,7 +2,6 @@ package se.kth.castor.jdbl.app.dt;
 
 public enum InputType
 {
-
    TEXT {
       @Override
       public Parser newParser()
@@ -10,7 +9,5 @@ public enum InputType
          return new TextParser();
       }
    };
-
    public abstract Parser newParser();
-
 }

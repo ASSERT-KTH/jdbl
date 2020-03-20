@@ -5,7 +5,6 @@ import java.util.Vector;
 
 public class LoaderCollector
 {
-
    public static Iterator list(ClassLoader classLoader) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException
    {
       Class CL_class = classLoader.getClass();

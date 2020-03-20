@@ -6,7 +6,6 @@ package se.kth.castor.jdbl.app.dt;
  */
 public class StandardTextVisitor extends AbstractTextVisitor
 {
-
    @Override
    public String getTreeSymbols(Node node)
    {
@@ -26,5 +25,4 @@ public class StandardTextVisitor extends AbstractTextVisitor
          return "|  ";
       }
    }
-
 }

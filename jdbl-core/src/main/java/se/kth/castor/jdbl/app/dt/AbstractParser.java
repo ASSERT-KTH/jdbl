@@ -5,16 +5,15 @@ import java.util.List;
 
 public abstract class AbstractParser implements Parser
 {
-
    /**
     * Parses a string representing a Maven artifact in standard notation.
     *
-    * @param artifact
+    * @param artifact the artifact
     * @return an instance of {@link Node} representing the artifact.
     */
    protected Node parseArtifactString(final String artifact)
    {
-      final List<String> tokens = new ArrayList<String>(7);
+      final List<String> tokens = new ArrayList<>(7);
       int tokenStart = 0;
       boolean tokenStarted = false;
       boolean hasDescription = false;
@@ -130,16 +129,7 @@ public abstract class AbstractParser implements Parser
          throw new IllegalStateException("Wrong number of tokens: " + tokens.size() + " for artifact: " + artifact);
       }
 
-      final Node node = new Node(
-         groupId,
-         artifactId,
-         packaging,
-         classifier,
-         version,
-         scope,
-         description,
-         omitted
-      );
+      final Node node = new Node(groupId, artifactId, packaging, classifier, version, scope, description, omitted);
       return node;
    }
 }

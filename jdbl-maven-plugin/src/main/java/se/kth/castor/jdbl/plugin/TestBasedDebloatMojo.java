@@ -1,37 +1,25 @@
 package se.kth.castor.jdbl.plugin;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.shared.utils.io.FileUtils;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import se.kth.castor.jdbl.app.DebloatTypeEnum;
 import se.kth.castor.jdbl.app.debloat.AbstractMethodDebloat;
 import se.kth.castor.jdbl.app.debloat.TestBasedMethodDebloat;
-import se.kth.castor.jdbl.app.dt.InputType;
-import se.kth.castor.jdbl.app.dt.Node;
-import se.kth.castor.jdbl.app.dt.ParseException;
-import se.kth.castor.jdbl.app.dt.Parser;
 import se.kth.castor.jdbl.app.util.ClassesLoadedSingleton;
 import se.kth.castor.jdbl.app.util.JDblFileUtils;
 import se.kth.castor.jdbl.app.util.JarUtils;
-import se.kth.castor.jdbl.app.util.MavenUtils;
 import se.kth.castor.jdbl.app.wrapper.JacocoWrapper;
 
 /**
@@ -46,34 +34,12 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
    @Override
    public void doExecute()
    {
-
       printCustomStringToConsole("S T A R T I N G    T E S T    B A S E D    D E B L O A T");
-
       Instant start = Instant.now();
-
       cleanReportFile();
-
       String outputDirectory = getProject().getBuild().getOutputDirectory();
-      File baseDir = getProject().getBasedir();
 
-      MavenUtils mavenUtils = new MavenUtils(getMavenHome(), baseDir);
-
-      // copy the dependencies
-      // mavenUtils.copyDependencies(outputDirectory);
-
-      // copy the resources
-      // mavenUtils.copyResources(outputDirectory);
-
-      //-----------------------------------------------------------------------
-      // remove optional dependencies
-      // removeOptionalDependencies(mavenUtils);
-      //-----------------------------------------------------------------------
-
-      // decompress the copied dependencies
-      // JarUtils.decompressJars(outputDirectory);
-
-
-      // // run JaCoCo usage analysis
+      // run JaCoCo usage analysis
       Map<String, Set<String>> jaCoCoUsageAnalysis = this.getJaCoCoUsageAnalysis();
       Set<String> usedClasses = null;
       try {
@@ -100,7 +66,6 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
 
       // write log file with the plugin's execution time
       writeTimeElapsedReportFile(start);
-
       printCustomStringToConsole("T E S T S    B A S E D    D E B L O A T    F I N I S H E D");
    }
 

@@ -7,7 +7,6 @@ import java.nio.file.Files;
 
 public class TestBasedClassLoader extends ClassLoader
 {
-
    private ClassLoader parent;
    private String testDir;
    private String classDir;

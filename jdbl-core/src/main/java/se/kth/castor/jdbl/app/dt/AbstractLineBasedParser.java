@@ -10,7 +10,6 @@ import org.apache.commons.lang3.StringUtils;
 
 public abstract class AbstractLineBasedParser extends AbstractParser
 {
-
    protected int lineIndex = 0;
 
    protected List<String> lines;
@@ -52,5 +51,4 @@ public abstract class AbstractLineBasedParser extends AbstractParser
       }
       return artifact;
    }
-
 }
