@@ -13,7 +13,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import se.kth.castor.jdbl.app.callgraph.JCallGraphModified;
 import se.kth.castor.jdbl.app.debloat.AbstractMethodDebloat;
 import se.kth.castor.jdbl.app.debloat.ConservativeMethodDebloat;
-import se.kth.castor.jdbl.app.util.FileUtils;
+import se.kth.castor.jdbl.app.util.JDblFileUtils;
 import se.kth.castor.jdbl.app.util.JarUtils;
 import se.kth.castor.jdbl.app.util.MavenUtils;
 
@@ -58,12 +58,12 @@ public class ConservativeDebloatMojo extends AbstractDebloatMojo
          usageAnalysis.values().stream().filter(Objects::nonNull).mapToInt(Set::size).sum()));
 
       // delete unused classes
-      FileUtils fileUtils = new FileUtils(outputDirectory,
+      JDblFileUtils JDblFileUtils = new JDblFileUtils(outputDirectory,
          new HashSet<>(),
          classesUsed,
          new File(getProject().getBasedir().getAbsolutePath() + "/" + getReportFileName()));
       try {
-         fileUtils.deleteUnusedClasses(outputDirectory);
+         JDblFileUtils.deleteUnusedClasses(outputDirectory);
       } catch (IOException e) {
          this.getLog().error(String.format("Error deleting unused classes: %s", e));
       }

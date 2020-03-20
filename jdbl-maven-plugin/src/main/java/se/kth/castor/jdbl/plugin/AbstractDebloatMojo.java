@@ -1,12 +1,18 @@
 package se.kth.castor.jdbl.plugin;
 
 import java.io.File;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
+import org.apache.maven.model.Dependency;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+
+import se.kth.castor.jdbl.app.dt.Node;
 
 public abstract class AbstractDebloatMojo extends AbstractMojo
 {
@@ -71,5 +77,16 @@ public abstract class AbstractDebloatMojo extends AbstractMojo
    public String getReportFileName()
    {
       return reportFileName;
+   }
+
+   public void setOptionalDependenciesAsTestScope()
+   {
+      List<Dependency> dependencyList = getProject().getDependencies();
+      for (Dependency dependency : dependencyList) {
+         if (dependency.isOptional()) {
+
+            dependency.setScope("test");
+         }
+      }
    }
 }

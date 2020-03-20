@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-public class FileUtils
+public class JDblFileUtils
 {
    /**
     * Counts the number of classes removed.
@@ -43,9 +43,9 @@ public class FileUtils
    /**
     * Class logger.
     */
-   private static final Logger LOGGER = LogManager.getLogger(FileUtils.class.getName());
+   private static final Logger LOGGER = LogManager.getLogger(JDblFileUtils.class.getName());
 
-   public FileUtils(String outputDirectory, Set<String> exclusionSet, Set<String> classesUsed, File reportFile)
+   public JDblFileUtils(String outputDirectory, Set<String> exclusionSet, Set<String> classesUsed, File reportFile)
    {
       this.nbClassesRemoved = 0;
       this.outputDirectory = outputDirectory;

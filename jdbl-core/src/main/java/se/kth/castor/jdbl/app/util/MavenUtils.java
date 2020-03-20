@@ -31,17 +31,46 @@ public class MavenUtils
 
    /**
     * Execute the maven plugin dependency:copy-dependencies.
-    * Resolve direct and transitive dependencies.
+    * This plugin resolves direct and transitive dependencies.
     *
     * @param outputDirectory The directory to put the dependencies in.
     */
    public void copyDependencies(String outputDirectory)
    {
+
+      // optionalDependencies.forEach(s -> System.out.println(s));
+      //
+      // StringBuilder optionalDependenciesArtifactIds = new StringBuilder();
+      // optionalDependencies.forEach(s -> optionalDependenciesArtifactIds.append(s.split(":")[1]).append(","));
+      //
+      // LOGGER.info("Dependencies " + removeLastComma(optionalDependenciesArtifactIds.toString()) + "are optional, they will not be " +
+      //    "copied to the bundle JAR.");
+
       Properties copyDependenciesProperties = new Properties();
       copyDependenciesProperties.setProperty("outputDirectory", outputDirectory);
       copyDependenciesProperties.setProperty("includeScope", "compile");
+      // copyDependenciesProperties.setProperty("excludeArtifactIds",
+      //    removeLastComma(optionalDependenciesArtifactIds.toString()));
+      copyDependenciesProperties.setProperty("prependGroupId", "true");
       runMaven(Collections.singletonList("dependency:copy-dependencies"), copyDependenciesProperties);
    }
+
+   public void dependencyTree(String outputDirectory)
+   {
+      LOGGER.info("Copying dependency tree to " + outputDirectory + "/dependency-tree.txt");
+      Properties copyProperties = new Properties();
+      copyProperties.setProperty("outputFile", outputDirectory);
+      copyProperties.setProperty("outputType", "text");
+      runMaven(Collections.singletonList("dependency:tree"), copyProperties);
+   }
+
+   // private String removeLastComma(String str)
+   // {
+   //    if (str != null && str.length() > 0 && str.charAt(str.length() - 1) == ',') {
+   //       str = str.substring(0, str.length() - 2);
+   //    }
+   //    return str;
+   // }
 
    /**
     * Copy the resources to the specified directory.

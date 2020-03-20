@@ -54,6 +54,7 @@ public class JacocoWrapper
       if (report.exists()) {
          FileUtils.deleteQuietly(report);
       }
+
    }
 
    public JacocoWrapper(MavenProject mavenProject,
@@ -80,16 +81,23 @@ public class JacocoWrapper
    {
       MavenUtils mavenUtils = new MavenUtils(this.mavenHome, this.mavenProject.getBasedir());
       Properties propertyTestClasspath = new Properties();
-      propertyTestClasspath.setProperty("mdep.outputFile", this.mavenProject.getBasedir().getAbsolutePath() + "/target/test-classpath");
+      propertyTestClasspath.setProperty("mdep.outputFile", this.mavenProject.getBasedir().getAbsolutePath() +
+         "/target/test-classpath");
       propertyTestClasspath.setProperty("scope", "test");
 
       // write all the test classpath to a local file
       mavenUtils.runMaven(Collections.singletonList("dependency:build-classpath"), propertyTestClasspath);
 
       Properties propertyCopyDependencies = new Properties();
-      propertyCopyDependencies.setProperty("outputDirectory", this.mavenProject.getBasedir().getAbsolutePath() + "/target/classes");
+      propertyCopyDependencies.setProperty("outputDirectory", this.mavenProject.getBasedir().getAbsolutePath() +
+         "/target/classes");
       propertyCopyDependencies.setProperty("includeScope", "compile");
       mavenUtils.runMaven(Collections.singletonList("dependency:copy-dependencies"), propertyCopyDependencies);
+
+      // do not process the optional dependencies
+      OptionalDependencyIgnorer optionalDependencyIgnorer = new OptionalDependencyIgnorer(getMavenProject());
+      optionalDependencyIgnorer.removeOptionalDependencies(mavenUtils);
+
       JarUtils.decompressJars(this.mavenProject.getBasedir().getAbsolutePath() + "/target/classes");
 
       // instrument the code
@@ -122,6 +130,11 @@ public class JacocoWrapper
       JacocoReportReader reportReader = new JacocoReportReader();
 
       return reportReader.getUnusedClassesAndMethods(this.report);
+   }
+
+   public MavenProject getMavenProject()
+   {
+      return mavenProject;
    }
 
    private void entryPointDebloat() throws IOException
@@ -163,7 +176,7 @@ public class JacocoWrapper
       EntryPoint.persistence = true;
       EntryPoint.verbose = true;
       EntryPoint.jUnit5Mode = this.isJunit5;
-      EntryPoint.timeoutInMs = 900000; // 15min timeout (in ms)
+      EntryPoint.timeoutInMs = 3600000; // 60min timeout (in ms)
 
       Set<String> classesLoadedTestDebloat = new HashSet<>();
       try {
