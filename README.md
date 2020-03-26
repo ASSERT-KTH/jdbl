@@ -2,7 +2,7 @@
 
 [![PDD status](http://www.0pdd.com/svg?name=castor-software/jdbl)](http://www.0pdd.com/p?name=castor-software/jdbl)
 [![Build Status](https://travis-ci.org/castor-software/jdbl.svg?branch=master)](https://travis-ci.org/castor-software/jdbl)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/teamed/qulice/blob/master/LICENSE.txt)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/castor-software/jdbl/blob/master/LICENSE)
 
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=castor-software_jdbl&metric=alert_status)](https://sonarcloud.io/dashboard?id=castor-software_jdbl)
