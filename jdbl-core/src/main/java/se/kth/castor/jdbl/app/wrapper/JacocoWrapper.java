@@ -1,11 +1,10 @@
 package se.kth.castor.jdbl.app.wrapper;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
+import java.io.InputStreamReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -14,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.concurrent.TimeoutException;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.LogManager;
@@ -22,7 +20,6 @@ import org.apache.log4j.Logger;
 import org.apache.maven.project.MavenProject;
 import org.xml.sax.SAXException;
 
-import eu.stamp_project.testrunner.EntryPoint;
 import javax.xml.parsers.ParserConfigurationException;
 import se.kth.castor.jdbl.app.DebloatTypeEnum;
 import se.kth.castor.jdbl.app.util.ClassesLoadedSingleton;
@@ -156,43 +153,27 @@ public class JacocoWrapper
 
    private void testBasedDebloat() throws IOException
    {
-      // add jacoco to the classpath
-      String classpathTest = this.addJacocoToClasspath(String.format("%s/target/test-classpath",
-         this.mavenProject.getBasedir().getAbsolutePath()));
-
-      // collect test classes
-      StringBuilder entryParametersTest = new StringBuilder();
-      for (String test : this.findTestFiles(this.mavenProject.getBuild().getTestOutputDirectory())) {
-         StringBuilder testSb = new StringBuilder(test);
-
-         // do not consider inner classes in test
-         if (!test.contains("$") && test.endsWith("Test")) {
-            entryParametersTest.append(testSb.append(" "));
-         }
-      }
-
-      // execute all the tests classes
-      EntryPoint.JVMArgs = "-verbose:class";
-      EntryPoint.persistence = true;
-      EntryPoint.verbose = true;
-      EntryPoint.jUnit5Mode = this.isJunit5;
-      EntryPoint.timeoutInMs = 3600000; // 60min timeout (in ms)
-
       Set<String> classesLoadedTestDebloat = new HashSet<>();
-      try {
-         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-         PrintStream outPrint = new PrintStream(outStream);
-         EntryPoint.outPrintStream = outPrint;
-         EntryPoint.runTests(classpathTest + ":" +
-            this.mavenProject.getBuild().getOutputDirectory() + ":" +
-            this.mavenProject.getBuild().getTestOutputDirectory(), entryParametersTest.toString().split(" "));
-         final String[] lines = outStream.toString().split("\n");
-         for (String line : lines) {
-            if (line.startsWith("[Loaded ") && line.endsWith("target/classes" + "/]")) {
-               classesLoadedTestDebloat.add(line.split(" ")[1]);
+      Runtime rt = Runtime.getRuntime();
+      Process p = rt.exec("mvn test -X -DargLine=\"-verbose:class\"");
+      new Thread(() -> {
+         BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+         String line;
+         try {
+            while ((line = input.readLine()) != null) {
+               if (line.contains("class,load") && line.endsWith("target/classes/")) {
+                  classesLoadedTestDebloat.add(line.split(" ")[1]);
+               }
             }
+         } catch (IOException e) {
+            // should not happen
+            LOGGER.error(e);
          }
-      } catch (TimeoutException e) {
+      }).start();
+
+      try {
+         p.waitFor();
+      } catch (InterruptedException e) {
          LOGGER.error("Error getting the loaded classes after executing the test cases.");
       }
 
