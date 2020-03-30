@@ -14,6 +14,6 @@ public enum DebloatTypeEnum
    @Override
    public String toString()
    {
-      return "Debloat strategies: " + Arrays.toString(DebloatTypeEnum.values());
+      return this.name();
    }
 }
