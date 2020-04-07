@@ -51,7 +51,6 @@ public class JacocoWrapper
       if (report.exists()) {
          FileUtils.deleteQuietly(report);
       }
-
    }
 
    public JacocoWrapper(MavenProject mavenProject,
