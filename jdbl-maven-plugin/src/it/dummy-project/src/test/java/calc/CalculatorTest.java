@@ -18,4 +18,9 @@ public class CalculatorTest {
    public void testSum() {
       assertEquals(5, calculatorInt.sum());
    }
+
+   @Test
+   public void testOther() {
+      assertEquals(10, ((Calculator) calculatorInt).other());
+   }
 }
