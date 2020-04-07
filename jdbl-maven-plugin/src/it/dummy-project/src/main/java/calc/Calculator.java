@@ -25,4 +25,8 @@ public class Calculator extends CalculatorB {
         return a * b;
     }
 
+    public int other() {
+        return StaticCl.A;
+    }
+
 }
