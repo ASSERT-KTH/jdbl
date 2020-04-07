@@ -174,6 +174,7 @@ public class JacocoWrapper
          p.waitFor();
       } catch (InterruptedException e) {
          LOGGER.error("Error getting the loaded classes after executing the test cases.");
+         Thread.currentThread().interrupt();
       }
 
       // print info about the number of classes loaded
