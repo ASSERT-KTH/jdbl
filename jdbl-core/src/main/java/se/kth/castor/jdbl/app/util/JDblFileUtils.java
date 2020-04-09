@@ -96,7 +96,8 @@ public class JDblFileUtils
             if (!classesUsed.contains(currentClassName) &&
                isRemovable(currentClassName.replace("/", ".")) &&
                !exclusionSet.contains(currentClassName) &&
-               !ccr.isInterface()) {
+               !ccr.isInterface() &&
+               !ccr.isException()) {
                // get the current directory
                File parent = new File(classFile.getParent());
                // remove the file

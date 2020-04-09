@@ -1,7 +1,6 @@
 package se.kth.castor.jdbl.app.adapter;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class CustomClassReaderTest
@@ -13,8 +12,17 @@ class CustomClassReaderTest
    {
       ccr = new CustomClassReader("java.lang.Appendable");
       Assertions.assertTrue(ccr.isInterface());
-
       ccr = new CustomClassReader("java.lang.Character");
       Assertions.assertFalse(ccr.isInterface());
+   }
+
+   @Test
+   void testIsException()
+   {
+      ccr = new CustomClassReader("java.io.FileNotFoundException");
+      Assertions.assertTrue(ccr.isException());
+
+      ccr = new CustomClassReader("java.io.Bits");
+      Assertions.assertFalse(ccr.isException());
    }
 }

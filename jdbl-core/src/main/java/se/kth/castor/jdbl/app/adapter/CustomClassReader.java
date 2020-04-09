@@ -6,19 +6,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 
 public class CustomClassReader
 {
-   ClassReader reader;
-   ClassWriter writer;
+   private ClassReader reader;
 
-   public CustomClassReader(InputStream inputStream)
+   public CustomClassReader(InputStream classInputStream)
    {
       try {
-         reader = new ClassReader(inputStream);
-         writer = new ClassWriter(reader, 0);
+         reader = new ClassReader(classInputStream);
       } catch (IOException e) {
          Logger.getLogger(CustomClassReader.class.getName()).log(Level.SEVERE, null, e);
       }
@@ -28,7 +25,6 @@ public class CustomClassReader
    {
       try {
          reader = new ClassReader(className);
-         writer = new ClassWriter(reader, 0);
       } catch (IOException e) {
          Logger.getLogger(CustomClassReader.class.getName()).log(Level.SEVERE, null, e);
       }
@@ -37,5 +33,10 @@ public class CustomClassReader
    public boolean isInterface()
    {
       return ((reader.getAccess() & Opcodes.ACC_INTERFACE) != 0);
+   }
+
+   public boolean isException()
+   {
+      return (reader.getSuperName().endsWith("Exception"));
    }
 }
