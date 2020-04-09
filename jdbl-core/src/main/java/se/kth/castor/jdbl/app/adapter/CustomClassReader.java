@@ -24,6 +24,16 @@ public class CustomClassReader
       }
    }
 
+   public CustomClassReader(String className)
+   {
+      try {
+         reader = new ClassReader(className);
+         writer = new ClassWriter(reader, 0);
+      } catch (IOException e) {
+         Logger.getLogger(CustomClassReader.class.getName()).log(Level.SEVERE, null, e);
+      }
+   }
+
    public boolean isInterface()
    {
       return ((reader.getAccess() & Opcodes.ACC_INTERFACE) != 0);
