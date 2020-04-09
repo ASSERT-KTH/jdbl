@@ -9,5 +9,3 @@ Many thanks for your contribution, we truly appreciate it. We will appreciate it
 * Description begins with the issue's number, then enumerates the changes - summarized - in bullet points
 * Description does not contain GitHub keywords (https://help.github.com/articles/closing-issues-using-keywords).
 * You ran the build locally and it passed (see `.travis.yml` for all checks performed on PRs)
-
-Thank you for your contribution :smile: !

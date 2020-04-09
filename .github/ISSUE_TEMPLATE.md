@@ -6,6 +6,3 @@ Make sure the title of the issue explains the problem you are having. Also, the 
 * You tell us what you are trying to do
 * You explain the results you are getting
 * You suggest an alternative result you would like to see
-
-Thank you for your contribution :smile: !
-

@@ -84,6 +84,7 @@ In the case of the **entry-point** strategy, the following additional configurat
 | `<entryClass>` | `<String>` | Fully qualified name of the class used as the entry point of the application. **Typical value is:** `Main`.
 | `<entryMethod>` | `<String>` | Fully qualified name of the method in the `<entryClass>` used as the entry point of the application. **Typical value is:** `main`./|
 | `<entryParameters>` | `Set<String>` | Parameters of the `<entryMethod>` used provided. Only string values separated by commas are permitted.
+| `<skipJDBL>` | `boolean` | Skip plugin execution completely. **Default value is:** `false`.|
 
 ## License
 
