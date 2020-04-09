@@ -1,7 +1,5 @@
 package se.kth.castor.jdbl.app;
 
-import java.util.Arrays;
-
 /**
  * The debloat strategies supported by this plugin.
  */

@@ -1,10 +1,10 @@
 package se.kth.castor.jdbl.app.wrapper;
 
 import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -110,9 +110,6 @@ public class JacocoWrapper
             // TODO implement the conservative approach
             break;
       }
-
-      // move the jacoco exec file to the target dir
-      // FileUtils.moveFile(new File(this.mavenProject.getBasedir(), "jacoco.exec"), new File(this.mavenProject.getBasedir(), "target/jacoco.exec"));
 
       // restore instrumented classes and generate the jacoco xml report
       mavenUtils.runMaven(Arrays.asList(

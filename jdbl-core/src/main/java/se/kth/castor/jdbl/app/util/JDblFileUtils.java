@@ -1,6 +1,7 @@
 package se.kth.castor.jdbl.app.util;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -12,6 +13,8 @@ import java.util.stream.Stream;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+
+import se.kth.castor.jdbl.app.adapter.CustomClassReader;
 
 public class JDblFileUtils
 {
@@ -86,9 +89,14 @@ public class JDblFileUtils
          } else if (classFile.getName().endsWith(".class")) {
             String classFilePath = classFile.getAbsolutePath();
             String currentClassName = getBinaryNameOfTestFile(classFilePath);
+
+            // do not remove interfaces
+            CustomClassReader ccr = new CustomClassReader(new FileInputStream(classFilePath));
+
             if (!classesUsed.contains(currentClassName) &&
                isRemovable(currentClassName.replace("/", ".")) &&
-               !exclusionSet.contains(currentClassName)) {
+               !exclusionSet.contains(currentClassName) &&
+               !ccr.isInterface()) {
                // get the current directory
                File parent = new File(classFile.getParent());
                // remove the file
