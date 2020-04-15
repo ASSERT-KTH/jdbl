@@ -28,13 +28,13 @@ public abstract class AbstractDebloatMojo extends AbstractMojo
     * Skip plugin execution completely.
     */
    @Parameter(property = "skipJDBL", defaultValue = "false")
-   private boolean skipKDBL;
+   private boolean skipJDBL;
 
    @Override
    public final void execute()
       throws MojoExecutionException, MojoFailureException
    {
-      if (isSkipKDBL()) {
+      if (isSkipJDBL()) {
          getLog().info("Skipping plugin execution...");
          return;
       }
@@ -44,9 +44,9 @@ public abstract class AbstractDebloatMojo extends AbstractMojo
    protected abstract void doExecute()
       throws MojoExecutionException, MojoFailureException;
 
-   public boolean isSkipKDBL()
+   public boolean isSkipJDBL()
    {
-      return this.skipKDBL;
+      return this.skipJDBL;
    }
 
    public MavenProject getProject()
