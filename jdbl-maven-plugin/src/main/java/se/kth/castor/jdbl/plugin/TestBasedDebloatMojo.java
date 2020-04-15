@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.sql.SQLOutput;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.HashSet;
@@ -69,7 +68,12 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
       this.removeUnusedMethods(outputDirectory, jaCoCoUsageAnalysis);
 
       // ----------------------------------------------------
-      rerunTests();
+      try {
+         this.getLog().info("Starting running the test suite on the debloated version...");
+         rerunTests();
+      } catch (IOException e) {
+         this.getLog().error("IOExeption when rerunning the tests");
+      }
       // ----------------------------------------------------
 
       // write log file with the plugin's execution time
@@ -77,44 +81,37 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
       printCustomStringToConsole("T E S T S    B A S E D    D E B L O A T    F I N I S H E D");
    }
 
-   private void rerunTests()
+   private void rerunTests() throws IOException
    {
       Runtime rt = Runtime.getRuntime();
-      Process p = null;
+      Process p = rt.exec("mvn test -Dmaven.main.skip=true");
+      BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+      String line;
+      int totalTests = 0;
+      int failedTests = 0;
+      int errorTests = 0;
+      int skippedTests = 0;
       try {
-         p = rt.exec("mvn test");
-      } catch (IOException e) {
-         this.getLog().error("Error executing the test suite.");
-      }
-      final Process finalP = p;
-      new Thread(() -> {
-         BufferedReader input = new BufferedReader(new InputStreamReader(finalP.getInputStream()));
-         String line;
-         int totalTests = 0;
-         int failedTests = 0;
-         int errorTests = 0;
-         int skippedTests = 0;
-         try {
-            while ((line = input.readLine()) != null) {
-               if (Pattern.matches("^Tests run: \\d*, Failures: \\d*, Errors: \\d*, Skipped: \\d*$", line)) {
-                  line = line.replaceAll("\\s+", "");
-                  String[] split = line.split(",");
-                  totalTests = Integer.parseInt(split[0].split(":")[1]);
-                  failedTests = Integer.parseInt(split[1].split(":")[1]);
-                  errorTests = Integer.parseInt(split[2].split(":")[1]);
-                  skippedTests = Integer.parseInt(split[3].split(":")[1]);
-               }
+         while ((line = input.readLine()) != null) {
+            if (Pattern.matches("^Tests run: \\d*, Failures: \\d*, Errors: \\d*, Skipped: \\d*$", line)) {
+               line = line.replaceAll("\\s+", "");
+               String[] split = line.split(",");
+               totalTests = Integer.parseInt(split[0].split(":")[1]);
+               failedTests = Integer.parseInt(split[1].split(":")[1]);
+               errorTests = Integer.parseInt(split[2].split(":")[1]);
+               skippedTests = Integer.parseInt(split[3].split(":")[1]);
             }
-            if (errorTests != 0) {
-               this.getLog().info("Tests run: " + totalTests + ", Failures: " + failedTests +
-                  ", Errors: " + errorTests + ", Skipped: " + skippedTests);
-               this.getLog().error("Unable to produce a correct debloated version: tests failures!");
-               System.exit(-1);
-            }
-         } catch (IOException e) {
-            this.getLog().error("Error reading the test execution outputs.");
          }
-      }).start();
+         input.close();
+         if (errorTests != 0) {
+            printCustomStringToConsole("T E S T S    B A S E D    D E B L O A T    F A I L E D");
+            this.getLog().info("Tests run: " + totalTests + ", Failures: " + failedTests +
+               ", Errors: " + errorTests + ", Skipped: " + skippedTests);
+            System.exit(-1);
+         }
+      } catch (IOException e) {
+         this.getLog().error("Error reading the test execution outputs.");
+      }
    }
 
    private void writeClassStatusPerDependency(final Set<String> usedClasses)
