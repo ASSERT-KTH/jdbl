@@ -23,6 +23,7 @@ import se.kth.castor.jdbl.app.debloat.TestBasedMethodDebloat;
 import se.kth.castor.jdbl.app.util.ClassesLoadedSingleton;
 import se.kth.castor.jdbl.app.util.JDblFileUtils;
 import se.kth.castor.jdbl.app.util.JarUtils;
+import se.kth.castor.jdbl.app.util.TSResult;
 import se.kth.castor.jdbl.app.wrapper.JacocoWrapper;
 
 /**
@@ -87,26 +88,22 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
       Process p = rt.exec("mvn test -Dmaven.main.skip=true");
       BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
       String line;
-      int totalTests = 0;
-      int failedTests = 0;
-      int errorTests = 0;
-      int skippedTests = 0;
+      TSResult tsResult = new TSResult();
       try {
          while ((line = input.readLine()) != null) {
             if (Pattern.matches("^Tests run: \\d*, Failures: \\d*, Errors: \\d*, Skipped: \\d*$", line)) {
                line = line.replaceAll("\\s+", "");
                String[] split = line.split(",");
-               totalTests = Integer.parseInt(split[0].split(":")[1]);
-               failedTests = Integer.parseInt(split[1].split(":")[1]);
-               errorTests = Integer.parseInt(split[2].split(":")[1]);
-               skippedTests = Integer.parseInt(split[3].split(":")[1]);
+               tsResult = new TSResult(Integer.parseInt(split[0].split(":")[1]),
+                  Integer.parseInt(split[1].split(":")[1]), Integer.parseInt(split[2].split(":")[1]),
+                  Integer.parseInt(split[3].split(":")[1]));
             }
          }
          input.close();
-         if (errorTests != 0) {
+         if (tsResult.errorTests() != 0) {
             printCustomStringToConsole("T E S T S    B A S E D    D E B L O A T    F A I L E D");
-            this.getLog().info("Tests run: " + totalTests + ", Failures: " + failedTests +
-               ", Errors: " + errorTests + ", Skipped: " + skippedTests);
+            this.getLog().info("Tests run: " + tsResult.totalTests() + ", Failures: " + tsResult.failedTests() +
+               ", Errors: " + tsResult.errorTests() + ", Skipped: " + tsResult.skippedTests());
             System.exit(-1);
          }
       } catch (IOException e) {
