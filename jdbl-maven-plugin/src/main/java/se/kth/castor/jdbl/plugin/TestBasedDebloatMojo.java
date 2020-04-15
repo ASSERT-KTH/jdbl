@@ -102,12 +102,27 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
          input.close();
          if (tsResult.errorTests() != 0) {
             printCustomStringToConsole("T E S T S    B A S E D    D E B L O A T    F A I L E D");
-            this.getLog().info("Tests run: " + tsResult.totalTests() + ", Failures: " + tsResult.failedTests() +
-               ", Errors: " + tsResult.errorTests() + ", Skipped: " + tsResult.skippedTests());
+            writeTSResultsToFile(tsResult);
             System.exit(-1);
          }
       } catch (IOException e) {
          this.getLog().error("Error reading the test execution outputs.");
+      }
+   }
+
+   private void writeTSResultsToFile(final TSResult tsResult)
+   {
+      final String results = "Tests run: " + tsResult.totalTests() + ", Failures: " + tsResult.failedTests() +
+         ", Errors: " + tsResult.errorTests() + ", Skipped: " + tsResult.skippedTests() + "\n";
+      this.getLog().info(results);
+      this.getLog().info("Writing ts-results.log to " +
+         new File(getProject().getBasedir().getAbsolutePath() + "/" + "ts-results.log"));
+      try {
+         final String reportTSResultsFileName = "ts-results.log";
+         org.apache.commons.io.FileUtils.write(new File(getProject().getBasedir().getAbsolutePath() + "/" +
+            reportTSResultsFileName), results);
+      } catch (IOException e) {
+         this.getLog().error("Error creating tests results report file.");
       }
    }
 
