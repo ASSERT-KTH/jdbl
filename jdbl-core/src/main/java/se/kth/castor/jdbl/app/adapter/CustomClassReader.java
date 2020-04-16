@@ -10,12 +10,12 @@ import org.objectweb.asm.Opcodes;
 
 public class CustomClassReader
 {
-   private ClassReader reader;
+   private ClassReader cr;
 
    public CustomClassReader(InputStream classInputStream)
    {
       try {
-         reader = new ClassReader(classInputStream);
+         cr = new ClassReader(classInputStream);
       } catch (IOException e) {
          Logger.getLogger(CustomClassReader.class.getName()).log(Level.SEVERE, null, e);
       }
@@ -24,7 +24,7 @@ public class CustomClassReader
    public CustomClassReader(String className)
    {
       try {
-         reader = new ClassReader(className);
+         cr = new ClassReader(className);
       } catch (IOException e) {
          Logger.getLogger(CustomClassReader.class.getName()).log(Level.SEVERE, null, e);
       }
@@ -32,11 +32,11 @@ public class CustomClassReader
 
    public boolean isInterface()
    {
-      return ((reader.getAccess() & Opcodes.ACC_INTERFACE) != 0);
+      return ((cr.getAccess() & Opcodes.ACC_INTERFACE) != 0);
    }
 
    public boolean isException()
    {
-      return (reader.getSuperName().endsWith("Exception"));
+      return (cr.getSuperName().endsWith("Exception"));
    }
 }

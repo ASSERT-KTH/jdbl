@@ -15,6 +15,7 @@ public class ClassAdapter extends ClassVisitor implements Opcodes
 
    private String baseDir;
 
+
    public ClassAdapter(final ClassVisitor cv, String baseDir)
    {
       super(ASM5, cv);
