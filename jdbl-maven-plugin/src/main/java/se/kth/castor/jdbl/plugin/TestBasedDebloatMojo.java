@@ -94,8 +94,10 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
             if (Pattern.matches("^Tests run: \\d*, Failures: \\d*, Errors: \\d*, Skipped: \\d*$", line)) {
                line = line.replaceAll("\\s+", "");
                String[] split = line.split(",");
-               tsResult = new TSResult(Integer.parseInt(split[0].split(":")[1]),
-                  Integer.parseInt(split[1].split(":")[1]), Integer.parseInt(split[2].split(":")[1]),
+               tsResult = new TSResult(
+                  Integer.parseInt(split[0].split(":")[1]),
+                  Integer.parseInt(split[1].split(":")[1]),
+                  Integer.parseInt(split[2].split(":")[1]),
                   Integer.parseInt(split[3].split(":")[1]));
             }
          }
@@ -112,15 +114,13 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
 
    private void writeTSResultsToFile(final TSResult tsResult)
    {
-      final String results = "Tests run: " + tsResult.totalTests() + ", Failures: " + tsResult.failedTests() +
-         ", Errors: " + tsResult.errorTests() + ", Skipped: " + tsResult.skippedTests() + "\n";
-      this.getLog().info(results);
+      this.getLog().info(tsResult.getResults());
       this.getLog().info("Writing ts-results.log to " +
          new File(getProject().getBasedir().getAbsolutePath() + "/" + "ts-results.log"));
       try {
          final String reportTSResultsFileName = "ts-results.log";
          org.apache.commons.io.FileUtils.write(new File(getProject().getBasedir().getAbsolutePath() + "/" +
-            reportTSResultsFileName), results);
+            reportTSResultsFileName), tsResult.getResults());
       } catch (IOException e) {
          this.getLog().error("Error creating tests results report file.");
       }
