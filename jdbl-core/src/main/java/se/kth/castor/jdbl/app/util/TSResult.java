@@ -23,6 +23,12 @@ public class TSResult
       this.skippedTests = skippedTests;
    }
 
+   public String getResults()
+   {
+      return "Tests run: " + totalTests() + ", Failures: " + failedTests() +
+      ", Errors: " + errorTests() + ", Skipped: " + skippedTests() + "\n";
+   }
+
    public int totalTests()
    {
       return totalTests;
