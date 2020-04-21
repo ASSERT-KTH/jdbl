@@ -116,8 +116,8 @@ public class JacocoWrapper
          "org.jacoco:jacoco-maven-plugin:0.8.4:restore-instrumented-classes",
          "org.jacoco:jacoco-maven-plugin:0.8.4:report"), null);
 
-      // move the jacoco xml report
-      FileUtils.moveFile(new File(this.mavenProject.getBasedir(), "target/site/jacoco/jacoco.xml"), this.report);
+      // copy the jacoco xml report
+      FileUtils.copyFile(new File(this.mavenProject.getBasedir(), "target/site/jacoco/jacoco.xml"), this.report);
 
       // read the jacoco report
       JacocoReportReader reportReader = new JacocoReportReader();
