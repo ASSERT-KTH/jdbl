@@ -1,12 +1,10 @@
 package se.kth.castor.jdbl.app.util;
 
-import com.google.common.io.Files;
 import org.w3c.dom.Document;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
-import java.nio.charset.Charset;
 
 public class TestResultReader {
     private String path;
