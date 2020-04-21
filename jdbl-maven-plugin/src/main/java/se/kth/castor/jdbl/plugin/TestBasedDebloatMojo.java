@@ -13,6 +13,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.xml.sax.SAXException;
@@ -188,13 +189,14 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
 
    private void removeUnusedClasses(final String outputDirectory, final Set<String> usedClasses)
    {
-      JDblFileUtils JDblFileUtils = new JDblFileUtils(outputDirectory,
-         new HashSet<>(),
-         usedClasses,
-         new File(getProject().getBasedir().getAbsolutePath() + "/" + getReportFileName()));
+
       try {
+         JDblFileUtils JDblFileUtils = new JDblFileUtils(outputDirectory,
+            new HashSet<>(),
+            usedClasses,
+            new File(getProject().getBasedir().getAbsolutePath() + "/" + getReportFileName()), getProject().getTestClasspathElements());
          JDblFileUtils.deleteUnusedClasses(outputDirectory);
-      } catch (IOException e) {
+      } catch (Exception e) {
          this.getLog().error(String.format("Error deleting unused classes: %s", e));
       }
    }

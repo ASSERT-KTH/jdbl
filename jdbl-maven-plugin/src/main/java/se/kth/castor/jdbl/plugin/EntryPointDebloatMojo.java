@@ -85,7 +85,7 @@ public class EntryPointDebloatMojo extends AbstractDebloatMojo
       // remove unused classes
       JDblFileUtils jDblFileUtils = new JDblFileUtils(outputDirectory, new HashSet<>(),
          ClassesLoadedSingleton.INSTANCE.getClassesLoaded(),
-         new File(getProject().getBasedir().getAbsolutePath() + "/" + getReportFileName()));
+         new File(getProject().getBasedir().getAbsolutePath() + "/" + getReportFileName()), null);
       try {
          jDblFileUtils.deleteUnusedClasses(outputDirectory);
       } catch (IOException e) {

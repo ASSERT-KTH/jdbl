@@ -4,9 +4,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -47,9 +54,11 @@ public class JDblFileUtils
     * Class logger.
     */
    private static final Logger LOGGER = LogManager.getLogger(JDblFileUtils.class.getName());
+   private List<String> classpath;
 
-   public JDblFileUtils(String outputDirectory, Set<String> exclusionSet, Set<String> classesUsed, File reportFile)
+   public JDblFileUtils(String outputDirectory, Set<String> exclusionSet, Set<String> classesUsed, File reportFile, List<String> classpath)
    {
+      this.classpath = classpath;
       this.nbClassesRemoved = 0;
       this.outputDirectory = outputDirectory;
       this.exclusionSet = exclusionSet;
@@ -79,6 +88,14 @@ public class JDblFileUtils
     */
    public void deleteUnusedClasses(String currentPath) throws IOException
    {
+      URLClassLoader urlClassLoader = null;
+      if (this.classpath != null) {
+         URL[] urls = new URL[this.classpath.size()];
+         for (int i = 0; i < this.classpath.size(); i++) {
+            urls[i] = new File(this.classpath.get(i)).toURL();
+         }
+         urlClassLoader = new URLClassLoader(urls, null);
+      }
       File file = new File(currentPath);
       File[] list = file.listFiles();
       assert list != null;
@@ -89,7 +106,52 @@ public class JDblFileUtils
          } else if (classFile.getName().endsWith(".class")) {
             String classFilePath = classFile.getAbsolutePath();
             String currentClassName = getBinaryNameOfTestFile(classFilePath);
-
+            if (currentClassName == null) {
+               continue;
+            }
+            try {
+               if (urlClassLoader != null) {
+                  Class<?> aClass = urlClassLoader.loadClass(currentClassName);
+                  if (aClass.isAnnotation()) {
+                     exclusionSet.add(currentClassName);
+                  } else if (aClass.isInterface()) {
+                     exclusionSet.add(currentClassName);
+                  } else if (aClass.isEnum()) {
+                     exclusionSet.add(currentClassName);
+                  } else {
+                     try {
+                        if (Modifier.isPrivate(aClass.getConstructor().getModifiers())) {
+                           exclusionSet.add(currentClassName);
+                        }
+                     } catch (Throwable e) {
+                        // ignore
+                     }
+                     try {
+                        boolean allStatic = true;
+                        for (Field field : aClass.getFields()) {
+                           allStatic = allStatic && Modifier.isStatic(field.getModifiers());
+                        }
+                        for (Method method : aClass.getMethods()) {
+                           allStatic = allStatic && Modifier.isStatic(method.getModifiers());
+                        }
+                        if (allStatic) {
+                           exclusionSet.add(currentClassName);
+                        }
+                     } catch (Throwable e) {
+                        // ignore
+                     }
+                     try {
+                        if (Modifier.isStatic(aClass.getField("INSTANCE").getModifiers())) {
+                           exclusionSet.add(currentClassName);
+                        }
+                     } catch (Throwable e) {
+                        // ignore
+                     }
+                  }
+               }
+            } catch (Throwable e) {
+               // ignore
+            }
             // do not remove interfaces
             CustomClassReader ccr = new CustomClassReader(new FileInputStream(classFilePath));
 

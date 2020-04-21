@@ -61,7 +61,7 @@ public class ConservativeDebloatMojo extends AbstractDebloatMojo
       JDblFileUtils JDblFileUtils = new JDblFileUtils(outputDirectory,
          new HashSet<>(),
          classesUsed,
-         new File(getProject().getBasedir().getAbsolutePath() + "/" + getReportFileName()));
+         new File(getProject().getBasedir().getAbsolutePath() + "/" + getReportFileName()), null);
       try {
          JDblFileUtils.deleteUnusedClasses(outputDirectory);
       } catch (IOException e) {

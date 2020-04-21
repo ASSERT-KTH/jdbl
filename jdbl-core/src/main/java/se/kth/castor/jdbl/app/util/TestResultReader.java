@@ -31,9 +31,6 @@ public class TestResultReader {
         for (File f : file.listFiles()) {
             if (f.getName().endsWith(".xml")) {
                 try {
-
-                    System.out.println(f.getAbsolutePath());
-                    System.out.println(String.join("\n", Files.readLines(f, Charset.defaultCharset())));
                     DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
                     Document doc = dBuilder.parse(f);
                     doc.getDocumentElement().normalize();
@@ -56,7 +53,6 @@ public class TestResultReader {
                     if (skipped != null) {
                         nbSkip += Integer.parseInt(skipped);
                     }
-                    System.out.println(nbTest + " " + nbFailure + " " + nbErrors + " " + nbSkip);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
