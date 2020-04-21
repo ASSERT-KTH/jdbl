@@ -48,4 +48,9 @@ public class TSResult
    {
       return skippedTests;
    }
+
+   @Override
+   public String toString() {
+      return getResults();
+   }
 }

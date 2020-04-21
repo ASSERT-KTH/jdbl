@@ -12,6 +12,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.xml.sax.SAXException;
@@ -20,10 +21,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import se.kth.castor.jdbl.app.DebloatTypeEnum;
 import se.kth.castor.jdbl.app.debloat.AbstractMethodDebloat;
 import se.kth.castor.jdbl.app.debloat.TestBasedMethodDebloat;
-import se.kth.castor.jdbl.app.util.ClassesLoadedSingleton;
-import se.kth.castor.jdbl.app.util.JDblFileUtils;
-import se.kth.castor.jdbl.app.util.JarUtils;
-import se.kth.castor.jdbl.app.util.TSResult;
+import se.kth.castor.jdbl.app.util.*;
 import se.kth.castor.jdbl.app.wrapper.JacocoWrapper;
 
 /**
@@ -86,29 +84,17 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
    {
       Runtime rt = Runtime.getRuntime();
       Process p = rt.exec("mvn test -Dmaven.main.skip=true");
-      BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
-      String line;
-      TSResult tsResult = new TSResult();
       try {
-         while ((line = input.readLine()) != null) {
-            if (Pattern.matches("^Tests run: \\d*, Failures: \\d*, Errors: \\d*, Skipped: \\d*$", line)) {
-               line = line.replaceAll("\\s+", "");
-               String[] split = line.split(",");
-               tsResult = new TSResult(
-                  Integer.parseInt(split[0].split(":")[1]),
-                  Integer.parseInt(split[1].split(":")[1]),
-                  Integer.parseInt(split[2].split(":")[1]),
-                  Integer.parseInt(split[3].split(":")[1]));
-            }
-         }
-         input.close();
-         if (tsResult.errorTests() != 0) {
-            printCustomStringToConsole("T E S T S    B A S E D    D E B L O A T    F A I L E D");
-            writeTSResultsToFile(tsResult);
-            System.exit(-1);
-         }
-      } catch (IOException e) {
-         this.getLog().error("Error reading the test execution outputs.");
+         p.waitFor();
+      } catch (InterruptedException e) {
+         e.printStackTrace();
+      }
+      TestResultReader testResultReader = new TestResultReader(".");
+      TSResult tsResult = testResultReader.getResults();
+      writeTSResultsToFile(tsResult);
+      if (tsResult.errorTests() != 0) {
+         printCustomStringToConsole("T E S T S    B A S E D    D E B L O A T    F A I L E D");
+         System.exit(-1);
       }
    }
 
