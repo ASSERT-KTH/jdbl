@@ -21,9 +21,8 @@ import static org.objectweb.asm.Opcodes.ASM7;
 
 public class ConstantAdapter
 {
-   ClassReader reader;
-   ClassWriter writer;
-   AddFieldAdapter addFieldAdapter;
+   private ClassReader reader;
+   private ClassWriter writer;
 
    public ConstantAdapter(InputStream classInputStream)
    {
@@ -47,15 +46,16 @@ public class ConstantAdapter
 
    public static void main(String[] args) throws IOException
    {
-      ConstantAdapter ccw = new ConstantAdapter(new FileInputStream(new File("./jdbl-maven-plugin/src/it/dummy-project/target/classes/calc/StaticCl.class")));
+      ConstantAdapter ccw = new ConstantAdapter(
+         new FileInputStream(new File("./jdbl-maven-plugin/src/it/dummy-project/target/classes/calc/StaticCl.class")));
       byte[] result = ccw.addField();
-      FileUtils.writeByteArrayToFile(new File("./StaticCl.class"), result);
-
+      FileUtils.writeByteArrayToFile(
+         new File("/home/cesarsv/Documents/codes/github/jdbl/jdbl-core/StaticCl.class"), result);
    }
 
    public byte[] addField()
    {
-      addFieldAdapter = new AddFieldAdapter("aNewBooleanField", Opcodes.ACC_PUBLIC, writer);
+      final AddFieldAdapter addFieldAdapter = new AddFieldAdapter("aNewBooleanField", Opcodes.ACC_PUBLIC, writer);
       reader.accept(addFieldAdapter, 0);
       return writer.toByteArray();
    }
@@ -128,8 +128,7 @@ public class ConstantAdapter
       // }
 
       @Override
-      public MethodVisitor visitMethod(int acc, String name, String desc,
-         String sig, String[] ex)
+      public MethodVisitor visitMethod(int acc, String name, String desc, String sig, String[] ex)
       {
          MethodVisitor mv = super.visitMethod(acc, name, desc, sig, ex);
          if (name.equals("<clinit>")) {

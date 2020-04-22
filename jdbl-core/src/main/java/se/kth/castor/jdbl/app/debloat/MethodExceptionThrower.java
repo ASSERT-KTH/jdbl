@@ -9,7 +9,7 @@ public class MethodExceptionThrower extends MethodVisitor
 
    public MethodExceptionThrower(MethodVisitor methodVisitor)
    {
-      super(Opcodes.ASM6, null);
+      super(Opcodes.ASM8, null);
       this.target = methodVisitor;
    }
 

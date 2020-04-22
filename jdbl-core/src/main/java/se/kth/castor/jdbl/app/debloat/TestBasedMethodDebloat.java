@@ -5,9 +5,11 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.objectweb.asm.ClassReader;
@@ -31,7 +33,7 @@ public class TestBasedMethodDebloat extends AbstractMethodDebloat
       FileInputStream in = new FileInputStream(new File(outputDirectory + "/" + clazz + ".class"));
       ClassReader cr = new ClassReader(in);
       ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_MAXS);
-      ClassVisitor cv = new ClassVisitor(Opcodes.ASM5, cw)
+      ClassVisitor cv = new ClassVisitor(Opcodes.ASM8, cw)
       {
          @Override
          public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions)
@@ -64,7 +66,7 @@ public class TestBasedMethodDebloat extends AbstractMethodDebloat
    private void writeReportToFile(final String name, final String desc, final String usageType, String clazz)
    {
       try {
-         org.apache.commons.io.FileUtils.writeStringToFile(reportFile, usageType + clazz + ":" + name + desc + "\n", true);
+         FileUtils.writeStringToFile(reportFile, usageType + clazz + ":" + name + desc + "\n", StandardCharsets.UTF_8, true);
       } catch (IOException e) {
          LOGGER.error("Error writing the methods report.");
       }

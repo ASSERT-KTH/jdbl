@@ -28,7 +28,7 @@ public class ConservativeMethodDebloat extends AbstractMethodDebloat
          FileInputStream in = new FileInputStream(new File(outputDirectory + "/" + clazz + ".class"));
          ClassReader cr = new ClassReader(in);
          ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_MAXS);
-         ClassVisitor cv = new ClassVisitor(Opcodes.ASM5, cw)
+         ClassVisitor cv = new ClassVisitor(Opcodes.ASM8, cw)
          {
             @Override
             public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions)
@@ -36,12 +36,13 @@ public class ConservativeMethodDebloat extends AbstractMethodDebloat
                MethodVisitor mv = cv.visitMethod(access, name, desc, signature, exceptions);
 
                if (clazz.equals("calc/Calculator")) {
-                  System.out.println("method name: " + name + ", " + "desc: " + desc + ", " + "signature: " + signature + ", " + "access: " + access);
+                  System.out.println("method name: " + name + ", " + "desc: " + desc + ", " + "signature: " + signature +
+                     ", " + "access: " + access);
                   System.out.println(usedMethods);
                }
 
                if (isContains(name, usedMethods)) {
-                  //                        System.out.println("Removing unused method: " + name + desc + " in class: " + clazz);
+                  // System.out.println("Removing unused method: " + name + desc + " in class: " + clazz);
                   return new MethodExceptionThrower(mv);
                   // return null;
                }
