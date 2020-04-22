@@ -1,19 +1,16 @@
 package se.kth.castor.jdbl.plugin;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.regex.Pattern;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.maven.artifact.DependencyResolutionRequiredException;
+import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.xml.sax.SAXException;
@@ -22,7 +19,11 @@ import javax.xml.parsers.ParserConfigurationException;
 import se.kth.castor.jdbl.app.DebloatTypeEnum;
 import se.kth.castor.jdbl.app.debloat.AbstractMethodDebloat;
 import se.kth.castor.jdbl.app.debloat.TestBasedMethodDebloat;
-import se.kth.castor.jdbl.app.util.*;
+import se.kth.castor.jdbl.app.util.ClassesLoadedSingleton;
+import se.kth.castor.jdbl.app.util.JDblFileUtils;
+import se.kth.castor.jdbl.app.util.JarUtils;
+import se.kth.castor.jdbl.app.test.TestResult;
+import se.kth.castor.jdbl.app.test.TestResultReader;
 import se.kth.castor.jdbl.app.wrapper.JacocoWrapper;
 
 /**
@@ -72,7 +73,7 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
          this.getLog().info("Starting running the test suite on the debloated version...");
          rerunTests();
       } catch (IOException e) {
-         this.getLog().error("IOExeption when rerunning the tests");
+         this.getLog().error("IOException when rerunning the tests");
       }
       // ----------------------------------------------------
 
@@ -88,26 +89,27 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
       try {
          p.waitFor();
       } catch (InterruptedException e) {
-         e.printStackTrace();
+         this.getLog().error("Re-testing process terminated unexpectedly.");
+         Thread.currentThread().interrupt();
       }
       TestResultReader testResultReader = new TestResultReader(".");
-      TSResult tsResult = testResultReader.getResults();
-      writeTSResultsToFile(tsResult);
-      if (tsResult.errorTests() != 0 || tsResult.failedTests() != 0) {
+      TestResult testResult = testResultReader.getResults();
+      writeTSResultsToFile(testResult);
+      if (testResult.errorTests() != 0 || testResult.failedTests() != 0) {
          printCustomStringToConsole("T E S T S    B A S E D    D E B L O A T    F A I L E D");
          System.exit(-1);
       }
    }
 
-   private void writeTSResultsToFile(final TSResult tsResult)
+   private void writeTSResultsToFile(final TestResult testResult)
    {
-      this.getLog().info(tsResult.getResults());
+      this.getLog().info(testResult.getResults());
       this.getLog().info("Writing ts-results.log to " +
          new File(getProject().getBasedir().getAbsolutePath() + "/" + "ts-results.log"));
       try {
          final String reportTSResultsFileName = "ts-results.log";
-         org.apache.commons.io.FileUtils.write(new File(getProject().getBasedir().getAbsolutePath() + "/" +
-            reportTSResultsFileName), tsResult.getResults());
+         FileUtils.writeStringToFile(new File(getProject().getBasedir().getAbsolutePath() + "/" +
+            reportTSResultsFileName), testResult.getResults(), StandardCharsets.UTF_8);
       } catch (IOException e) {
          this.getLog().error("Error creating tests results report file.");
       }
@@ -133,8 +135,8 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
          }
       }
       try {
-         org.apache.commons.io.FileUtils.write(new File(getProject().getBasedir().getAbsolutePath() + "/" +
-            reportClassStatusPerDependencyFileName), s);
+         FileUtils.writeStringToFile(new File(getProject().getBasedir().getAbsolutePath() + "/" +
+            reportClassStatusPerDependencyFileName), s.toString(), StandardCharsets.UTF_8);
       } catch (IOException e) {
          this.getLog().error("Error creating dependency bloat report file.");
       }
@@ -150,8 +152,8 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
       this.getLog().info(timeElapsedInSeconds);
       try {
          final String reportExecutionTimeFileName = "debloat-execution-time.log";
-         org.apache.commons.io.FileUtils.write(new File(getProject().getBasedir().getAbsolutePath() + "/" +
-            reportExecutionTimeFileName), timeElapsedInSeconds);
+         FileUtils.writeStringToFile(new File(getProject().getBasedir().getAbsolutePath() + "/" +
+            reportExecutionTimeFileName), timeElapsedInSeconds, StandardCharsets.UTF_8);
       } catch (IOException e) {
          this.getLog().error("Error creating time elapsed report file.");
       }
@@ -160,8 +162,8 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
    private void cleanReportFile()
    {
       try {
-         org.apache.commons.io.FileUtils.write(new File(getProject().getBasedir().getAbsolutePath() + "/" +
-            getReportFileName()), "");
+         FileUtils.writeStringToFile(new File(getProject().getBasedir().getAbsolutePath() + "/" +
+            getReportFileName()), "", StandardCharsets.UTF_8);
       } catch (IOException e) {
          this.getLog().error("Error cleaning report file.");
       }
@@ -189,13 +191,12 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
 
    private void removeUnusedClasses(final String outputDirectory, final Set<String> usedClasses)
    {
-
       try {
-         JDblFileUtils JDblFileUtils = new JDblFileUtils(outputDirectory,
+         JDblFileUtils jdblFileUtils = new JDblFileUtils(outputDirectory,
             new HashSet<>(),
             usedClasses,
             new File(getProject().getBasedir().getAbsolutePath() + "/" + getReportFileName()), getProject().getTestClasspathElements());
-         JDblFileUtils.deleteUnusedClasses(outputDirectory);
+         jdblFileUtils.deleteUnusedClasses(outputDirectory);
       } catch (Exception e) {
          this.getLog().error(String.format("Error deleting unused classes: %s", e));
       }

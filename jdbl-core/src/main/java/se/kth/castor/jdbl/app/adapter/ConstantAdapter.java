@@ -17,8 +17,6 @@ import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
-import static org.objectweb.asm.Opcodes.ASM7;
-
 public class ConstantAdapter
 {
    private ClassReader reader;
@@ -69,7 +67,7 @@ public class ConstantAdapter
 
       public AddFieldAdapter(String fieldName, int access, ClassVisitor cv)
       {
-         super(ASM7, cv);
+         super(Opcodes.ASM8, cv);
          this.cv = cv;
          this.access = access;
       }
@@ -132,7 +130,7 @@ public class ConstantAdapter
       {
          MethodVisitor mv = super.visitMethod(acc, name, desc, sig, ex);
          if (name.equals("<clinit>")) {
-            mv = new MethodVisitor(Opcodes.ASM5, mv)
+            mv = new MethodVisitor(Opcodes.ASM8, mv)
             {
                @Override
                public void visitCode()
@@ -193,7 +191,7 @@ public class ConstantAdapter
 
       StaticBlockMethodVisitor(MethodVisitor mv)
       {
-         super(ASM7, mv);
+         super(Opcodes.ASM8, mv);
       }
 
       @Override
@@ -209,7 +207,7 @@ public class ConstantAdapter
          super.visitTypeInsn(Opcodes.NEW, "Example");
          super.visitInsn(Opcodes.DUP);
          super.visitInsn(Opcodes.ICONST_1); // pass argument 1 to constructor
-         super.visitMethodInsn(Opcodes.INVOKESPECIAL, "Example", "<init>", "(I)V");
+         super.visitMethodInsn(Opcodes.INVOKESPECIAL, "Example", "<init>", "(I)V", false);
          // store it in the field
          // super.visitFieldInsn(Opcodes.PUTSTATIC, "Example", "FIRST", "LExample;");
 

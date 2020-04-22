@@ -45,20 +45,11 @@ import org.apache.bcel.generic.MethodGen;
  */
 public class ClassVisitor extends EmptyVisitor
 {
-
-   //--------------------------------/
-   //-------- CLASS FIELD/S --------/
-   //------------------------------/
-
    private JavaClass clazz;
    private ConstantPoolGen constants;
    private String classReferenceFormat;
    private final DynamicCallManager dynamicCallManager = new DynamicCallManager();
    private List<String> methodCalls = new LinkedList<>();
-
-   //--------------------------------/
-   //-------- CONSTRUCTOR/S --------/
-   //------------------------------/
 
    public ClassVisitor(JavaClass jc)
    {
@@ -66,10 +57,6 @@ public class ClassVisitor extends EmptyVisitor
       constants = new ConstantPoolGen(clazz.getConstantPool());
       classReferenceFormat = "C:" + clazz.getClassName() + " %s";
    }
-
-   //--------------------------------/
-   //------- PUBLIC METHOD/S -------/
-   //------------------------------/
 
    @Override
    public void visitJavaClass(JavaClass jc)

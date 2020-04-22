@@ -10,15 +10,13 @@ import org.objectweb.asm.Opcodes;
 
 public class ClassAdapter extends ClassVisitor implements Opcodes
 {
-
    public boolean isRemovable;
 
    private String baseDir;
 
-
    public ClassAdapter(final ClassVisitor cv, String baseDir)
    {
-      super(ASM5, cv);
+      super(Opcodes.ASM8, cv);
       this.baseDir = baseDir;
    }
 

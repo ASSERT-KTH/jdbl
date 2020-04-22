@@ -18,8 +18,8 @@ public class MavenUtils
 {
    private static final int TEST_EXECUTION_TIMEOUT = 10 * 60; // 10 minutes in seconds
 
-   private File mavenHome;
-   private File workingDir;
+   private final File mavenHome;
+   private final File workingDir;
 
    private static final Logger LOGGER = LogManager.getLogger(MavenUtils.class.getName());
 

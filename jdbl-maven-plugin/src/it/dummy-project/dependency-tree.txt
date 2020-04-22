@@ -1,0 +1,4 @@
+experiments:dummy-project:jar:1.0-SNAPSHOT
++- junit:junit:jar:4.13-beta-2:test
+|  \- org.hamcrest:hamcrest-core:jar:1.3:test
+\- org.apache.commons:commons-collections4:jar:4.3:compile

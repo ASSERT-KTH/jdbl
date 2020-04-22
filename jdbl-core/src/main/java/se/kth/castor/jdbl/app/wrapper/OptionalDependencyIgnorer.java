@@ -18,10 +18,10 @@ import org.apache.maven.model.Dependency;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.shared.utils.io.FileUtils;
 
-import se.kth.castor.jdbl.app.dt.InputType;
-import se.kth.castor.jdbl.app.dt.Node;
-import se.kth.castor.jdbl.app.dt.ParseException;
-import se.kth.castor.jdbl.app.dt.Parser;
+import se.kth.castor.jdbl.app.deptree.InputType;
+import se.kth.castor.jdbl.app.deptree.Node;
+import se.kth.castor.jdbl.app.deptree.ParseException;
+import se.kth.castor.jdbl.app.deptree.Parser;
 import se.kth.castor.jdbl.app.util.MavenUtils;
 
 public class OptionalDependencyIgnorer

@@ -32,11 +32,11 @@
                      <!--                 <goal>entry-point-debloat</goal>-->
                      <goal>test-based-debloat</goal>
                   </goals>
-                  <configuration>
+<!--                  <configuration>-->
                      <!--                     <entryClass>${main.class}</entryClass>-->
                      <!--                     <entryMethod>main</entryMethod>-->
                      <!--                     <entryParameters>2 3</entryParameters>-->
-                  </configuration>
+<!--                  </configuration>-->
                </execution>
             </executions>
          </plugin>
@@ -118,6 +118,7 @@
             <configuration>
                <source>${maven.compiler.source}</source>
                <target>${maven.compiler.target}</target>
+               <optimize>false</optimize>
             </configuration>
          </plugin>
       </plugins>
@@ -135,10 +136,10 @@
          <artifactId>commons-collections4</artifactId>
          <version>4.3</version>
       </dependency>
-      <dependency>
-         <groupId>commons-io</groupId>
-         <artifactId>commons-io</artifactId>
-         <version>2.6</version>
-      </dependency>
+<!--      <dependency>-->
+<!--         <groupId>commons-io</groupId>-->
+<!--         <artifactId>commons-io</artifactId>-->
+<!--         <version>2.6</version>-->
+<!--      </dependency>-->
    </dependencies>
 </project>

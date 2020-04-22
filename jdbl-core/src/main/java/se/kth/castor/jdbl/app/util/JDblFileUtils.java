@@ -7,9 +7,9 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -18,6 +18,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -165,8 +166,8 @@ public class JDblFileUtils
                // remove the file
                LOGGER.info("Removed class: " + currentClassName);
                // write report
-               org.apache.commons.io.FileUtils.writeStringToFile(this.reportFile, "BloatedClass, " + currentClassName +
-                  "\n", true);
+               FileUtils.writeStringToFile(this.reportFile, "BloatedClass, " + currentClassName +
+                  "\n", StandardCharsets.UTF_16, true);
                Files.delete(classFile.toPath());
                nbClassesRemoved++;
                // remove the parent folder if is empty
@@ -176,8 +177,8 @@ public class JDblFileUtils
                }
             } else {
                // write report
-               org.apache.commons.io.FileUtils.writeStringToFile(this.reportFile, "UsedClass, " + currentClassName +
-                  "\n", true);
+               FileUtils.writeStringToFile(this.reportFile, "UsedClass, " + currentClassName +
+                  "\n", StandardCharsets.UTF_16, true);
             }
          }
       }
@@ -242,7 +243,7 @@ public class JDblFileUtils
       }
    }
 
-   private boolean isSymlink(final File file) throws IOException
+   private boolean isSymlink(final File file)
    {
       if (file == null) {
          throw new NullPointerException("File must not be null");

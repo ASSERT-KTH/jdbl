@@ -2,6 +2,7 @@ package se.kth.castor.jdbl.app.wrapper;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -22,6 +24,7 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import se.kth.castor.jdbl.app.DebloatTypeEnum;
+import se.kth.castor.jdbl.app.adapter.ConstantAdapter;
 import se.kth.castor.jdbl.app.util.ClassesLoadedSingleton;
 import se.kth.castor.jdbl.app.util.CmdExec;
 import se.kth.castor.jdbl.app.util.JarUtils;
@@ -38,7 +41,6 @@ public class JacocoWrapper
    private File mavenHome;
    private File report;
    private DebloatTypeEnum debloatTypeEnum;
-   private boolean isJunit5 = false;
 
    public JacocoWrapper(MavenProject mavenProject,
       File report,
@@ -96,8 +98,24 @@ public class JacocoWrapper
 
       JarUtils.decompressJars(this.mavenProject.getBasedir().getAbsolutePath() + "/target/classes");
 
+      // apply bytecode transformations
+      Iterator<File> itFiles = FileUtils.iterateFiles(
+         new File(this.mavenProject.getBasedir().getAbsolutePath() + "/target/classes"), new String[]{"class"}, true);
+      while (itFiles.hasNext()) {
+         File file = itFiles.next();
+         if (file.getName().equals("StaticCl.class")) {
+            System.out.println("processing file: " + file.getName());
+         }
+         ConstantAdapter constantAdapter = new ConstantAdapter(new FileInputStream(file));
+         byte[] result = constantAdapter.addField();
+         FileUtils.forceDelete(file);
+         FileUtils.writeByteArrayToFile(new File(file.getAbsolutePath()), result);
+      }
+
       // instrument the code
       mavenUtils.runMaven(Collections.singletonList("org.jacoco:jacoco-maven-plugin:0.8.4:instrument"), null);
+
+      // System.exit(-1);
 
       switch (this.debloatTypeEnum) {
          case TEST_DEBLOAT:

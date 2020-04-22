@@ -11,16 +11,7 @@ import org.apache.log4j.Logger;
 
 public class CmdExec
 {
-
-   //--------------------------------/
-   //-------- CLASS FIELD/S --------/
-   //------------------------------/
-
    private static final Logger LOGGER = LogManager.getLogger(CmdExec.class.getName());
-
-   //--------------------------------/
-   //------- PUBLIC METHOD/S -------/
-   //------------------------------/
 
    /**
     * Creates a system process to execute a Java class with its parameters via command line.
