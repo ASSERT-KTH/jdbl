@@ -1,7 +1,9 @@
 package se.kth.castor.jdbl.plugin;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
@@ -27,10 +29,10 @@ import se.kth.castor.jdbl.app.test.TestResultReader;
 import se.kth.castor.jdbl.app.wrapper.JacocoWrapper;
 
 /**
- * This Mojo instruments the project according to the coverage of its test suite.
+ * This Mojo debloats the project according to the coverage of its test suite.
  * Probes are inserted in order to keep track of the classes and methods used.
  * Non covered classes are removed from the final jar file, the non covered
- * methods is replaced by an <code>UnsupportedOperationException</code>.
+ * methods are replaced by an <code>UnsupportedOperationException</code>.
  */
 @Mojo(name = "test-based-debloat", defaultPhase = LifecyclePhase.PREPARE_PACKAGE, threadSafe = true)
 public class TestBasedDebloatMojo extends AbstractDebloatMojo
@@ -60,11 +62,11 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
          this.getLog().error("Error writing the status of classes per dependency.");
       }
 
-      // remove unused classes
+      // ----------------------------------------------------
       this.getLog().info("Starting removing unused classes...");
       this.removeUnusedClasses(outputDirectory, usedClasses);
 
-      // remove unused methods
+      // ----------------------------------------------------
       this.getLog().info("Starting removing unused methods...");
       this.removeUnusedMethods(outputDirectory, jaCoCoUsageAnalysis);
 
@@ -75,9 +77,8 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
       } catch (IOException e) {
          this.getLog().error("IOException when rerunning the tests");
       }
-      // ----------------------------------------------------
 
-      // write log file with the plugin's execution time
+      // ----------------------------------------------------
       writeTimeElapsedReportFile(start);
       printCustomStringToConsole("T E S T S    B A S E D    D E B L O A T    F I N I S H E D");
    }
@@ -86,6 +87,9 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
    {
       Runtime rt = Runtime.getRuntime();
       Process p = rt.exec("mvn test -Dmaven.main.skip=true");
+
+      printProcessToStandardOutput(p);
+
       try {
          p.waitFor();
       } catch (InterruptedException e) {
@@ -99,6 +103,16 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
          printCustomStringToConsole("T E S T S    B A S E D    D E B L O A T    F A I L E D");
          System.exit(-1);
       }
+   }
+
+   private void printProcessToStandardOutput(final Process p) throws IOException
+   {
+      String line;
+      BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+      while ((line = input.readLine()) != null) {
+         System.out.println(line);
+      }
+      input.close();
    }
 
    private void writeTSResultsToFile(final TestResult testResult)
