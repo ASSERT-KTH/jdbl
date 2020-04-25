@@ -101,7 +101,6 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
       writeTSResultsToFile(testResult);
       if (testResult.errorTests() != 0 || testResult.failedTests() != 0) {
          printCustomStringToConsole("T E S T S    B A S E D    D E B L O A T    F A I L E D");
-         System.exit(-1);
       }
    }
 
