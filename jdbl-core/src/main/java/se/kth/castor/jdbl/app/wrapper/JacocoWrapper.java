@@ -170,13 +170,15 @@ public class JacocoWrapper
       Set<String> classesLoadedTestDebloat = new HashSet<>();
       Runtime rt = Runtime.getRuntime();
       FileUtils.deleteDirectory(new File("target/classes"));
-      Process p = rt.exec("mvn test -X -Djacoco.skip -Denforcer.skip=true -Dcheckstyle.skip=true -Dcobertura.skip=true -DskipITs=true -Drat.skip=true -Dlicense.skip=true -Dfindbugs.skip=true -DargLine=\"-verbose:class\"");
+      Process p = rt.exec("mvn test -X -Denforcer.skip=true -Dcheckstyle.skip=true -Dcobertura.skip=true -DskipITs=true -Drat.skip=true -Dlicense.skip=true -Dfindbugs.skip=true -DargLine=\"-verbose:class\"");
       new Thread(() -> {
          BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
          String line;
          try {
             while ((line = input.readLine()) != null) {
                if (line.contains("class,load") && line.endsWith("target/classes/")) {
+                  classesLoadedTestDebloat.add(line.split(" ")[1]);
+               } else if (line.contains("[Loaded") && line.endsWith("target/classes/]")) {
                   classesLoadedTestDebloat.add(line.split(" ")[1]);
                }
             }
