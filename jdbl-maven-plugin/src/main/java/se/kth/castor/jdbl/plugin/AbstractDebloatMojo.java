@@ -1,6 +1,9 @@
 package se.kth.castor.jdbl.plugin;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -13,7 +16,23 @@ public abstract class AbstractDebloatMojo extends AbstractMojo
    /**
     * The maven home file, assuming either an environment variable M2_HOME, or that mvn command exists in PATH.
     */
-   private static final File mavenHome = new File(System.getenv().get("M2_HOME"));
+   private static File mavenHome;
+   static {
+      if (System.getenv().containsKey("M2_HOME")) {
+         mavenHome = new File(System.getenv().get("M2_HOME"));
+      } else {
+         try {
+            Process exec = Runtime.getRuntime().exec("mvn --version");
+            BufferedReader stdInput = new BufferedReader(new InputStreamReader(exec.getInputStream()));
+            exec.waitFor();
+            mavenHome = new File(stdInput.readLine().replace("Maven home: ", ""));
+         } catch (Exception e) {
+            e.printStackTrace();
+            mavenHome = new File("");
+         }
+      }
+   }
+
    private static final String LINE_SEPARATOR = "------------------------------------------------------------------------";
 
    /**
