@@ -107,6 +107,7 @@ public class JDblFileUtils
          } else if (classFile.getName().endsWith(".class")) {
             String classFilePath = classFile.getAbsolutePath();
             String currentClassName = getBinaryNameOfTestFile(classFilePath);
+            String fileType = "class";
             if (currentClassName == null) {
                continue;
             }
@@ -114,14 +115,18 @@ public class JDblFileUtils
                if (urlClassLoader != null) {
                   Class<?> aClass = urlClassLoader.loadClass(currentClassName);
                   if (aClass.isAnnotation()) {
+                     fileType = "annotation";
                      exclusionSet.add(currentClassName);
                   } else if (aClass.isInterface()) {
+                     fileType = "interface";
                      exclusionSet.add(currentClassName);
                   } else if (aClass.isEnum()) {
+                     fileType = "enum";
                      exclusionSet.add(currentClassName);
                   } else {
                      try {
                         if (Modifier.isPrivate(aClass.getConstructor().getModifiers())) {
+                           fileType = "constant";
                            exclusionSet.add(currentClassName);
                         }
                      } catch (Throwable e) {
@@ -136,6 +141,7 @@ public class JDblFileUtils
                            allStatic = allStatic && Modifier.isStatic(method.getModifiers());
                         }
                         if (allStatic) {
+                           fileType = "constant";
                            exclusionSet.add(currentClassName);
                         }
                      } catch (Throwable e) {
@@ -143,6 +149,7 @@ public class JDblFileUtils
                      }
                      try {
                         if (Modifier.isStatic(aClass.getField("INSTANCE").getModifiers())) {
+                           fileType = "constant";
                            exclusionSet.add(currentClassName);
                         }
                      } catch (Throwable e) {
@@ -152,6 +159,7 @@ public class JDblFileUtils
                }
             } catch (Throwable e) {
                // ignore
+               fileType = "unknown";
             }
             // do not remove interfaces
             CustomClassReader ccr = new CustomClassReader(new FileInputStream(classFilePath));
@@ -166,7 +174,7 @@ public class JDblFileUtils
                // remove the file
                LOGGER.info("Removed class: " + currentClassName);
                // write report
-               FileUtils.writeStringToFile(this.reportFile, "BloatedClass, " + currentClassName +
+               FileUtils.writeStringToFile(this.reportFile, "BloatedClass," + currentClassName + "," + fileType +
                   "\n", StandardCharsets.UTF_8, true);
                Files.delete(classFile.toPath());
                nbClassesRemoved++;
@@ -177,7 +185,7 @@ public class JDblFileUtils
                }
             } else {
                // write report
-               FileUtils.writeStringToFile(this.reportFile, "UsedClass, " + currentClassName +
+               FileUtils.writeStringToFile(this.reportFile, "UsedClass," + currentClassName + "," + fileType +
                   "\n", StandardCharsets.UTF_8, true);
             }
          }
