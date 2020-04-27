@@ -167,7 +167,7 @@ public class JDblFileUtils
                LOGGER.info("Removed class: " + currentClassName);
                // write report
                FileUtils.writeStringToFile(this.reportFile, "BloatedClass, " + currentClassName +
-                  "\n", StandardCharsets.UTF_16, true);
+                  "\n", StandardCharsets.UTF_8, true);
                Files.delete(classFile.toPath());
                nbClassesRemoved++;
                // remove the parent folder if is empty
@@ -178,7 +178,7 @@ public class JDblFileUtils
             } else {
                // write report
                FileUtils.writeStringToFile(this.reportFile, "UsedClass, " + currentClassName +
-                  "\n", StandardCharsets.UTF_16, true);
+                  "\n", StandardCharsets.UTF_8, true);
             }
          }
       }
