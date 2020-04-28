@@ -26,7 +26,7 @@ public class ConstantAdapter
    {
       try {
          reader = new ClassReader(classInputStream);
-         writer = new ClassWriter(reader, ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
+         writer = new ClassWriter(reader, ClassWriter.COMPUTE_MAXS);
       } catch (IOException ex) {
          Logger.getLogger(ConstantAdapter.class.getName()).log(Level.SEVERE, null, ex);
       }
