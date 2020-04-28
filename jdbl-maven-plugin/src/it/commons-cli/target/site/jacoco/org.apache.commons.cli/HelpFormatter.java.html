@@ -1,0 +1,985 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HelpFormatter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Commons CLI</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.cli</a> &gt; <span class="el_source">HelpFormatter.java</span></div><h1>HelpFormatter.java</h1><pre class="source lang-java linenums">/**
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.apache.commons.cli;
+
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+
+/**
+ * A formatter of help messages for the current command line options
+ *
+ * @author Slawek Zachcial
+ * @author John Keyes (john at integralsource.com)
+ * @version $Revision$, $Date$
+ */
+<span class="nc" id="L35">public class HelpFormatter</span>
+{
+    // --------------------------------------------------------------- Constants
+
+    /** default number of characters per line */
+    public static final int DEFAULT_WIDTH = 74;
+
+    /** default padding to the left of each line */
+    public static final int DEFAULT_LEFT_PAD = 1;
+
+    /**
+     * the number of characters of padding to be prefixed
+     * to each description line
+     */
+    public static final int DEFAULT_DESC_PAD = 3;
+
+    /** the string to display at the beginning of the usage statement */
+    public static final String DEFAULT_SYNTAX_PREFIX = &quot;usage: &quot;;
+
+    /** default prefix for shortOpts */
+    public static final String DEFAULT_OPT_PREFIX = &quot;-&quot;;
+
+    /** default prefix for long Option */
+    public static final String DEFAULT_LONG_OPT_PREFIX = &quot;--&quot;;
+
+    /** default name for an argument */
+    public static final String DEFAULT_ARG_NAME = &quot;arg&quot;;
+
+    // -------------------------------------------------------------- Attributes
+
+    /**
+     * number of characters per line
+     *
+     * @deprecated Scope will be made private for next major version
+     * - use get/setWidth methods instead.
+     */
+<span class="nc" id="L71">    public int defaultWidth = DEFAULT_WIDTH;</span>
+
+    /**
+     * amount of padding to the left of each line
+     *
+     * @deprecated Scope will be made private for next major version
+     * - use get/setLeftPadding methods instead.
+     */
+<span class="nc" id="L79">    public int defaultLeftPad = DEFAULT_LEFT_PAD;</span>
+
+    /**
+     * the number of characters of padding to be prefixed
+     * to each description line
+     *
+     * @deprecated Scope will be made private for next major version
+     * - use get/setDescPadding methods instead.
+     */
+<span class="nc" id="L88">    public int defaultDescPad = DEFAULT_DESC_PAD;</span>
+
+    /**
+     * the string to display at the begining of the usage statement
+     *
+     * @deprecated Scope will be made private for next major version
+     * - use get/setSyntaxPrefix methods instead.
+     */
+<span class="nc" id="L96">    public String defaultSyntaxPrefix = DEFAULT_SYNTAX_PREFIX;</span>
+
+    /**
+     * the new line string
+     *
+     * @deprecated Scope will be made private for next major version
+     * - use get/setNewLine methods instead.
+     */
+<span class="nc" id="L104">    public String defaultNewLine = System.getProperty(&quot;line.separator&quot;);</span>
+
+    /**
+     * the shortOpt prefix
+     *
+     * @deprecated Scope will be made private for next major version
+     * - use get/setOptPrefix methods instead.
+     */
+<span class="nc" id="L112">    public String defaultOptPrefix = DEFAULT_OPT_PREFIX;</span>
+
+    /**
+     * the long Opt prefix
+     *
+     * @deprecated Scope will be made private for next major version
+     * - use get/setLongOptPrefix methods instead.
+     */
+<span class="nc" id="L120">    public String defaultLongOptPrefix = DEFAULT_LONG_OPT_PREFIX;</span>
+
+    /**
+     * the name of the argument
+     *
+     * @deprecated Scope will be made private for next major version
+     * - use get/setArgName methods instead.
+     */
+<span class="nc" id="L128">    public String defaultArgName = DEFAULT_ARG_NAME;</span>
+
+    /**
+     * Comparator used to sort the options when they output in help text
+     *
+     * Defaults to case-insensitive alphabetical sorting by option key
+     */
+<span class="nc" id="L135">    protected Comparator optionComparator = new OptionComparator();</span>
+
+    /**
+     * Sets the 'width'.
+     *
+     * @param width the new value of 'width'
+     */
+    public void setWidth(int width)
+    {
+<span class="nc" id="L144">        this.defaultWidth = width;</span>
+<span class="nc" id="L145">    }</span>
+
+    /**
+     * Returns the 'width'.
+     *
+     * @return the 'width'
+     */
+    public int getWidth()
+    {
+<span class="nc" id="L154">        return defaultWidth;</span>
+    }
+
+    /**
+     * Sets the 'leftPadding'.
+     *
+     * @param padding the new value of 'leftPadding'
+     */
+    public void setLeftPadding(int padding)
+    {
+<span class="nc" id="L164">        this.defaultLeftPad = padding;</span>
+<span class="nc" id="L165">    }</span>
+
+    /**
+     * Returns the 'leftPadding'.
+     *
+     * @return the 'leftPadding'
+     */
+    public int getLeftPadding()
+    {
+<span class="nc" id="L174">        return defaultLeftPad;</span>
+    }
+
+    /**
+     * Sets the 'descPadding'.
+     *
+     * @param padding the new value of 'descPadding'
+     */
+    public void setDescPadding(int padding)
+    {
+<span class="nc" id="L184">        this.defaultDescPad = padding;</span>
+<span class="nc" id="L185">    }</span>
+
+    /**
+     * Returns the 'descPadding'.
+     *
+     * @return the 'descPadding'
+     */
+    public int getDescPadding()
+    {
+<span class="nc" id="L194">        return defaultDescPad;</span>
+    }
+
+    /**
+     * Sets the 'syntaxPrefix'.
+     *
+     * @param prefix the new value of 'syntaxPrefix'
+     */
+    public void setSyntaxPrefix(String prefix)
+    {
+<span class="nc" id="L204">        this.defaultSyntaxPrefix = prefix;</span>
+<span class="nc" id="L205">    }</span>
+
+    /**
+     * Returns the 'syntaxPrefix'.
+     *
+     * @return the 'syntaxPrefix'
+     */
+    public String getSyntaxPrefix()
+    {
+<span class="nc" id="L214">        return defaultSyntaxPrefix;</span>
+    }
+
+    /**
+     * Sets the 'newLine'.
+     *
+     * @param newline the new value of 'newLine'
+     */
+    public void setNewLine(String newline)
+    {
+<span class="nc" id="L224">        this.defaultNewLine = newline;</span>
+<span class="nc" id="L225">    }</span>
+
+    /**
+     * Returns the 'newLine'.
+     *
+     * @return the 'newLine'
+     */
+    public String getNewLine()
+    {
+<span class="nc" id="L234">        return defaultNewLine;</span>
+    }
+
+    /**
+     * Sets the 'optPrefix'.
+     *
+     * @param prefix the new value of 'optPrefix'
+     */
+    public void setOptPrefix(String prefix)
+    {
+<span class="nc" id="L244">        this.defaultOptPrefix = prefix;</span>
+<span class="nc" id="L245">    }</span>
+
+    /**
+     * Returns the 'optPrefix'.
+     *
+     * @return the 'optPrefix'
+     */
+    public String getOptPrefix()
+    {
+<span class="nc" id="L254">        return defaultOptPrefix;</span>
+    }
+
+    /**
+     * Sets the 'longOptPrefix'.
+     *
+     * @param prefix the new value of 'longOptPrefix'
+     */
+    public void setLongOptPrefix(String prefix)
+    {
+<span class="nc" id="L264">        this.defaultLongOptPrefix = prefix;</span>
+<span class="nc" id="L265">    }</span>
+
+    /**
+     * Returns the 'longOptPrefix'.
+     *
+     * @return the 'longOptPrefix'
+     */
+    public String getLongOptPrefix()
+    {
+<span class="nc" id="L274">        return defaultLongOptPrefix;</span>
+    }
+
+    /**
+     * Sets the 'argName'.
+     *
+     * @param name the new value of 'argName'
+     */
+    public void setArgName(String name)
+    {
+<span class="nc" id="L284">        this.defaultArgName = name;</span>
+<span class="nc" id="L285">    }</span>
+
+    /**
+     * Returns the 'argName'.
+     *
+     * @return the 'argName'
+     */
+    public String getArgName()
+    {
+<span class="nc" id="L294">        return defaultArgName;</span>
+    }
+
+    /**
+     * Comparator used to sort the options when they output in help text
+     *
+     * Defaults to case-insensitive alphabetical sorting by option key
+     */
+    public Comparator getOptionComparator()
+    {
+<span class="nc" id="L304">        return optionComparator;</span>
+    }
+
+    /**
+     * Set the comparator used to sort the options when they output in help text
+     *
+     * Passing in a null parameter will set the ordering to the default mode
+     */
+    public void setOptionComparator(Comparator comparator)
+    {
+<span class="nc bnc" id="L314" title="All 2 branches missed.">        if (comparator == null)</span>
+        {
+<span class="nc" id="L316">            this.optionComparator = new OptionComparator();</span>
+        }
+        else
+        {
+<span class="nc" id="L320">            this.optionComparator = comparator;</span>
+        }
+<span class="nc" id="L322">    }</span>
+
+    /**
+     * Print the help for &lt;code&gt;options&lt;/code&gt; with the specified
+     * command line syntax.  This method prints help information to
+     * System.out.
+     *
+     * @param cmdLineSyntax the syntax for this application
+     * @param options the Options instance
+     */
+    public void printHelp(String cmdLineSyntax, Options options)
+    {
+<span class="nc" id="L334">        printHelp(defaultWidth, cmdLineSyntax, null, options, null, false);</span>
+<span class="nc" id="L335">    }</span>
+
+    /**
+     * Print the help for &lt;code&gt;options&lt;/code&gt; with the specified
+     * command line syntax.  This method prints help information to
+     * System.out.
+     *
+     * @param cmdLineSyntax the syntax for this application
+     * @param options the Options instance
+     * @param autoUsage whether to print an automatically generated
+     * usage statement
+     */
+    public void printHelp(String cmdLineSyntax, Options options, boolean autoUsage)
+    {
+<span class="nc" id="L349">        printHelp(defaultWidth, cmdLineSyntax, null, options, null, autoUsage);</span>
+<span class="nc" id="L350">    }</span>
+
+    /**
+     * Print the help for &lt;code&gt;options&lt;/code&gt; with the specified
+     * command line syntax.  This method prints help information to
+     * System.out.
+     *
+     * @param cmdLineSyntax the syntax for this application
+     * @param header the banner to display at the begining of the help
+     * @param options the Options instance
+     * @param footer the banner to display at the end of the help
+     */
+    public void printHelp(String cmdLineSyntax, String header, Options options, String footer)
+    {
+<span class="nc" id="L364">        printHelp(cmdLineSyntax, header, options, footer, false);</span>
+<span class="nc" id="L365">    }</span>
+
+    /**
+     * Print the help for &lt;code&gt;options&lt;/code&gt; with the specified
+     * command line syntax.  This method prints help information to
+     * System.out.
+     *
+     * @param cmdLineSyntax the syntax for this application
+     * @param header the banner to display at the begining of the help
+     * @param options the Options instance
+     * @param footer the banner to display at the end of the help
+     * @param autoUsage whether to print an automatically generated
+     * usage statement
+     */
+    public void printHelp(String cmdLineSyntax, String header, Options options, String footer, boolean autoUsage)
+    {
+<span class="nc" id="L381">        printHelp(defaultWidth, cmdLineSyntax, header, options, footer, autoUsage);</span>
+<span class="nc" id="L382">    }</span>
+
+    /**
+     * Print the help for &lt;code&gt;options&lt;/code&gt; with the specified
+     * command line syntax.  This method prints help information to
+     * System.out.
+     *
+     * @param width the number of characters to be displayed on each line
+     * @param cmdLineSyntax the syntax for this application
+     * @param header the banner to display at the beginning of the help
+     * @param options the Options instance
+     * @param footer the banner to display at the end of the help
+     */
+    public void printHelp(int width, String cmdLineSyntax, String header, Options options, String footer)
+    {
+<span class="nc" id="L397">        printHelp(width, cmdLineSyntax, header, options, footer, false);</span>
+<span class="nc" id="L398">    }</span>
+
+    /**
+     * Print the help for &lt;code&gt;options&lt;/code&gt; with the specified
+     * command line syntax.  This method prints help information to
+     * System.out.
+     *
+     * @param width the number of characters to be displayed on each line
+     * @param cmdLineSyntax the syntax for this application
+     * @param header the banner to display at the begining of the help
+     * @param options the Options instance
+     * @param footer the banner to display at the end of the help
+     * @param autoUsage whether to print an automatically generated
+     * usage statement
+     */
+    public void printHelp(int width, String cmdLineSyntax, String header,
+                          Options options, String footer, boolean autoUsage)
+    {
+<span class="nc" id="L416">        PrintWriter pw = new PrintWriter(System.out);</span>
+
+<span class="nc" id="L418">        printHelp(pw, width, cmdLineSyntax, header, options, defaultLeftPad, defaultDescPad, footer, autoUsage);</span>
+<span class="nc" id="L419">        pw.flush();</span>
+<span class="nc" id="L420">    }</span>
+
+    /**
+     * Print the help for &lt;code&gt;options&lt;/code&gt; with the specified
+     * command line syntax.
+     *
+     * @param pw the writer to which the help will be written
+     * @param width the number of characters to be displayed on each line
+     * @param cmdLineSyntax the syntax for this application
+     * @param header the banner to display at the begining of the help
+     * @param options the Options instance
+     * @param leftPad the number of characters of padding to be prefixed
+     * to each line
+     * @param descPad the number of characters of padding to be prefixed
+     * to each description line
+     * @param footer the banner to display at the end of the help
+     *
+     * @throws IllegalStateException if there is no room to print a line
+     */
+    public void printHelp(PrintWriter pw, int width, String cmdLineSyntax,
+                          String header, Options options, int leftPad,
+                          int descPad, String footer)
+    {
+<span class="nc" id="L443">        printHelp(pw, width, cmdLineSyntax, header, options, leftPad, descPad, footer, false);</span>
+<span class="nc" id="L444">    }</span>
+
+
+    /**
+     * Print the help for &lt;code&gt;options&lt;/code&gt; with the specified
+     * command line syntax.
+     *
+     * @param pw the writer to which the help will be written
+     * @param width the number of characters to be displayed on each line
+     * @param cmdLineSyntax the syntax for this application
+     * @param header the banner to display at the begining of the help
+     * @param options the Options instance
+     * @param leftPad the number of characters of padding to be prefixed
+     * to each line
+     * @param descPad the number of characters of padding to be prefixed
+     * to each description line
+     * @param footer the banner to display at the end of the help
+     * @param autoUsage whether to print an automatically generated
+     * usage statement
+     *
+     * @throws IllegalStateException if there is no room to print a line
+     */
+    public void printHelp(PrintWriter pw, int width, String cmdLineSyntax,
+                          String header, Options options, int leftPad,
+                          int descPad, String footer, boolean autoUsage)
+    {
+<span class="nc bnc" id="L470" title="All 4 branches missed.">        if ((cmdLineSyntax == null) || (cmdLineSyntax.length() == 0))</span>
+        {
+<span class="nc" id="L472">            throw new IllegalArgumentException(&quot;cmdLineSyntax not provided&quot;);</span>
+        }
+
+<span class="nc bnc" id="L475" title="All 2 branches missed.">        if (autoUsage)</span>
+        {
+<span class="nc" id="L477">            printUsage(pw, width, cmdLineSyntax, options);</span>
+        }
+        else
+        {
+<span class="nc" id="L481">            printUsage(pw, width, cmdLineSyntax);</span>
+        }
+
+<span class="nc bnc" id="L484" title="All 4 branches missed.">        if ((header != null) &amp;&amp; (header.trim().length() &gt; 0))</span>
+        {
+<span class="nc" id="L486">            printWrapped(pw, width, header);</span>
+        }
+
+<span class="nc" id="L489">        printOptions(pw, width, options, leftPad, descPad);</span>
+
+<span class="nc bnc" id="L491" title="All 4 branches missed.">        if ((footer != null) &amp;&amp; (footer.trim().length() &gt; 0))</span>
+        {
+<span class="nc" id="L493">            printWrapped(pw, width, footer);</span>
+        }
+<span class="nc" id="L495">    }</span>
+
+    /**
+     * &lt;p&gt;Prints the usage statement for the specified application.&lt;/p&gt;
+     *
+     * @param pw The PrintWriter to print the usage statement
+     * @param width The number of characters to display per line
+     * @param app The application name
+     * @param options The command line Options
+     *
+     */
+    public void printUsage(PrintWriter pw, int width, String app, Options options)
+    {
+        // initialise the string buffer
+<span class="nc" id="L509">        StringBuffer buff = new StringBuffer(defaultSyntaxPrefix).append(app).append(&quot; &quot;);</span>
+
+        // create a list for processed option groups
+<span class="nc" id="L512">        final Collection processedGroups = new ArrayList();</span>
+
+        // temp variable
+        Option option;
+
+<span class="nc" id="L517">        List optList = new ArrayList(options.getOptions());</span>
+<span class="nc" id="L518">        Collections.sort(optList, getOptionComparator());</span>
+        // iterate over the options
+<span class="nc bnc" id="L520" title="All 2 branches missed.">        for (Iterator i = optList.iterator(); i.hasNext();)</span>
+        {
+            // get the next Option
+<span class="nc" id="L523">            option = (Option) i.next();</span>
+
+            // check if the option is part of an OptionGroup
+<span class="nc" id="L526">            OptionGroup group = options.getOptionGroup(option);</span>
+
+            // if the option is part of a group
+<span class="nc bnc" id="L529" title="All 2 branches missed.">            if (group != null)</span>
+            {
+                // and if the group has not already been processed
+<span class="nc bnc" id="L532" title="All 2 branches missed.">                if (!processedGroups.contains(group))</span>
+                {
+                    // add the group to the processed list
+<span class="nc" id="L535">                    processedGroups.add(group);</span>
+
+
+                    // add the usage clause
+<span class="nc" id="L539">                    appendOptionGroup(buff, group);</span>
+                }
+
+                // otherwise the option was displayed in the group
+                // previously so ignore it.
+            }
+
+            // if the Option is not part of an OptionGroup
+            else
+            {
+<span class="nc" id="L549">                appendOption(buff, option, option.isRequired());</span>
+            }
+
+<span class="nc bnc" id="L552" title="All 2 branches missed.">            if (i.hasNext())</span>
+            {
+<span class="nc" id="L554">                buff.append(&quot; &quot;);</span>
+            }
+<span class="nc" id="L556">        }</span>
+
+
+        // call printWrapped
+<span class="nc" id="L560">        printWrapped(pw, width, buff.toString().indexOf(' ') + 1, buff.toString());</span>
+<span class="nc" id="L561">    }</span>
+
+    /**
+     * Appends the usage clause for an OptionGroup to a StringBuffer.
+     * The clause is wrapped in square brackets if the group is required.
+     * The display of the options is handled by appendOption
+     * @param buff the StringBuffer to append to
+     * @param group the group to append
+     * @see #appendOption(StringBuffer,Option,boolean)
+     */
+    private void appendOptionGroup(final StringBuffer buff, final OptionGroup group)
+    {
+<span class="nc bnc" id="L573" title="All 2 branches missed.">        if (!group.isRequired())</span>
+        {
+<span class="nc" id="L575">            buff.append(&quot;[&quot;);</span>
+        }
+
+<span class="nc" id="L578">        List optList = new ArrayList(group.getOptions());</span>
+<span class="nc" id="L579">        Collections.sort(optList, getOptionComparator());</span>
+        // for each option in the OptionGroup
+<span class="nc bnc" id="L581" title="All 2 branches missed.">        for (Iterator i = optList.iterator(); i.hasNext();)</span>
+        {
+            // whether the option is required or not is handled at group level
+<span class="nc" id="L584">            appendOption(buff, (Option) i.next(), true);</span>
+
+<span class="nc bnc" id="L586" title="All 2 branches missed.">            if (i.hasNext())</span>
+            {
+<span class="nc" id="L588">                buff.append(&quot; | &quot;);</span>
+            }
+        }
+
+<span class="nc bnc" id="L592" title="All 2 branches missed.">        if (!group.isRequired())</span>
+        {
+<span class="nc" id="L594">            buff.append(&quot;]&quot;);</span>
+        }
+<span class="nc" id="L596">    }</span>
+
+    /**
+     * Appends the usage clause for an Option to a StringBuffer.
+     *
+     * @param buff the StringBuffer to append to
+     * @param option the Option to append
+     * @param required whether the Option is required or not
+     */
+    private static void appendOption(final StringBuffer buff, final Option option, final boolean required)
+    {
+<span class="nc bnc" id="L607" title="All 2 branches missed.">        if (!required)</span>
+        {
+<span class="nc" id="L609">            buff.append(&quot;[&quot;);</span>
+        }
+
+<span class="nc bnc" id="L612" title="All 2 branches missed.">        if (option.getOpt() != null)</span>
+        {
+<span class="nc" id="L614">            buff.append(&quot;-&quot;).append(option.getOpt());</span>
+        }
+        else
+        {
+<span class="nc" id="L618">            buff.append(&quot;--&quot;).append(option.getLongOpt());</span>
+        }
+
+        // if the Option has a value
+<span class="nc bnc" id="L622" title="All 4 branches missed.">        if (option.hasArg() &amp;&amp; option.hasArgName())</span>
+        {
+<span class="nc" id="L624">            buff.append(&quot; &lt;&quot;).append(option.getArgName()).append(&quot;&gt;&quot;);</span>
+        }
+
+        // if the Option is not a required option
+<span class="nc bnc" id="L628" title="All 2 branches missed.">        if (!required)</span>
+        {
+<span class="nc" id="L630">            buff.append(&quot;]&quot;);</span>
+        }
+<span class="nc" id="L632">    }</span>
+
+    /**
+     * Print the cmdLineSyntax to the specified writer, using the
+     * specified width.
+     *
+     * @param pw The printWriter to write the help to
+     * @param width The number of characters per line for the usage statement.
+     * @param cmdLineSyntax The usage statement.
+     */
+    public void printUsage(PrintWriter pw, int width, String cmdLineSyntax)
+    {
+<span class="nc" id="L644">        int argPos = cmdLineSyntax.indexOf(' ') + 1;</span>
+
+<span class="nc" id="L646">        printWrapped(pw, width, defaultSyntaxPrefix.length() + argPos, defaultSyntaxPrefix + cmdLineSyntax);</span>
+<span class="nc" id="L647">    }</span>
+
+    /**
+     * &lt;p&gt;Print the help for the specified Options to the specified writer,
+     * using the specified width, left padding and description padding.&lt;/p&gt;
+     *
+     * @param pw The printWriter to write the help to
+     * @param width The number of characters to display per line
+     * @param options The command line Options
+     * @param leftPad the number of characters of padding to be prefixed
+     * to each line
+     * @param descPad the number of characters of padding to be prefixed
+     * to each description line
+     */
+    public void printOptions(PrintWriter pw, int width, Options options,
+                             int leftPad, int descPad)
+    {
+<span class="nc" id="L664">        StringBuffer sb = new StringBuffer();</span>
+
+<span class="nc" id="L666">        renderOptions(sb, width, options, leftPad, descPad);</span>
+<span class="nc" id="L667">        pw.println(sb.toString());</span>
+<span class="nc" id="L668">    }</span>
+
+    /**
+     * Print the specified text to the specified PrintWriter.
+     *
+     * @param pw The printWriter to write the help to
+     * @param width The number of characters to display per line
+     * @param text The text to be written to the PrintWriter
+     */
+    public void printWrapped(PrintWriter pw, int width, String text)
+    {
+<span class="nc" id="L679">        printWrapped(pw, width, 0, text);</span>
+<span class="nc" id="L680">    }</span>
+
+    /**
+     * Print the specified text to the specified PrintWriter.
+     *
+     * @param pw The printWriter to write the help to
+     * @param width The number of characters to display per line
+     * @param nextLineTabStop The position on the next line for the first tab.
+     * @param text The text to be written to the PrintWriter
+     */
+    public void printWrapped(PrintWriter pw, int width, int nextLineTabStop, String text)
+    {
+<span class="nc" id="L692">        StringBuffer sb = new StringBuffer(text.length());</span>
+
+<span class="nc" id="L694">        renderWrappedText(sb, width, nextLineTabStop, text);</span>
+<span class="nc" id="L695">        pw.println(sb.toString());</span>
+<span class="nc" id="L696">    }</span>
+
+    // --------------------------------------------------------------- Protected
+
+    /**
+     * Render the specified Options and return the rendered Options
+     * in a StringBuffer.
+     *
+     * @param sb The StringBuffer to place the rendered Options into.
+     * @param width The number of characters to display per line
+     * @param options The command line Options
+     * @param leftPad the number of characters of padding to be prefixed
+     * to each line
+     * @param descPad the number of characters of padding to be prefixed
+     * to each description line
+     *
+     * @return the StringBuffer with the rendered Options contents.
+     */
+    protected StringBuffer renderOptions(StringBuffer sb, int width, Options options, int leftPad, int descPad)
+    {
+<span class="nc" id="L716">        final String lpad = createPadding(leftPad);</span>
+<span class="nc" id="L717">        final String dpad = createPadding(descPad);</span>
+
+        // first create list containing only &lt;lpad&gt;-a,--aaa where
+        // -a is opt and --aaa is long opt; in parallel look for
+        // the longest opt string this list will be then used to
+        // sort options ascending
+<span class="nc" id="L723">        int max = 0;</span>
+        StringBuffer optBuf;
+<span class="nc" id="L725">        List prefixList = new ArrayList();</span>
+
+<span class="nc" id="L727">        List optList = options.helpOptions();</span>
+
+<span class="nc" id="L729">        Collections.sort(optList, getOptionComparator());</span>
+
+<span class="nc bnc" id="L731" title="All 2 branches missed.">        for (Iterator i = optList.iterator(); i.hasNext();)</span>
+        {
+<span class="nc" id="L733">            Option option = (Option) i.next();</span>
+<span class="nc" id="L734">            optBuf = new StringBuffer(8);</span>
+
+<span class="nc bnc" id="L736" title="All 2 branches missed.">            if (option.getOpt() == null)</span>
+            {
+<span class="nc" id="L738">                optBuf.append(lpad).append(&quot;   &quot; + defaultLongOptPrefix).append(option.getLongOpt());</span>
+            }
+            else
+            {
+<span class="nc" id="L742">                optBuf.append(lpad).append(defaultOptPrefix).append(option.getOpt());</span>
+
+<span class="nc bnc" id="L744" title="All 2 branches missed.">                if (option.hasLongOpt())</span>
+                {
+<span class="nc" id="L746">                    optBuf.append(',').append(defaultLongOptPrefix).append(option.getLongOpt());</span>
+                }
+            }
+
+<span class="nc bnc" id="L750" title="All 2 branches missed.">            if (option.hasArg())</span>
+            {
+<span class="nc bnc" id="L752" title="All 2 branches missed.">                if (option.hasArgName())</span>
+                {
+<span class="nc" id="L754">                    optBuf.append(&quot; &lt;&quot;).append(option.getArgName()).append(&quot;&gt;&quot;);</span>
+                }
+                else
+                {
+<span class="nc" id="L758">                    optBuf.append(' ');</span>
+                }
+            }
+
+<span class="nc" id="L762">            prefixList.add(optBuf);</span>
+<span class="nc bnc" id="L763" title="All 2 branches missed.">            max = (optBuf.length() &gt; max) ? optBuf.length() : max;</span>
+<span class="nc" id="L764">        }</span>
+
+<span class="nc" id="L766">        int x = 0;</span>
+
+<span class="nc bnc" id="L768" title="All 2 branches missed.">        for (Iterator i = optList.iterator(); i.hasNext();)</span>
+        {
+<span class="nc" id="L770">            Option option = (Option) i.next();</span>
+<span class="nc" id="L771">            optBuf = new StringBuffer(prefixList.get(x++).toString());</span>
+
+<span class="nc bnc" id="L773" title="All 2 branches missed.">            if (optBuf.length() &lt; max)</span>
+            {
+<span class="nc" id="L775">                optBuf.append(createPadding(max - optBuf.length()));</span>
+            }
+
+<span class="nc" id="L778">            optBuf.append(dpad);</span>
+
+<span class="nc" id="L780">            int nextLineTabStop = max + descPad;</span>
+
+<span class="nc bnc" id="L782" title="All 2 branches missed.">            if (option.getDescription() != null)</span>
+            {
+<span class="nc" id="L784">                optBuf.append(option.getDescription());</span>
+            }
+
+<span class="nc" id="L787">            renderWrappedText(sb, width, nextLineTabStop, optBuf.toString());</span>
+
+<span class="nc bnc" id="L789" title="All 2 branches missed.">            if (i.hasNext())</span>
+            {
+<span class="nc" id="L791">                sb.append(defaultNewLine);</span>
+            }
+<span class="nc" id="L793">        }</span>
+
+<span class="nc" id="L795">        return sb;</span>
+    }
+
+    /**
+     * Render the specified text and return the rendered Options
+     * in a StringBuffer.
+     *
+     * @param sb The StringBuffer to place the rendered text into.
+     * @param width The number of characters to display per line
+     * @param nextLineTabStop The position on the next line for the first tab.
+     * @param text The text to be rendered.
+     *
+     * @return the StringBuffer with the rendered Options contents.
+     */
+    protected StringBuffer renderWrappedText(StringBuffer sb, int width,
+                                             int nextLineTabStop, String text)
+    {
+<span class="nc" id="L812">        int pos = findWrapPos(text, width, 0);</span>
+
+<span class="nc bnc" id="L814" title="All 2 branches missed.">        if (pos == -1)</span>
+        {
+<span class="nc" id="L816">            sb.append(rtrim(text));</span>
+
+<span class="nc" id="L818">            return sb;</span>
+        }
+<span class="nc" id="L820">        sb.append(rtrim(text.substring(0, pos))).append(defaultNewLine);</span>
+
+<span class="nc bnc" id="L822" title="All 2 branches missed.">        if (nextLineTabStop &gt;= width)</span>
+        {
+            // stops infinite loop happening
+<span class="nc" id="L825">            nextLineTabStop = 1;</span>
+        }
+
+        // all following lines must be padded with nextLineTabStop space
+        // characters
+<span class="nc" id="L830">        final String padding = createPadding(nextLineTabStop);</span>
+
+        while (true)
+        {
+<span class="nc" id="L834">            text = padding + text.substring(pos).trim();</span>
+<span class="nc" id="L835">            pos = findWrapPos(text, width, 0);</span>
+
+<span class="nc bnc" id="L837" title="All 2 branches missed.">            if (pos == -1)</span>
+            {
+<span class="nc" id="L839">                sb.append(text);</span>
+
+<span class="nc" id="L841">                return sb;</span>
+            }
+
+<span class="nc bnc" id="L844" title="All 4 branches missed.">            if ( (text.length() &gt; width) &amp;&amp; (pos == nextLineTabStop - 1) ) </span>
+            {
+<span class="nc" id="L846">                pos = width;</span>
+            }
+
+<span class="nc" id="L849">            sb.append(rtrim(text.substring(0, pos))).append(defaultNewLine);</span>
+        }
+    }
+
+    /**
+     * Finds the next text wrap position after &lt;code&gt;startPos&lt;/code&gt; for the
+     * text in &lt;code&gt;text&lt;/code&gt; with the column width &lt;code&gt;width&lt;/code&gt;.
+     * The wrap point is the last postion before startPos+width having a
+     * whitespace character (space, \n, \r).
+     *
+     * @param text The text being searched for the wrap position
+     * @param width width of the wrapped text
+     * @param startPos position from which to start the lookup whitespace
+     * character
+     * @return postion on which the text must be wrapped or -1 if the wrap
+     * position is at the end of the text
+     */
+    protected int findWrapPos(String text, int width, int startPos)
+    {
+<span class="nc" id="L868">        int pos = -1;</span>
+
+        // the line ends before the max wrap pos or a new line char found
+<span class="nc bnc" id="L871" title="All 4 branches missed.">        if (((pos = text.indexOf('\n', startPos)) != -1 &amp;&amp; pos &lt;= width)</span>
+<span class="nc bnc" id="L872" title="All 4 branches missed.">                || ((pos = text.indexOf('\t', startPos)) != -1 &amp;&amp; pos &lt;= width))</span>
+        {
+<span class="nc" id="L874">            return pos + 1;</span>
+        }
+<span class="nc bnc" id="L876" title="All 2 branches missed.">        else if (startPos + width &gt;= text.length())</span>
+        {
+<span class="nc" id="L878">            return -1;</span>
+        }
+
+
+        // look for the last whitespace character before startPos+width
+<span class="nc" id="L883">        pos = startPos + width;</span>
+
+        char c;
+
+<span class="nc bnc" id="L887" title="All 8 branches missed.">        while ((pos &gt;= startPos) &amp;&amp; ((c = text.charAt(pos)) != ' ')</span>
+                &amp;&amp; (c != '\n') &amp;&amp; (c != '\r'))
+        {
+<span class="nc" id="L890">            --pos;</span>
+        }
+
+        // if we found it - just return
+<span class="nc bnc" id="L894" title="All 2 branches missed.">        if (pos &gt; startPos)</span>
+        {
+<span class="nc" id="L896">            return pos;</span>
+        }
+
+        // must look for the first whitespace chearacter after startPos
+        // + width
+<span class="nc" id="L901">        pos = startPos + width;</span>
+
+<span class="nc bnc" id="L903" title="All 8 branches missed.">        while ((pos &lt;= text.length()) &amp;&amp; ((c = text.charAt(pos)) != ' ')</span>
+               &amp;&amp; (c != '\n') &amp;&amp; (c != '\r'))
+        {
+<span class="nc" id="L906">            ++pos;</span>
+        }
+
+<span class="nc bnc" id="L909" title="All 2 branches missed.">        return (pos == text.length()) ? (-1) : pos;</span>
+    }
+
+    /**
+     * Return a String of padding of length &lt;code&gt;len&lt;/code&gt;.
+     *
+     * @param len The length of the String of padding to create.
+     *
+     * @return The String of padding
+     */
+    protected String createPadding(int len)
+    {
+<span class="nc" id="L921">        StringBuffer sb = new StringBuffer(len);</span>
+
+<span class="nc bnc" id="L923" title="All 2 branches missed.">        for (int i = 0; i &lt; len; ++i)</span>
+        {
+<span class="nc" id="L925">            sb.append(' ');</span>
+        }
+
+<span class="nc" id="L928">        return sb.toString();</span>
+    }
+
+    /**
+     * Remove the trailing whitespace from the specified String.
+     *
+     * @param s The String to remove the trailing padding from.
+     *
+     * @return The String of without the trailing padding
+     */
+    protected String rtrim(String s)
+    {
+<span class="nc bnc" id="L940" title="All 4 branches missed.">        if ((s == null) || (s.length() == 0))</span>
+        {
+<span class="nc" id="L942">            return s;</span>
+        }
+
+<span class="nc" id="L945">        int pos = s.length();</span>
+
+<span class="nc bnc" id="L947" title="All 4 branches missed.">        while ((pos &gt; 0) &amp;&amp; Character.isWhitespace(s.charAt(pos - 1)))</span>
+        {
+<span class="nc" id="L949">            --pos;</span>
+        }
+
+<span class="nc" id="L952">        return s.substring(0, pos);</span>
+    }
+
+    // ------------------------------------------------------ Package protected
+    // ---------------------------------------------------------------- Private
+    // ---------------------------------------------------------- Inner classes
+    /**
+     * This class implements the &lt;code&gt;Comparator&lt;/code&gt; interface
+     * for comparing Options.
+     */
+    private static class OptionComparator implements Comparator
+    {
+
+        /**
+         * Compares its two arguments for order. Returns a negative
+         * integer, zero, or a positive integer as the first argument
+         * is less than, equal to, or greater than the second.
+         *
+         * @param o1 The first Option to be compared.
+         * @param o2 The second Option to be compared.
+         * @return a negative integer, zero, or a positive integer as
+         *         the first argument is less than, equal to, or greater than the
+         *         second.
+         */
+        public int compare(Object o1, Object o2)
+        {
+<span class="nc" id="L978">            Option opt1 = (Option) o1;</span>
+<span class="nc" id="L979">            Option opt2 = (Option) o2;</span>
+
+<span class="nc" id="L981">            return opt1.getKey().compareToIgnoreCase(opt2.getKey());</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

@@ -1,19 +1,23 @@
 package se.kth.castor.jdbl.app.test;
 
+import java.io.File;
+
 import org.w3c.dom.Document;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.File;
 
-public class TestResultReader {
+public class TestResultReader
+{
     private String path;
 
-    public TestResultReader(String path) {
+    public TestResultReader(String path)
+    {
         this.path = path;
     }
 
-    public TestResult getResults() {
+    public TestResult getResults()
+    {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         File file = new File(path + "/target/surefire-reports");
         if (!file.exists()) {

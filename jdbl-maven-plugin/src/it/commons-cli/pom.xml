@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
-<project xmlns:ns0="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+>
 
    <parent>
 
@@ -23,7 +23,8 @@
 
    <inceptionYear>2002</inceptionYear>
 
-   <description>Commons CLI provides a simple API for presenting, processing and validating a command line interface.</description>
+   <description>Commons CLI provides a simple API for presenting, processing and validating a command line interface.
+   </description>
 
    <url>http://commons.apache.org/cli/</url>
 
@@ -38,7 +39,8 @@
 
       <connection>scm:svn:http://svn.apache.org/repos/asf/commons/proper/cli/branches/cli-1.x/</connection>
 
-      <developerConnection>scm:svn:https://svn.apache.org/repos/asf/commons/proper/cli/branches/cli-1.x/</developerConnection>
+      <developerConnection>scm:svn:https://svn.apache.org/repos/asf/commons/proper/cli/branches/cli-1.x/
+      </developerConnection>
 
       <url>http://svn.apache.org/viewvc/commons/proper/cli/branches/cli-1.x/</url>
 
@@ -225,7 +227,6 @@
          </resource>
       </resources>
       <plugins>
-
 
 
          <plugin>
