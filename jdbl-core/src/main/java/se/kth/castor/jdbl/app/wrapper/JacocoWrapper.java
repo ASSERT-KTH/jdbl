@@ -168,9 +168,17 @@ public class JacocoWrapper
    private void testBasedDebloat() throws IOException
    {
       Set<String> classesLoadedTestDebloat = new HashSet<>();
-      Runtime rt = Runtime.getRuntime();
       FileUtils.deleteDirectory(new File("target/classes"));
-      Process p = rt.exec("mvn test -X -Denforcer.skip=true -Dcheckstyle.skip=true -Dcobertura.skip=true -DskipITs=true -Drat.skip=true -Dlicense.skip=true -Dfindbugs.skip=true -DargLine=\"-verbose:class\"");
+      String agentParameter = "-javaagent:" + new File("coverageAgent.jar").getAbsoluteFile();
+      List<String> args = new ArrayList<>();
+      args.add("mvn");
+      args.add("test");
+      args.add("-X");
+      args.add("-DargLine=-verbose:class " + agentParameter);
+      ProcessBuilder processBuilder = new ProcessBuilder(args);
+      Map<String, String> environment = processBuilder.environment();
+      environment.put("JAVA_HOME",  System.getenv().get("JAVA_HOME"));
+      Process p = processBuilder.start();
       new Thread(() -> {
          BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
          String line;
@@ -186,6 +194,14 @@ public class JacocoWrapper
             // should not happen
             LOGGER.error(e);
          }
+         input = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+         try {
+             while ((line = input.readLine()) != null) {
+                 System.out.println(line);
+             }
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
       }).start();
 
       try {

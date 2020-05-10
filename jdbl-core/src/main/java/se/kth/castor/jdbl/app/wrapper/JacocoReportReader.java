@@ -1,6 +1,8 @@
 package se.kth.castor.jdbl.app.wrapper;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.HashMap;
@@ -56,6 +58,25 @@ public class JacocoReportReader
       for (int i = 0; i < packages.getLength(); i++) {
          visitPackage(packages.item(i));
       }
+       if (new File("agentCoverage.csv").exists()) {
+           BufferedReader reader = new BufferedReader(new FileReader(new File("agentCoverage.csv")));
+           String line = reader.readLine();
+           while (line != null) {
+               String[] splitLine = line.split(",");
+               String type = splitLine[0].replace(".", "/");
+               String method = splitLine[1] + splitLine[2];
+               if (unusedClassesAndMethods.containsKey(type)) {
+                  Set<String> methods = unusedClassesAndMethods.get(type);
+                  if (methods == null) {
+                     unusedClassesAndMethods.remove(type);
+                  } else {
+                     methods.remove(method);
+                  }
+
+               }
+               line = reader.readLine();
+           }
+       }
       return unusedClassesAndMethods;
    }
 
@@ -64,10 +85,9 @@ public class JacocoReportReader
       NodeList classes = p.getChildNodes();
       for (int i = 0; i < classes.getLength(); i++) {
          Node n = classes.item(i);
-         if (!n.getNodeName().equals("class")) {
-            continue;
+         if (n.getNodeName().equals("class")) {
+            visitClass(n);
          }
-         visitClass(n);
       }
    }
 

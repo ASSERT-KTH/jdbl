@@ -60,6 +60,7 @@
       <module>jdbl-core</module>
       <module>jdbl-maven-plugin</module>
       <module>jdbl-app</module>
+      <module>jdbl-agent</module>
    </modules>
 
    <dependencies>
