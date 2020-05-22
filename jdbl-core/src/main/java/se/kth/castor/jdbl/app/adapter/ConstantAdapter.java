@@ -36,7 +36,7 @@ public class ConstantAdapter
    {
       try {
          reader = new ClassReader(className);
-         writer = new ClassWriter(reader, 0);
+         writer = new ClassWriter(reader, ClassWriter.COMPUTE_MAXS);
       } catch (IOException ex) {
          Logger.getLogger(ConstantAdapter.class.getName()).log(Level.SEVERE, null, ex);
       }
