@@ -169,12 +169,12 @@ public class JacocoWrapper
    {
       Set<String> classesLoadedTestDebloat = new HashSet<>();
       FileUtils.deleteDirectory(new File("target/classes"));
-      String agentParameter = "-javaagent:" + new File("coverageAgent.jar").getAbsoluteFile();
+      // String agentParameter = "-javaagent:" + new File("coverageAgent.jar").getAbsoluteFile();
       List<String> args = new ArrayList<>();
       args.add("mvn");
       args.add("test");
       args.add("-X");
-      args.add("-DargLine=-verbose:class " + agentParameter);
+      args.add("-DargLine=-verbose:class");
       ProcessBuilder processBuilder = new ProcessBuilder(args);
       Map<String, String> environment = processBuilder.environment();
       environment.put("JAVA_HOME",  System.getenv().get("JAVA_HOME"));
