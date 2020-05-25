@@ -6,6 +6,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.HashSet;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -15,23 +18,56 @@ import org.apache.log4j.Logger;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.tree.AbstractInsnNode;
+import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.LineNumberNode;
+import org.objectweb.asm.tree.MethodNode;
+import se.kth.castor.jdbl.app.test.StackLine;
 
 public class TestBasedMethodDebloat extends AbstractMethodDebloat
 {
    protected static final Logger LOGGER = LogManager.getLogger(TestBasedMethodDebloat.class);
+   private final Set<StackLine> failingMethods;
 
-   public TestBasedMethodDebloat(String outputDirectory, Map<String, Set<String>> usageAnalysis, File reportFile)
+   public TestBasedMethodDebloat(String outputDirectory, Map<String, Set<String>> usageAnalysis, File reportFile, Set<StackLine> failingMethods)
    {
       super(outputDirectory, usageAnalysis, reportFile);
+      this.failingMethods = failingMethods;
    }
 
    @Override
-   public void removeMethod(String clazz, Set<String> usedMethods) throws IOException
+   public void removeMethod(String clazz, Set<String> unusedMethods) throws IOException
    {
       FileInputStream in = new FileInputStream(new File(outputDirectory + "/" + clazz + ".class"));
       ClassReader cr = new ClassReader(in);
+
+      Set<StackLine> methods = new HashSet<>();
+      for (StackLine failingMethod : failingMethods) {
+         if (failingMethod.getClassName().equals(clazz.replace("/", "."))) {
+            methods.add(failingMethod);
+         }
+      }
+      ClassNode clNode = new ClassNode(Opcodes.ASM8);
+      cr.accept(clNode, Opcodes.ASM8);
+      for (MethodNode mNode: clNode.methods) {
+         for (StackLine failingMethod : methods) {
+            if (mNode.name.equals(failingMethod.getMethod())) {
+               ListIterator<AbstractInsnNode> it = mNode.instructions.iterator();
+               while (it.hasNext()) {
+                  AbstractInsnNode inNode = it.next();
+                  if (inNode instanceof LineNumberNode) {
+                     if (((LineNumberNode) inNode).line == failingMethod.getLine()) {
+                        unusedMethods.remove(mNode.name + mNode.desc);
+                     }
+                  }
+               }
+            }
+         }
+      }
+
       ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_MAXS);
       ClassVisitor cv = new ClassVisitor(Opcodes.ASM8, cw)
       {
@@ -40,7 +76,7 @@ public class TestBasedMethodDebloat extends AbstractMethodDebloat
          {
             MethodVisitor mv = cv.visitMethod(access, name, desc, signature, exceptions);
 
-            if (usedMethods.contains(name + desc)) {
+            if (unusedMethods.contains(name + desc)) {
                LOGGER.info("Removed method: " + name + desc + " in " + clazz);
                // write report to file
                writeReportToFile(name, desc, "BloatedMethod, ", clazz);

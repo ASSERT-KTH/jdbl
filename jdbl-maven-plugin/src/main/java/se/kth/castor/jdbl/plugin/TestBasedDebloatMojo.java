@@ -21,6 +21,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import se.kth.castor.jdbl.app.DebloatTypeEnum;
 import se.kth.castor.jdbl.app.debloat.AbstractMethodDebloat;
 import se.kth.castor.jdbl.app.debloat.TestBasedMethodDebloat;
+import se.kth.castor.jdbl.app.test.StackLine;
 import se.kth.castor.jdbl.app.test.TestResult;
 import se.kth.castor.jdbl.app.test.TestResultReader;
 import se.kth.castor.jdbl.app.util.ClassesLoadedSingleton;
@@ -55,6 +56,12 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
             this.getLog().error("Error computing JaCoCo usage analysis.");
         }
 
+        TestResultReader testResultReader = new TestResultReader(".");
+        Set<StackLine> failingMethods = testResultReader.getMethodFromStackTrace();
+        for (StackLine failingMethod : failingMethods) {
+            usedClasses.add(failingMethod.getClassName());
+        }
+
         // write to a file with the status of classes (Used or Bloated) in each dependency
         try {
             writeClassStatusPerDependency(usedClasses);
@@ -68,7 +75,7 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
 
         // ----------------------------------------------------
         this.getLog().info("Starting removing unused methods...");
-        this.removeUnusedMethods(outputDirectory, jaCoCoUsageAnalysis);
+        this.removeUnusedMethods(outputDirectory, jaCoCoUsageAnalysis, failingMethods);
 
         // ----------------------------------------------------
         try {
@@ -190,11 +197,11 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
         this.getLog().info(getLineSeparator());
     }
 
-    private void removeUnusedMethods(final String outputDirectory, final Map<String, Set<String>> usageAnalysis)
+    private void removeUnusedMethods(final String outputDirectory, final Map<String, Set<String>> usageAnalysis, Set<StackLine> failingMethods)
     {
         AbstractMethodDebloat testBasedMethodDebloat = new TestBasedMethodDebloat(outputDirectory,
             usageAnalysis,
-            new File(getProject().getBasedir().getAbsolutePath() + "/" + getReportFileName()));
+            new File(getProject().getBasedir().getAbsolutePath() + "/" + getReportFileName()), failingMethods);
         try {
             testBasedMethodDebloat.removeUnusedMethods();
         } catch (IOException e) {
