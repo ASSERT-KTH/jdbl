@@ -22,7 +22,7 @@
    </properties>
 
    <!-- Project description-->
-   <description>JDbl: A set of tools to automatically debloat Java projects projects</description>
+   <description>JDBL: A set of tools to automatically debloat Java projects projects</description>
    <url>https://github.com/castor-software/royal-debloat/jdbl</url>
 
    <issueManagement>

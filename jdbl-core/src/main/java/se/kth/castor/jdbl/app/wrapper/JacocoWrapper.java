@@ -89,7 +89,9 @@ public class JacocoWrapper
       Properties propertyCopyDependencies = new Properties();
       propertyCopyDependencies.setProperty("outputDirectory", this.mavenProject.getBasedir().getAbsolutePath() +
          "/target/classes");
-      propertyCopyDependencies.setProperty("includeScope", "compile");
+
+      // do not copy the dependencies with non-compile scopes
+      propertyCopyDependencies.setProperty("excludeScope", "test,provided,system,runtime,import");
       mavenUtils.runMaven(Collections.singletonList("dependency:copy-dependencies"), propertyCopyDependencies);
 
       // do not process the optional dependencies
