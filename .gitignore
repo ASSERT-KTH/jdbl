@@ -55,3 +55,5 @@ checkstyle.xml
 ### Thumbnails
 ._*
 
+### Intellij
+.idea

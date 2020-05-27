@@ -6,7 +6,14 @@
 
    <groupId>se.kth.castor</groupId>
    <artifactId>jdbl-core</artifactId>
-   <version>1.0-SNAPSHOT</version>
+   <version>1.0.0</version>
+
+   <parent>
+      <groupId>se.kth.castor</groupId>
+      <artifactId>jdbl-parent-pom</artifactId>
+      <version>1.0.0</version>
+      <relativePath>../</relativePath>
+   </parent>
 
    <name>jdbl-core</name>
    <url>https://github.com/castor-software/royal-debloat/jdbl/jdbl-maven-plugin</url>
