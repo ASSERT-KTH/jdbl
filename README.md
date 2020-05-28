@@ -39,7 +39,7 @@ To use JDBL as a Maven plugin, first install it from source cloning this repo an
 <plugin>
     <groupId>se.kth.castor</groupId>
     <artifactId>jdbl-maven-plugin</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <executions>
         <execution>
             <goals>
