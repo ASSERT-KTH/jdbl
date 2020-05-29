@@ -91,7 +91,8 @@ public class JacocoWrapper
          "/target/classes");
 
       // do not copy the dependencies with non-compile scopes
-      propertyCopyDependencies.setProperty("excludeScope", "test,provided,system,runtime,import");
+      propertyCopyDependencies.setProperty("includeScope", "runtime");
+      propertyCopyDependencies.setProperty("exclude", "runtime");
       mavenUtils.runMaven(Collections.singletonList("dependency:copy-dependencies"), propertyCopyDependencies);
 
       // do not process the optional dependencies
