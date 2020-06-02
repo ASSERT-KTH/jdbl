@@ -17,6 +17,8 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.xml.sax.SAXException;
 
+import fr.inria.offline.CoverageInstrumenter;
+import fr.inria.yajta.api.MalformedTrackingClassException;
 import javax.xml.parsers.ParserConfigurationException;
 import se.kth.castor.jdbl.app.DebloatTypeEnum;
 import se.kth.castor.jdbl.app.debloat.AbstractMethodDebloat;
@@ -45,6 +47,18 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
         Instant start = Instant.now();
         cleanReportFile();
         String outputDirectory = getProject().getBuild().getOutputDirectory();
+
+        // run yajta analysis
+        System.out.println("Running yajta");
+        try {
+            CoverageInstrumenter.main(new String[]{
+                "-i", getProject().getBasedir().getAbsolutePath() + "/target/classes",
+                "-o", getProject().getBasedir().getAbsolutePath() + "/target/instrumented"});
+        } catch (MalformedTrackingClassException e) {
+            e.printStackTrace();
+        }
+
+        System.exit(1);
 
         // run JaCoCo usage analysis
         Map<String, Set<String>> jaCoCoUsageAnalysis = this.getJaCoCoUsageAnalysis();
