@@ -5,18 +5,25 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.xml.sax.SAXException;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.inria.offline.CoverageInstrumenter;
 import fr.inria.yajta.api.MalformedTrackingClassException;
 import javax.xml.parsers.ParserConfigurationException;
@@ -49,19 +56,17 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
         String outputDirectory = getProject().getBuild().getOutputDirectory();
 
         // run yajta analysis
-        System.out.println("Running yajta");
-        try {
-            CoverageInstrumenter.main(new String[]{
-                "-i", getProject().getBasedir().getAbsolutePath() + "/target/classes",
-                "-o", getProject().getBasedir().getAbsolutePath() + "/target/instrumented"});
-        } catch (MalformedTrackingClassException e) {
-            e.printStackTrace();
-        }
-
-        System.exit(1);
+        runYajtaAnalysis();
 
         // run JaCoCo usage analysis
         Map<String, Set<String>> jaCoCoUsageAnalysis = this.getJaCoCoUsageAnalysis();
+        System.out.println("-----------BEFORE----------------------");
+        System.out.println(jaCoCoUsageAnalysis);
+
+        jaCoCoUsageAnalysis = addYajtaAnalysis(jaCoCoUsageAnalysis, getProject().getBasedir().getAbsolutePath());
+        System.out.println("-----------AFTER----------------------");
+        System.out.println(jaCoCoUsageAnalysis);
+
         Set<String> usedClasses = null;
         try {
             this.printClassesLoaded();
@@ -102,6 +107,38 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
         // ----------------------------------------------------
         writeTimeElapsedReportFile(start);
         printCustomStringToConsole("T E S T S    B A S E D    D E B L O A T    F I N I S H E D");
+    }
+
+    private void runYajtaAnalysis()
+    {
+        this.getLog().info("Running yajta");
+        try {
+            CoverageInstrumenter.main(new String[]{
+                "-i", getProject().getBasedir().getAbsolutePath() + "/target/classes",
+                "-o", getProject().getBasedir().getAbsolutePath() + "/target/instrumented"});
+        } catch (MalformedTrackingClassException e) {
+            this.getLog().error("Error executing yajta.");
+        }
+        try {
+            FileUtils.moveDirectory(new File(getProject().getBasedir().getAbsolutePath() + "/target/classes"),
+                new File(getProject().getBasedir().getAbsolutePath() + "/target/classes-original"));
+            FileUtils.moveDirectory(new File(getProject().getBasedir().getAbsolutePath() + "/target/instrumented"),
+                new File(getProject().getBasedir().getAbsolutePath() + "/target/classes"));
+        } catch (IOException e) {
+            this.getLog().error("Error handling target/class directory.");
+        }
+        try {
+            rerunTests();
+        } catch (IOException e) {
+            this.getLog().error("Error rerunning the tests.");
+        }
+        try {
+            FileUtils.deleteDirectory(new File(getProject().getBasedir().getAbsolutePath() + "/target/classes"));
+            FileUtils.moveDirectory(new File(getProject().getBasedir().getAbsolutePath() + "/target/classes-original"),
+                new File(getProject().getBasedir().getAbsolutePath() + "/target/classes"));
+        } catch (IOException e) {
+            this.getLog().error("Error rolling back the compiled classes.");
+        }
     }
 
     private void rerunTests() throws IOException
@@ -272,5 +309,49 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
         this.getLog().info(String.format("Total unused methods: %d",
             usageAnalysis.values().stream().filter(Objects::nonNull).mapToInt(Set::size).sum()));
         this.getLog().info(getLineSeparator());
+    }
+
+    private Map<String, Set<String>> addYajtaAnalysis(Map<String, Set<String>> jaCoCoUsageAnalysis, String projectBasedir)
+    {
+        Set<String> filesInBasedir = listFilesInDirectory(projectBasedir);
+        // yajta could produce more than one coverage file, so we need to read all of them
+        for (String fileName : filesInBasedir) {
+            if (fileName.startsWith("yajta_coverage")) {
+                String json;
+                try {
+                    json = new String(Files.readAllBytes(Paths.get(projectBasedir +
+                        "/" + fileName)), StandardCharsets.UTF_8);
+                    ObjectMapper mapper = new ObjectMapper();
+                    // convert JSON string to Map
+                    Map<String, ArrayList<String>> map = mapper.readValue(json, Map.class);
+                    Iterator it = map.entrySet().iterator();
+                    while (it.hasNext()) {
+                        Map.Entry pair = (Map.Entry) it.next();
+                        // we add the yajta coverage results to the jacoco analysis
+                        final String className = String.valueOf(pair.getKey()).replace(".", "/");
+                        if (jaCoCoUsageAnalysis.containsKey(className)) {
+                            ArrayList<String> yajtaMethods = map.get(pair.getKey());
+                            Set<String> set = jaCoCoUsageAnalysis.get(className);
+                            // enrich the jacoco coverage with he yajta coverage
+                            if (set != null) {
+                                set.removeAll(yajtaMethods);
+                                jaCoCoUsageAnalysis.replace(className, set);
+                            }
+                        }
+                    }
+                } catch (IOException e) {
+                    System.out.println("Error reading the yajta coverage file.");
+                }
+            }
+        }
+        return jaCoCoUsageAnalysis;
+    }
+
+    private Set<String> listFilesInDirectory(String dir)
+    {
+        return Stream.of(new File(dir).listFiles())
+            .filter(file -> !file.isDirectory())
+            .map(File::getName)
+            .collect(Collectors.toSet());
     }
 }
