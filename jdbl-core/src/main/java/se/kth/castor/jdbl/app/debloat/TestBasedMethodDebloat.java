@@ -62,6 +62,7 @@ public class TestBasedMethodDebloat extends AbstractMethodDebloat
                         AbstractInsnNode inNode = it.next();
                         if (inNode instanceof LineNumberNode) {
                             if (((LineNumberNode) inNode).line == failingMethod.getLine()) {
+                                System.out.println("Method in stacktrace: " + mNode.name + mNode.desc);
                                 unusedMethods.remove(mNode.name + mNode.desc);
                             }
                         }
@@ -77,7 +78,6 @@ public class TestBasedMethodDebloat extends AbstractMethodDebloat
             public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions)
             {
                 MethodVisitor mv = cv.visitMethod(access, name, desc, signature, exceptions);
-
                 if (unusedMethods.contains(name + desc)) {
                     LOGGER.info("Removed method: " + name + desc + " in " + clazz);
                     // write report to file
