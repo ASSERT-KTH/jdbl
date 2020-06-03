@@ -24,8 +24,8 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.xml.sax.SAXException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fr.inria.offline.CoverageInstrumenter;
-import fr.inria.yajta.api.MalformedTrackingClassException;
+import se.kth.castor.offline.CoverageInstrumenter;
+import se.kth.castor.yajta.api.MalformedTrackingClassException;
 import javax.xml.parsers.ParserConfigurationException;
 import se.kth.castor.jdbl.app.DebloatTypeEnum;
 import se.kth.castor.jdbl.app.debloat.AbstractMethodDebloat;
