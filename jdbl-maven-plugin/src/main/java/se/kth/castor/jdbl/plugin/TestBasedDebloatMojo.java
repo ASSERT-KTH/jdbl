@@ -24,6 +24,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.xml.sax.SAXException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import se.kth.castor.jdbl.app.util.MavenUtils;
 import se.kth.castor.offline.CoverageInstrumenter;
 import se.kth.castor.yajta.api.MalformedTrackingClassException;
 import javax.xml.parsers.ParserConfigurationException;
@@ -125,6 +126,11 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
             this.getLog().error("Error handling target/class directory.");
         }
         try {
+            MavenUtils mavenUtils = new MavenUtils(super.mavenHome, getProject().getBasedir());
+            final String testDir = getProject().getBasedir().getAbsolutePath() + "/target/test-classes";
+            mavenUtils.copyDependency("se.kth.castor:yajta-core:2.0.1", testDir);
+            mavenUtils.copyDependency("se.kth.castor:yajta-offline:2.0.1", testDir);
+            JarUtils.decompressJars(testDir);
             rerunTests();
         } catch (IOException e) {
             this.getLog().error("Error rerunning the tests.");

@@ -44,6 +44,20 @@ public class MavenUtils
       runMaven(Collections.singletonList("dependency:copy-dependencies"), copyDependenciesProperties);
    }
 
+
+   public void copyDependency(String artifact, String outputDirectory)
+   {
+      LOGGER.info("Copying dependency " + artifact + " to " + outputDirectory);
+      Properties copyProperties = new Properties();
+      copyProperties.setProperty("artifact", artifact);
+      runMaven(Collections.singletonList("dependency:get"), copyProperties);
+
+      copyProperties = new Properties();
+      copyProperties.setProperty("artifact", artifact);
+      copyProperties.setProperty("outputDirectory", outputDirectory);
+      runMaven(Collections.singletonList("dependency:copy"), copyProperties);
+   }
+
    public void dependencyTree(String outputDirectory)
    {
       LOGGER.info("Copying dependency tree to " + outputDirectory + "/dependency-tree.txt");

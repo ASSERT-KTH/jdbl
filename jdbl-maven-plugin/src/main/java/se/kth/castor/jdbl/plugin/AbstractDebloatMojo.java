@@ -16,7 +16,7 @@ public abstract class AbstractDebloatMojo extends AbstractMojo
    /**
     * The maven home file, assuming either an environment variable M2_HOME, or that mvn command exists in PATH.
     */
-   private static File mavenHome;
+   public static File mavenHome;
    static {
       if (System.getenv().containsKey("M2_HOME")) {
          mavenHome = new File(System.getenv().get("M2_HOME"));
