@@ -60,12 +60,9 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
 
         // run JaCoCo usage analysis
         Map<String, Set<String>> jaCoCoUsageAnalysis = this.getJaCoCoUsageAnalysis();
-        System.out.println("-----------BEFORE----------------------");
-        System.out.println(jaCoCoUsageAnalysis);
 
+        // add yajta trace analysis to jaCoCo traces
         jaCoCoUsageAnalysis = addYajtaAnalysis(jaCoCoUsageAnalysis, getProject().getBasedir().getAbsolutePath());
-        System.out.println("-----------AFTER----------------------");
-        System.out.println(jaCoCoUsageAnalysis);
 
         Set<String> usedClasses = null;
         try {
@@ -314,7 +311,7 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
     private Map<String, Set<String>> addYajtaAnalysis(Map<String, Set<String>> jaCoCoUsageAnalysis, String projectBasedir)
     {
         Set<String> filesInBasedir = listFilesInDirectory(projectBasedir);
-        // yajta could produce more than one coverage file, so we need to read all of them
+        // yajta could produce more than one coverage file (in case of parallel testing), so we need to read all of them
         for (String fileName : filesInBasedir) {
             if (fileName.startsWith("yajta_coverage")) {
                 String json;
@@ -327,12 +324,12 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
                     Iterator it = map.entrySet().iterator();
                     while (it.hasNext()) {
                         Map.Entry pair = (Map.Entry) it.next();
-                        // we add the yajta coverage results to the jacoco analysis
+                        // add the yajta coverage results to the jacoco analysis
                         final String className = String.valueOf(pair.getKey()).replace(".", "/");
                         if (jaCoCoUsageAnalysis.containsKey(className)) {
                             ArrayList<String> yajtaMethods = map.get(pair.getKey());
                             Set<String> set = jaCoCoUsageAnalysis.get(className);
-                            // enrich the jacoco coverage with he yajta coverage
+                            // if the method is covered by yajta then remove it from the set
                             if (set != null) {
                                 set.removeAll(yajtaMethods);
                                 jaCoCoUsageAnalysis.replace(className, set);
@@ -340,7 +337,7 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
                         }
                     }
                 } catch (IOException e) {
-                    System.out.println("Error reading the yajta coverage file.");
+                    this.getLog().error("Error reading the yajta coverage file.");
                 }
             }
         }
