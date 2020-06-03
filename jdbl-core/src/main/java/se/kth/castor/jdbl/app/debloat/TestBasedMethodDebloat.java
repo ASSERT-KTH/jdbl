@@ -53,7 +53,7 @@ public class TestBasedMethodDebloat extends AbstractMethodDebloat
         cr.accept(clNode, Opcodes.ASM8);
         for (MethodNode mNode : clNode.methods) {
 
-            ignoreOneLineMethods(unusedMethods, mNode);
+            // ignoreOneLineMethods(unusedMethods, mNode);
 
             for (StackLine failingMethod : methods) {
                 if (mNode.name.equals(failingMethod.getMethod())) {
