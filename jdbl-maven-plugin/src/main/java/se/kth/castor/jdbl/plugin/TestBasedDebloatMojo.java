@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
@@ -24,9 +25,6 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.xml.sax.SAXException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import se.kth.castor.jdbl.app.util.MavenUtils;
-import se.kth.castor.offline.CoverageInstrumenter;
-import se.kth.castor.yajta.api.MalformedTrackingClassException;
 import javax.xml.parsers.ParserConfigurationException;
 import se.kth.castor.jdbl.app.DebloatTypeEnum;
 import se.kth.castor.jdbl.app.debloat.AbstractMethodDebloat;
@@ -37,7 +35,10 @@ import se.kth.castor.jdbl.app.test.TestResultReader;
 import se.kth.castor.jdbl.app.util.ClassesLoadedSingleton;
 import se.kth.castor.jdbl.app.util.JDblFileUtils;
 import se.kth.castor.jdbl.app.util.JarUtils;
+import se.kth.castor.jdbl.app.util.MavenUtils;
 import se.kth.castor.jdbl.app.wrapper.JacocoWrapper;
+import se.kth.castor.offline.CoverageInstrumenter;
+import se.kth.castor.yajta.api.MalformedTrackingClassException;
 
 /**
  * This Mojo debloats the project according to the coverage of its test suite.
@@ -110,35 +111,51 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
     private void runYajtaAnalysis()
     {
         this.getLog().info("Running yajta");
+        final String classesDir = getProject().getBasedir().getAbsolutePath() + "/target/classes";
+        final String testDir = getProject().getBasedir().getAbsolutePath() + "/target/test-classes";
+        final String instrumentedDir = getProject().getBasedir().getAbsolutePath() + "/target/instrumented";
+        final String classesOriginalDir = getProject().getBasedir().getAbsolutePath() + "/target/classes-original";
+
+        // copy dependencies to be instrumented by yajta
+        MavenUtils mavenUtils = new MavenUtils(super.mavenHome, getProject().getBasedir());
+        mavenUtils.copyDependencies(classesDir);
+        JarUtils.decompressJars(classesDir);
+
+        // TODO Delete non class files (this should not happen in a new version of yajta)
+        File directory = new File(classesDir + "/META-INF");
+        try {
+            FileUtils.deleteDirectory(directory);
+        } catch (IOException e) {
+            this.getLog().error("Error deleting directory " + directory.getName());
+        }
+
         try {
             CoverageInstrumenter.main(new String[]{
-                "-i", getProject().getBasedir().getAbsolutePath() + "/target/classes",
-                "-o", getProject().getBasedir().getAbsolutePath() + "/target/instrumented"});
+                "-i", classesDir,
+                "-o", instrumentedDir});
         } catch (MalformedTrackingClassException e) {
             this.getLog().error("Error executing yajta.");
         }
         try {
-            FileUtils.moveDirectory(new File(getProject().getBasedir().getAbsolutePath() + "/target/classes"),
-                new File(getProject().getBasedir().getAbsolutePath() + "/target/classes-original"));
-            FileUtils.moveDirectory(new File(getProject().getBasedir().getAbsolutePath() + "/target/instrumented"),
-                new File(getProject().getBasedir().getAbsolutePath() + "/target/classes"));
+            FileUtils.moveDirectory(new File(classesDir),
+                new File(classesOriginalDir));
+            FileUtils.moveDirectory(new File(instrumentedDir),
+                new File(classesDir));
         } catch (IOException e) {
             this.getLog().error("Error handling target/class directory.");
         }
         try {
-            MavenUtils mavenUtils = new MavenUtils(super.mavenHome, getProject().getBasedir());
-            final String testDir = getProject().getBasedir().getAbsolutePath() + "/target/test-classes";
-            mavenUtils.copyDependency("se.kth.castor:yajta-core:2.0.1", testDir);
-            mavenUtils.copyDependency("se.kth.castor:yajta-offline:2.0.1", testDir);
+            mavenUtils.copyDependency("se.kth.castor:yajta-core:2.0.2", testDir);
+            mavenUtils.copyDependency("se.kth.castor:yajta-offline:2.0.2", testDir);
             JarUtils.decompressJars(testDir);
             rerunTests();
         } catch (IOException e) {
             this.getLog().error("Error rerunning the tests.");
         }
         try {
-            FileUtils.deleteDirectory(new File(getProject().getBasedir().getAbsolutePath() + "/target/classes"));
-            FileUtils.moveDirectory(new File(getProject().getBasedir().getAbsolutePath() + "/target/classes-original"),
-                new File(getProject().getBasedir().getAbsolutePath() + "/target/classes"));
+            FileUtils.deleteDirectory(new File(classesDir));
+            FileUtils.moveDirectory(new File(classesOriginalDir),
+                new File(classesDir));
         } catch (IOException e) {
             this.getLog().error("Error rolling back the compiled classes.");
         }
@@ -251,7 +268,8 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
         this.getLog().info(getLineSeparator());
     }
 
-    private void removeUnusedMethods(final String outputDirectory, final Map<String, Set<String>> usageAnalysis, Set<StackLine> failingMethods)
+    private void removeUnusedMethods(final String outputDirectory, final Map<String, Set<String>> usageAnalysis,
+        Set<StackLine> failingMethods)
     {
         AbstractMethodDebloat testBasedMethodDebloat = new TestBasedMethodDebloat(outputDirectory,
             usageAnalysis,

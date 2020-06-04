@@ -106,13 +106,12 @@ public class JacocoWrapper
          new File(this.mavenProject.getBasedir().getAbsolutePath() + "/target/classes"), new String[]{"class"}, true);
       while (itFiles.hasNext()) {
          File file = itFiles.next();
-         if (file.getName().equals("StaticCl.class")) {
-            System.out.println("processing file: " + file.getName());
-         }
-         ConstantAdapter constantAdapter = new ConstantAdapter(new FileInputStream(file));
+         FileInputStream fileInputStream = new FileInputStream(file);
+         ConstantAdapter constantAdapter = new ConstantAdapter(fileInputStream);
          byte[] result = constantAdapter.addField();
          FileUtils.forceDelete(file);
          FileUtils.writeByteArrayToFile(new File(file.getAbsolutePath()), result);
+         fileInputStream.close();
       }
 
       // instrument the code
