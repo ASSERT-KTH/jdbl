@@ -1,33 +1,30 @@
 package se.kth.castor.jdbl.plugin;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.ParserConfigurationException;
-import se.kth.castor.jdbl.app.DebloatTypeEnum;
+import se.kth.castor.jdbl.app.coverage.JacocoCoverage;
+import se.kth.castor.jdbl.app.coverage.UsageAnalysis;
+import se.kth.castor.jdbl.app.coverage.YajtaCoverage;
 import se.kth.castor.jdbl.app.debloat.AbstractMethodDebloat;
+import se.kth.castor.jdbl.app.debloat.DebloatTypeEnum;
 import se.kth.castor.jdbl.app.debloat.TestBasedMethodDebloat;
 import se.kth.castor.jdbl.app.test.StackLine;
-import se.kth.castor.jdbl.app.test.TestResult;
 import se.kth.castor.jdbl.app.test.TestResultReader;
+import se.kth.castor.jdbl.app.test.TestRunner;
 import se.kth.castor.jdbl.app.util.ClassesLoadedSingleton;
 import se.kth.castor.jdbl.app.util.JDblFileUtils;
 import se.kth.castor.jdbl.app.util.JarUtils;
-import se.kth.castor.jdbl.app.wrapper.JacocoWrapper;
 
 /**
  * This Mojo debloats the project according to the coverage of its test suite.
@@ -41,17 +38,36 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
     @Override
     public void doExecute()
     {
-        printCustomStringToConsole("S T A R T I N G    T E S T    B A S E D    D E B L O A T");
+        printCustomStringToConsole("JDBL: STARTING TEST BASED DEBLOAT");
         Instant start = Instant.now();
         cleanReportFile();
         String outputDirectory = getProject().getBuild().getOutputDirectory();
 
-        // run JaCoCo usage analysis
-        Map<String, Set<String>> jaCoCoUsageAnalysis = this.getJaCoCoUsageAnalysis();
+        // Run yajta analysis
+        YajtaCoverage yajtaCoverage = new YajtaCoverage(getProject(), mavenHome, DebloatTypeEnum.TEST_DEBLOAT);
+        UsageAnalysis yajtaUsageAnalysis = yajtaCoverage.analyzeUsages();
+
+        // Run JaCoCo usage analysis
+        JacocoCoverage jacocoCoverage = new JacocoCoverage(getProject(), mavenHome,
+            new File(getProject().getBasedir().getAbsolutePath() + "/target/report.xml"), DebloatTypeEnum.TEST_DEBLOAT);
+        UsageAnalysis jacocoUsageAnalysis = jacocoCoverage.analyzeUsages();
+
+        // Print Yajta and JaCoCo coverage outputs
+        System.out.println("Yajta:");
+        System.out.print(yajtaUsageAnalysis.toString());
+        printCoverageAnalysisResults(yajtaUsageAnalysis);
+        System.out.println("JaCoCo");
+        System.out.print(jacocoUsageAnalysis.toString());
+        printCoverageAnalysisResults(jacocoUsageAnalysis);
+
+        // Merge coverage analysis
+        UsageAnalysis mergedUsageAnalysis = mergeTwoUsageAnalysis(yajtaUsageAnalysis, jacocoUsageAnalysis);
+
+        // Classes loaded
         Set<String> usedClasses = null;
         try {
             this.printClassesLoaded();
-            usedClasses = TestBasedDebloatMojo.getUsedClasses(jaCoCoUsageAnalysis);
+            usedClasses = TestBasedDebloatMojo.getUsedClasses(mergedUsageAnalysis);
         } catch (RuntimeException e) {
             this.getLog().error("Error computing JaCoCo usage analysis.");
         }
@@ -59,10 +75,12 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
         TestResultReader testResultReader = new TestResultReader(".");
         Set<StackLine> failingMethods = testResultReader.getMethodFromStackTrace();
         for (StackLine failingMethod : failingMethods) {
-            usedClasses.add(failingMethod.getClassName());
+            if (usedClasses != null) {
+                usedClasses.add(failingMethod.getClassName());
+            }
         }
 
-        // write to a file with the status of classes (Used or Bloated) in each dependency
+        // Write to a file with the status of classes (Used or Bloated) in each dependency
         try {
             writeClassStatusPerDependency(usedClasses);
         } catch (RuntimeException e) {
@@ -75,64 +93,32 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
 
         // ----------------------------------------------------
         this.getLog().info("Starting removing unused methods...");
-        this.removeUnusedMethods(outputDirectory, jaCoCoUsageAnalysis, failingMethods);
+        this.removeUnusedMethods(outputDirectory, mergedUsageAnalysis, failingMethods);
 
         // ----------------------------------------------------
         try {
             this.getLog().info("Starting running the test suite on the debloated version...");
-            rerunTests();
+            TestRunner.runTests(getProject());
         } catch (IOException e) {
             this.getLog().error("IOException when rerunning the tests");
         }
 
         // ----------------------------------------------------
         writeTimeElapsedReportFile(start);
-        printCustomStringToConsole("T E S T S    B A S E D    D E B L O A T    F I N I S H E D");
+        printCustomStringToConsole("JDBL: TEST BASED DEBLOAT FINISHED");
     }
 
-    private void rerunTests() throws IOException
+    private UsageAnalysis mergeTwoUsageAnalysis(UsageAnalysis aUsageAnalysis, UsageAnalysis anotherUsageAnalysis)
     {
-        Runtime rt = Runtime.getRuntime();
-        Process p = rt.exec("mvn test -Dmaven.main.skip=true");
-
-        printProcessToStandardOutput(p);
-
-        try {
-            p.waitFor();
-        } catch (InterruptedException e) {
-            this.getLog().error("Re-testing process terminated unexpectedly.");
-            Thread.currentThread().interrupt();
-        }
-        TestResultReader testResultReader = new TestResultReader(".");
-        TestResult testResult = testResultReader.getResults();
-        writeTSResultsToFile(testResult);
-        if (testResult.errorTests() != 0 || testResult.failedTests() != 0) {
-            printCustomStringToConsole("T E S T S    B A S E D    D E B L O A T    F A I L E D");
-        }
-    }
-
-    private void printProcessToStandardOutput(final Process p) throws IOException
-    {
-        String line;
-        BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
-        while ((line = input.readLine()) != null) {
-            System.out.println(line);
-        }
-        input.close();
-    }
-
-    private void writeTSResultsToFile(final TestResult testResult)
-    {
-        this.getLog().info(testResult.getResults());
-        this.getLog().info("Writing ts-results.log to " +
-            new File(getProject().getBasedir().getAbsolutePath() + "/" + "ts-results.log"));
-        try {
-            final String reportTSResultsFileName = "ts-results.log";
-            FileUtils.writeStringToFile(new File(getProject().getBasedir().getAbsolutePath() + "/" +
-                reportTSResultsFileName), testResult.getResults(), StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            this.getLog().error("Error creating tests results report file.");
-        }
+        UsageAnalysis mergedUsageAnalysis = new UsageAnalysis();
+        aUsageAnalysis.getAnalysis().keySet().forEach(clazz -> {
+            Set<String> methods = aUsageAnalysis.getAnalysis().get(clazz);
+            if (anotherUsageAnalysis.getAnalysis().containsKey(clazz)) {
+                methods.addAll(anotherUsageAnalysis.getAnalysis().get(clazz));
+            }
+            mergedUsageAnalysis.getAnalysis().put(clazz, methods);
+        });
+        return mergedUsageAnalysis;
     }
 
     private void writeClassStatusPerDependency(final Set<String> usedClasses)
@@ -193,11 +179,12 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
     {
         final int nbOfClassesLoaded = ClassesLoadedSingleton.INSTANCE.getClassesLoaded().size();
         this.getLog().info("Loaded classes (" + nbOfClassesLoaded + ')');
-        ClassesLoadedSingleton.INSTANCE.getClassesLoaded().stream().forEach(System.out::println);
+        ClassesLoadedSingleton.INSTANCE.printClassesLoaded();
         this.getLog().info(getLineSeparator());
     }
 
-    private void removeUnusedMethods(final String outputDirectory, final Map<String, Set<String>> usageAnalysis, Set<StackLine> failingMethods)
+    private void removeUnusedMethods(final String outputDirectory, final UsageAnalysis usageAnalysis,
+        Set<StackLine> failingMethods)
     {
         AbstractMethodDebloat testBasedMethodDebloat = new TestBasedMethodDebloat(outputDirectory,
             usageAnalysis,
@@ -223,11 +210,12 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
         }
     }
 
-    private static Set<String> getUsedClasses(final Map<String, Set<String>> usageAnalysis)
+    private static Set<String> getUsedClasses(final UsageAnalysis usageAnalysis)
     {
         // get the union of the JaCoCo output and the JVM class loader results
         Set<String> usedClasses = new HashSet<>(ClassesLoadedSingleton.INSTANCE.getClassesLoaded());
         usageAnalysis
+            .getAnalysis()
             .entrySet()
             .stream()
             .filter(e -> e.getValue() != null)
@@ -235,28 +223,13 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
         return usedClasses;
     }
 
-    private Map<String, Set<String>> getJaCoCoUsageAnalysis()
+    private void printCoverageAnalysisResults(final UsageAnalysis usageAnalysis)
     {
-        JacocoWrapper jacocoWrapper = new JacocoWrapper(getProject(),
-            new File(getProject().getBasedir().getAbsolutePath() + "/target/report.xml"),
-            DebloatTypeEnum.TEST_DEBLOAT);
-        Map<String, Set<String>> usageAnalysis = null;
-        try {
-            usageAnalysis = jacocoWrapper.analyzeUsages();
-            this.printJaCoCoUsageAnalysisResults(usageAnalysis);
-        } catch (IOException | ParserConfigurationException | SAXException e) {
-            this.getLog().error(e);
-        }
-        return usageAnalysis;
-    }
-
-    private void printJaCoCoUsageAnalysisResults(final Map<String, Set<String>> usageAnalysis)
-    {
-        this.getLog().info("JaCoCo ANALYSIS RESULTS:");
-        this.getLog().info(String.format("Total unused classes: %d",
-            usageAnalysis.entrySet().stream().filter(e -> e.getValue() == null).count()));
-        this.getLog().info(String.format("Total unused methods: %d",
-            usageAnalysis.values().stream().filter(Objects::nonNull).mapToInt(Set::size).sum()));
+        this.getLog().info("ANALYSIS RESULTS:");
+        this.getLog().info(String.format("Total used classes: %d",
+            usageAnalysis.getAnalysis().entrySet().stream().filter(e -> e.getValue() != null).count()));
+        this.getLog().info(String.format("Total used methods: %d",
+            usageAnalysis.getAnalysis().values().stream().filter(Objects::nonNull).mapToInt(Set::size).sum()));
         this.getLog().info(getLineSeparator());
     }
 }

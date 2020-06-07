@@ -45,6 +45,8 @@ import org.apache.bcel.classfile.ClassParser;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import se.kth.castor.jdbl.app.coverage.UsageAnalysis;
+
 /**
  * Constructs a callgraph out of a set of directories, classes and JAR archives.
  * Can combine multiple archives into a single call graph.
@@ -79,9 +81,9 @@ public class JCallGraphModified
       return allMethodsCalls;
    }
 
-   public Map<String, Set<String>> runUsageAnalysis(String classPath)
+   public UsageAnalysis runUsageAnalysis(String classPath)
    {
-      Map<String, Set<String>> usageAnalysis = new HashMap<>();
+      UsageAnalysis usageAnalysis = new UsageAnalysis();
       List<String> list = getAllMethodsCallsFromFile(classPath);
       for (String s : list) {
 
@@ -90,17 +92,17 @@ public class JCallGraphModified
          String callerMethod = s.split(" ")[0].split(":")[2];
 
          if (callerMethod.equals("main(java.lang.String[])")) {
-            usageAnalysis.put(callerClass, new HashSet<>(Collections.singletonList(callerMethod)));
+            usageAnalysis.getAnalysis().put(callerClass, new HashSet<>(Collections.singletonList(callerMethod)));
          }
 
          // consider the rest of classes
          String calledClass = s.split(" ")[1].split(":")[0].substring(3);
          String calledMethod = s.split(" ")[1].split(":")[1];
 
-         if (!usageAnalysis.containsKey(calledClass)) { // add the class if is not in the map
-            usageAnalysis.put(calledClass, new HashSet<>(Collections.singletonList(calledMethod)));
+         if (!usageAnalysis.getAnalysis().containsKey(calledClass)) { // add the class if is not in the map
+            usageAnalysis.getAnalysis().put(calledClass, new HashSet<>(Collections.singletonList(calledMethod)));
          } else { // add method if the class exists
-            usageAnalysis.get(calledClass).add(calledMethod);
+            usageAnalysis.getAnalysis().get(calledClass).add(calledMethod);
          }
       }
       return usageAnalysis;

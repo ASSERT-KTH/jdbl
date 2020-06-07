@@ -18,11 +18,13 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
+import se.kth.castor.jdbl.app.coverage.UsageAnalysis;
+
 public class EntryPointMethodDebloat extends AbstractMethodDebloat
 {
    protected static final Logger LOGGER = LogManager.getLogger(EntryPointMethodDebloat.class);
 
-   public EntryPointMethodDebloat(String outputDirectory, Map<String, Set<String>> usageAnalysis, File reportFile)
+   public EntryPointMethodDebloat(String outputDirectory, UsageAnalysis usageAnalysis, File reportFile)
    {
       super(outputDirectory, usageAnalysis, reportFile);
    }

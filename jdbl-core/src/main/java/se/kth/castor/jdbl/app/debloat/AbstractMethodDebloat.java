@@ -5,13 +5,15 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 
+import se.kth.castor.jdbl.app.coverage.UsageAnalysis;
+
 public abstract class AbstractMethodDebloat
 {
+   protected UsageAnalysis usageAnalysis;
    protected String outputDirectory;
-   protected Map<String, Set<String>> usageAnalysis;
    protected File reportFile;
 
-   public AbstractMethodDebloat(String outputDirectory, Map<String, Set<String>> usageAnalysis, File reportFile)
+   public AbstractMethodDebloat(String outputDirectory, UsageAnalysis usageAnalysis, File reportFile)
    {
       this.outputDirectory = outputDirectory;
       this.usageAnalysis = usageAnalysis;
@@ -32,7 +34,7 @@ public abstract class AbstractMethodDebloat
     */
    public void removeUnusedMethods() throws IOException
    {
-      for (Map.Entry<String, Set<String>> entry : this.usageAnalysis.entrySet()) {
+      for (Map.Entry<String, Set<String>> entry : this.usageAnalysis.getAnalysis().entrySet()) {
          if (entry.getValue() != null) {
             this.removeMethod(entry.getKey().replace(".", "/"), entry.getValue());
          }

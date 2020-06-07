@@ -24,6 +24,7 @@ import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.LineNumberNode;
 import org.objectweb.asm.tree.MethodNode;
 
+import se.kth.castor.jdbl.app.coverage.UsageAnalysis;
 import se.kth.castor.jdbl.app.test.StackLine;
 
 public class TestBasedMethodDebloat extends AbstractMethodDebloat
@@ -31,14 +32,15 @@ public class TestBasedMethodDebloat extends AbstractMethodDebloat
     protected static final Logger LOGGER = LogManager.getLogger(TestBasedMethodDebloat.class);
     private final Set<StackLine> failingMethods;
 
-    public TestBasedMethodDebloat(String outputDirectory, Map<String, Set<String>> usageAnalysis, File reportFile, Set<StackLine> failingMethods)
+    public TestBasedMethodDebloat(String outputDirectory, UsageAnalysis usageAnalysis,
+        File reportFile, Set<StackLine> failingMethods)
     {
         super(outputDirectory, usageAnalysis, reportFile);
         this.failingMethods = failingMethods;
     }
 
     @Override
-    public void removeMethod(String clazz, Set<String> unusedMethods) throws IOException
+    public void removeMethod(String clazz, Set<String> usedMethods) throws IOException
     {
         FileInputStream in = new FileInputStream(new File(outputDirectory + "/" + clazz + ".class"));
         ClassReader cr = new ClassReader(in);
@@ -53,7 +55,7 @@ public class TestBasedMethodDebloat extends AbstractMethodDebloat
         cr.accept(clNode, Opcodes.ASM8);
         for (MethodNode mNode : clNode.methods) {
 
-            ignoreOneLineMethods(unusedMethods, mNode);
+            // ignoreOneLineMethods(usedMethods, mNode);
 
             for (StackLine failingMethod : methods) {
                 if (mNode.name.equals(failingMethod.getMethod())) {
@@ -62,7 +64,8 @@ public class TestBasedMethodDebloat extends AbstractMethodDebloat
                         AbstractInsnNode inNode = it.next();
                         if (inNode instanceof LineNumberNode) {
                             if (((LineNumberNode) inNode).line == failingMethod.getLine()) {
-                                unusedMethods.remove(mNode.name + mNode.desc);
+                                LOGGER.info("Method in stacktrace: " + mNode.name + mNode.desc);
+                                usedMethods.add(mNode.name + mNode.desc);
                             }
                         }
                     }
@@ -77,14 +80,14 @@ public class TestBasedMethodDebloat extends AbstractMethodDebloat
             public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions)
             {
                 MethodVisitor mv = cv.visitMethod(access, name, desc, signature, exceptions);
-
-                if (unusedMethods.contains(name + desc)) {
+                if (!usedMethods.contains(name + desc) && !(isDefaultConstructor(name + desc))) {
                     LOGGER.info("Removed method: " + name + desc + " in " + clazz);
                     // write report to file
                     writeReportToFile(name, desc, "BloatedMethod, ", clazz);
                     return new MethodExceptionThrower(mv);
                     // return null;
                 } else {
+                    // LOGGER.info("Keep method: " + name + desc + " in " + clazz);
                     // write report to file
                     writeReportToFile(name, desc, "UsedMethod, ", clazz);
                 }
@@ -101,7 +104,7 @@ public class TestBasedMethodDebloat extends AbstractMethodDebloat
         }
     }
 
-    private void ignoreOneLineMethods(final Set<String> unusedMethods, final MethodNode mNode)
+    private void ignoreOneLineMethods(final Set<String> usedMethods, final MethodNode mNode)
     {
         ListIterator<AbstractInsnNode> iter = mNode.instructions.iterator();
         int counter = 0;
@@ -112,14 +115,20 @@ public class TestBasedMethodDebloat extends AbstractMethodDebloat
             }
         }
         if (counter <= 1) {
-            unusedMethods.remove(mNode.name + mNode.desc);
+            usedMethods.add(mNode.name + mNode.desc);
         }
+    }
+
+    private boolean isDefaultConstructor(String name)
+    {
+        return name.startsWith("<init>(") || name.startsWith("<clinit>(");
     }
 
     private void writeReportToFile(final String name, final String desc, final String usageType, String clazz)
     {
         try {
-            FileUtils.writeStringToFile(reportFile, usageType + clazz + ":" + name + desc + "\n", StandardCharsets.UTF_8, true);
+            FileUtils.writeStringToFile(reportFile, usageType + clazz + ":" + name + desc + "\n",
+                StandardCharsets.UTF_8, true);
         } catch (IOException e) {
             LOGGER.error("Error writing the methods report.");
         }

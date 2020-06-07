@@ -1,4 +1,4 @@
-package se.kth.castor.jdbl.app;
+package se.kth.castor.jdbl.app.debloat;
 
 /**
  * The debloat strategies supported by this plugin.
