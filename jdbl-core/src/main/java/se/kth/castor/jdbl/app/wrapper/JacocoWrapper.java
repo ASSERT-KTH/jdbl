@@ -142,7 +142,7 @@ public class JacocoWrapper
       // read the jacoco report
       JacocoReportReader reportReader = new JacocoReportReader();
 
-      return reportReader.getUnusedClassesAndMethods(this.report);
+      return reportReader.getUsedClassesAndMethods(this.report);
    }
 
    public MavenProject getMavenProject()

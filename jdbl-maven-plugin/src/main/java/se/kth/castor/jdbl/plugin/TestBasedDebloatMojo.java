@@ -325,16 +325,20 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
     private void printJaCoCoUsageAnalysisResults(final Map<String, Set<String>> usageAnalysis)
     {
         this.getLog().info("JaCoCo ANALYSIS RESULTS:");
+        this.getLog().info(String.format("Total used classes: %d",
+            usageAnalysis.entrySet().stream().filter(e -> e.getValue() != null).count()));
         this.getLog().info(String.format("Total unused classes: %d",
-            usageAnalysis.entrySet().stream().filter(e -> e.getValue() == null).count()));
-        this.getLog().info(String.format("Total unused methods: %d",
+                usageAnalysis.entrySet().stream().filter(e -> e.getValue() == null).count()));
+        this.getLog().info(String.format("Total used methods: %d",
             usageAnalysis.values().stream().filter(Objects::nonNull).mapToInt(Set::size).sum()));
         this.getLog().info(getLineSeparator());
     }
 
-    private Map<String, Set<String>> addYajtaAnalysis(Map<String, Set<String>> jaCoCoUsageAnalysis, String projectBasedir)
+    protected Map<String, Set<String>> addYajtaAnalysis(Map<String, Set<String>> jaCoCoUsageAnalysis, String projectBasedir)
     {
         Set<String> filesInBasedir = listFilesInDirectory(projectBasedir);
+        int newCoveredMethods = 0;
+        int newCoveredClasses = 0;
         // yajta could produce more than one coverage file (in case of parallel testing), so we need to read all of them
         for (String fileName : filesInBasedir) {
             if (fileName.startsWith("yajta_coverage")) {
@@ -350,14 +354,28 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
                         Map.Entry pair = (Map.Entry) it.next();
                         // add the yajta coverage results to the jacoco analysis
                         final String className = String.valueOf(pair.getKey()).replace(".", "/");
+                        ArrayList<String> yajtaMethods = map.get(pair.getKey());
+                        //this.getLog().error("yajta: class: " + className);
                         if (jaCoCoUsageAnalysis.containsKey(className)) {
-                            ArrayList<String> yajtaMethods = map.get(pair.getKey());
                             Set<String> set = jaCoCoUsageAnalysis.get(className);
+                            int nbMethodCoveredBefore = (set == null) ? 0 : set.size();
                             // if the method is covered by yajta then remove it from the set
                             if (set != null) {
-                                set.removeAll(yajtaMethods);
+                                //this.getLog().error("yajta: class exist in jacoco report");
+                                set.addAll(yajtaMethods);
                                 jaCoCoUsageAnalysis.replace(className, set);
+                                newCoveredMethods += (set.size() - nbMethodCoveredBefore);
+                            } else {
+                                //this.getLog().error("yajta: class does not exist in jacoco report");
+                                jaCoCoUsageAnalysis.put(className, new HashSet<>(yajtaMethods));
+                                newCoveredClasses++;
+                                newCoveredMethods += yajtaMethods.size();
                             }
+                        } else {
+                            //this.getLog().error("yajta: class does not exist in jacoco report");
+                            jaCoCoUsageAnalysis.put(className, new HashSet<>(yajtaMethods));
+                            newCoveredClasses++;
+                            newCoveredMethods += yajtaMethods.size();
                         }
                     }
                 } catch (IOException e) {
@@ -365,10 +383,12 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
                 }
             }
         }
+        this.getLog().info(String.format("Total newly covered methods: %d", newCoveredMethods));
+        this.getLog().info(String.format("Total newly covered classes: %d", newCoveredClasses));
         return jaCoCoUsageAnalysis;
     }
 
-    private Set<String> listFilesInDirectory(String dir)
+    protected static Set<String> listFilesInDirectory(String dir)
     {
         return Stream.of(new File(dir).listFiles())
             .filter(file -> !file.isDirectory())

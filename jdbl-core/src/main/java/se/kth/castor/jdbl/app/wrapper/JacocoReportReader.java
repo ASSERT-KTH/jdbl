@@ -22,7 +22,8 @@ import javax.xml.parsers.ParserConfigurationException;
 
 public class JacocoReportReader
 {
-   private Map<String, Set<String>> unusedClassesAndMethods;
+   private Map<String, Set<String>> usedClassesAndMethods;
+   int unusedMethodCound = 0;
    private DocumentBuilder dBuilder;
 
    public JacocoReportReader() throws ParserConfigurationException
@@ -41,16 +42,16 @@ public class JacocoReportReader
    }
 
    /**
-    * Return a collection of unused classes and unused methods organized as following:
+    * Return a collection of used classes and used methods organized as following:
     * Map: class fullyQualifiedName -> Set< unused method qualifier > if the class contains covered methods
     * -> null if no methods is covered
     * method qualifier = methodSimpleName + descriptor
     * descriptor = (paramTypes;*)returnType
     * ex: method "contains(Ljava/lang/Object;)Z" is named contains and take an object as parameter and return a boolean
     */
-   public Map<String, Set<String>> getUnusedClassesAndMethods(File xmlJacocoReport) throws IOException, SAXException
+   public Map<String, Set<String>> getUsedClassesAndMethods(File xmlJacocoReport) throws IOException, SAXException
    {
-      unusedClassesAndMethods = new HashMap<>();
+      usedClassesAndMethods = new HashMap<>();
       Document doc = dBuilder.parse(xmlJacocoReport);
       doc.getDocumentElement().normalize();
 
@@ -58,26 +59,24 @@ public class JacocoReportReader
       for (int i = 0; i < packages.getLength(); i++) {
          visitPackage(packages.item(i));
       }
-       if (new File("agentCoverage.csv").exists()) {
-           BufferedReader reader = new BufferedReader(new FileReader(new File("agentCoverage.csv")));
-           String line = reader.readLine();
-           while (line != null) {
-               String[] splitLine = line.split(",");
-               String type = splitLine[0].replace(".", "/");
-               String method = splitLine[1] + splitLine[2];
-               if (unusedClassesAndMethods.containsKey(type)) {
-                  Set<String> methods = unusedClassesAndMethods.get(type);
-                  if (methods == null) {
-                     unusedClassesAndMethods.remove(type);
-                  } else {
-                     methods.remove(method);
-                  }
-
+      if (new File("agentCoverage.csv").exists()) {
+         BufferedReader reader = new BufferedReader(new FileReader(new File("agentCoverage.csv")));
+         String line = reader.readLine();
+         while (line != null) {
+            String[] splitLine = line.split(",");
+            String type = splitLine[0].replace(".", "/");
+            String method = splitLine[1] + splitLine[2];
+            if (usedClassesAndMethods.containsKey(type)) {
+               Set<String> methods = usedClassesAndMethods.get(type);
+               if (methods == null) {
+                  usedClassesAndMethods.put(type, new HashSet<>());
                }
-               line = reader.readLine();
-           }
-       }
-      return unusedClassesAndMethods;
+               methods.add(method);
+            }
+            line = reader.readLine();
+         }
+      }
+      return usedClassesAndMethods;
    }
 
    private void visitPackage(Node p)
@@ -93,24 +92,19 @@ public class JacocoReportReader
 
    private void visitClass(Node c)
    {
-      // if the class is not covered at all we add is and put null is the set of uncovered method
-      if (!isCovered(c, "CLASS")) {
-         unusedClassesAndMethods.put(c.getAttributes().getNamedItem("name").getNodeValue(), null);
-      } else {
-         NodeList methods = c.getChildNodes();
+      NodeList methods = c.getChildNodes();
 
-         // interface have no child nodes, and we ignore them (coverage does not make sense)
-         if (methods.getLength() == 0) {
-            return;
+      // interface have no child nodes, and we ignore them (coverage does not make sense)
+      if (methods.getLength() == 0) {
+         return;
+      }
+      usedClassesAndMethods.put(c.getAttributes().getNamedItem("name").getNodeValue(), new HashSet<>());
+      for (int i = 0; i < methods.getLength(); i++) {
+         Node n = methods.item(i);
+         if (!n.getNodeName().equals("method")) {
+            continue;
          }
-         unusedClassesAndMethods.put(c.getAttributes().getNamedItem("name").getNodeValue(), new HashSet<>());
-         for (int i = 0; i < methods.getLength(); i++) {
-            Node n = methods.item(i);
-            if (!n.getNodeName().equals("method")) {
-               continue;
-            }
-            visitMethod(n);
-         }
+         visitMethod(n);
       }
    }
 
@@ -137,12 +131,13 @@ public class JacocoReportReader
 
    private void visitMethod(Node m)
    {
-      if (isCovered(m, "METHOD")) {
+      if (!isCovered(m, "METHOD")) {
+         unusedMethodCound++;
          return;
       }
       String desc = m.getAttributes().getNamedItem("name").getNodeValue() + m.getAttributes().getNamedItem("desc").getNodeValue();
 
-      // we add the method only if it is not covered
-      unusedClassesAndMethods.get(m.getParentNode().getAttributes().getNamedItem("name").getNodeValue()).add(desc);
+      // we add the method only if it is covered
+      usedClassesAndMethods.get(m.getParentNode().getAttributes().getNamedItem("name").getNodeValue()).add(desc);
    }
 }

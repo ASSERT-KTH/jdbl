@@ -38,7 +38,7 @@ public class TestBasedMethodDebloat extends AbstractMethodDebloat
     }
 
     @Override
-    public void removeMethod(String clazz, Set<String> unusedMethods) throws IOException
+    public void removeMethod(String clazz, Set<String> usedMethods) throws IOException
     {
         FileInputStream in = new FileInputStream(new File(outputDirectory + "/" + clazz + ".class"));
         ClassReader cr = new ClassReader(in);
@@ -63,7 +63,7 @@ public class TestBasedMethodDebloat extends AbstractMethodDebloat
                         if (inNode instanceof LineNumberNode) {
                             if (((LineNumberNode) inNode).line == failingMethod.getLine()) {
                                 System.out.println("Method in stacktrace: " + mNode.name + mNode.desc);
-                                unusedMethods.remove(mNode.name + mNode.desc);
+                                usedMethods.add(mNode.name + mNode.desc);
                             }
                         }
                     }
@@ -78,13 +78,14 @@ public class TestBasedMethodDebloat extends AbstractMethodDebloat
             public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions)
             {
                 MethodVisitor mv = cv.visitMethod(access, name, desc, signature, exceptions);
-                if (unusedMethods.contains(name + desc)) {
+                if (!usedMethods.contains(name + desc) && !(isDefaultConstructor(name + desc))) {
                     LOGGER.info("Removed method: " + name + desc + " in " + clazz);
                     // write report to file
                     writeReportToFile(name, desc, "BloatedMethod, ", clazz);
                     return new MethodExceptionThrower(mv);
                     // return null;
                 } else {
+                    LOGGER.info("Keep method: " + name + desc + " in " + clazz);
                     // write report to file
                     writeReportToFile(name, desc, "UsedMethod, ", clazz);
                 }
@@ -99,6 +100,11 @@ public class TestBasedMethodDebloat extends AbstractMethodDebloat
         } catch (Exception ignored) {
             LOGGER.error("Error replacing class " + clazz + " with debloated methods ");
         }
+    }
+
+    private boolean isDefaultConstructor(String name) {
+        //return name.startsWith("<init>(") || name.startsWith("<clinit>(");
+	    return name.startsWith("<init>(") || name.startsWith("<clinit>(");
     }
 
     private void ignoreOneLineMethods(final Set<String> unusedMethods, final MethodNode mNode)

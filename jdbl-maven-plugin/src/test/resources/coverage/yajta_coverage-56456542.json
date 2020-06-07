@@ -1,0 +1,5 @@
+{
+  "org.dummy.pa.PartiallyCovered": ["<init>()V","m1(Ljava/lang/String;)Ljava/lang/String;","<clinit>()V"],
+  "org.dummy.pa.NotCovered": ["<init>()V","m1(Ljava/lang/String;)Ljava/lang/String;","<clinit>()V"],
+  "org.dummy.pa.Missing": ["<init>()V","m1(Ljava/lang/String;)Ljava/lang/String;","<clinit>()V"]
+}
