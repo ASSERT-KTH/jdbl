@@ -177,7 +177,7 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
     {
         final int nbOfClassesLoaded = ClassesLoadedSingleton.INSTANCE.getClassesLoaded().size();
         this.getLog().info("Loaded classes (" + nbOfClassesLoaded + ')');
-        ClassesLoadedSingleton.INSTANCE.getClassesLoaded().stream().forEach(System.out::println);
+        ClassesLoadedSingleton.INSTANCE.printClassesLoaded();
         this.getLog().info(getLineSeparator());
     }
 

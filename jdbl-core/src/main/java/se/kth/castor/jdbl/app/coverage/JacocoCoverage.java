@@ -120,8 +120,6 @@ public class JacocoCoverage extends CoverageWrapper implements UsageAnalyzer
         // Instrument the code
         mavenUtils.runMaven(Collections.singletonList("org.jacoco:jacoco-maven-plugin:0.8.4:instrument"), null);
 
-        System.exit(1);
-
         switch (this.debloatTypeEnum) {
             case TEST_DEBLOAT:
                 try {
@@ -220,8 +218,6 @@ public class JacocoCoverage extends CoverageWrapper implements UsageAnalyzer
 
         // print info about the number of classes loaded
         ClassesLoadedSingleton.INSTANCE.setClassesLoaded(classesLoadedTestDebloat);
-        // print the list of classes loaded
-        ClassesLoadedSingleton.INSTANCE.printClassesLoaded();
     }
 
     private void entryPointDebloat() throws IOException
