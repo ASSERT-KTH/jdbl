@@ -8,7 +8,6 @@ import java.io.StringReader;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.commons.io.FileUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -23,7 +22,6 @@ public class JacocoReportReader
 {
     private UsageAnalysis usageAnalysis;
     private final DocumentBuilder dBuilder;
-    private int unusedMethodsCount = 0;
 
     public JacocoReportReader() throws ParserConfigurationException
     {
@@ -48,19 +46,6 @@ public class JacocoReportReader
      */
     public UsageAnalysis getUsedClassesAndMethods(File xmlJacocoReport) throws IOException, SAXException
     {
-
-        System.out.println("***************************************************");
-        try (BufferedReader br = new BufferedReader(new FileReader(xmlJacocoReport.getAbsolutePath()))) {
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = br.readLine()) != null) {
-                sb.append(line);
-            }
-            FileUtils.writeStringToFile(new File("coverageResult.xml"), sb.toString());
-
-        }
-        System.out.println("***************************************************");
-
         usageAnalysis = new UsageAnalysis();
         Document doc = dBuilder.parse(xmlJacocoReport);
         doc.getDocumentElement().normalize();
@@ -82,7 +67,6 @@ public class JacocoReportReader
                 usageAnalysis2.getAnalysis().put(clazz, usageAnalysis.getAnalysis().get(clazz));
             }
         }
-
         return usageAnalysis2;
     }
 
@@ -118,7 +102,6 @@ public class JacocoReportReader
     private void visitMethod(Node m)
     {
         if (!isCovered(m, "METHOD")) {
-            unusedMethodsCount++;
             return;
         }
         String desc = m.getAttributes().getNamedItem("name").getNodeValue() +

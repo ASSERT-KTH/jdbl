@@ -2,8 +2,6 @@ package se.kth.castor.jdbl.app.coverage;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
-import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;
@@ -13,7 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class JacocoReportReaderTest
 {
-
     @Test
     void getUsedClassesAndMethods() throws ParserConfigurationException, IOException, SAXException
     {

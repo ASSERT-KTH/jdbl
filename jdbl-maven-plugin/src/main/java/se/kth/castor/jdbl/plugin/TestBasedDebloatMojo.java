@@ -52,7 +52,7 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
             new File(getProject().getBasedir().getAbsolutePath() + "/target/report.xml"), DebloatTypeEnum.TEST_DEBLOAT);
         UsageAnalysis jacocoUsageAnalysis = jacocoCoverage.analyzeUsages();
 
-        // Print Yajta and JaCoCo coverages
+        // Print Yajta and JaCoCo coverage outputs
         System.out.println("Yajta:");
         System.out.print(yajtaUsageAnalysis.toString());
         printCoverageAnalysisResults(yajtaUsageAnalysis);
@@ -75,7 +75,9 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
         TestResultReader testResultReader = new TestResultReader(".");
         Set<StackLine> failingMethods = testResultReader.getMethodFromStackTrace();
         for (StackLine failingMethod : failingMethods) {
-            usedClasses.add(failingMethod.getClassName());
+            if (usedClasses != null) {
+                usedClasses.add(failingMethod.getClassName());
+            }
         }
 
         // Write to a file with the status of classes (Used or Bloated) in each dependency
@@ -226,8 +228,6 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
         this.getLog().info("ANALYSIS RESULTS:");
         this.getLog().info(String.format("Total used classes: %d",
             usageAnalysis.getAnalysis().entrySet().stream().filter(e -> e.getValue() != null).count()));
-        this.getLog().info(String.format("Total unused classes: %d",
-            usageAnalysis.getAnalysis().entrySet().stream().filter(e -> e.getValue() == null).count()));
         this.getLog().info(String.format("Total used methods: %d",
             usageAnalysis.getAnalysis().values().stream().filter(Objects::nonNull).mapToInt(Set::size).sum()));
         this.getLog().info(getLineSeparator());
