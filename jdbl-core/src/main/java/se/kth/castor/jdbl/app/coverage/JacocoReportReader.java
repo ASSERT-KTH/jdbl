@@ -60,7 +60,17 @@ public class JacocoReportReader
         if (new File("agentCoverage.csv").exists()) {
             writeAgentCoverage();
         }
-        return usedClassesAndMethods;
+
+        // Remove all classes that do not contain any covered method
+        // TODO this is ugly, it should not be necessary
+        Map<String, Set<String>> usedClassesAndMethods2 = new HashMap<>();
+        for (String clazz : usedClassesAndMethods.keySet()) {
+            if (!usedClassesAndMethods.get(clazz).isEmpty()) {
+                usedClassesAndMethods2.put(clazz, usedClassesAndMethods.get(clazz));
+            }
+        }
+
+        return usedClassesAndMethods2;
     }
 
     private void visitPackage(Node p)
@@ -92,6 +102,19 @@ public class JacocoReportReader
         }
     }
 
+    private void visitMethod(Node m)
+    {
+        if (!isCovered(m, "METHOD")) {
+            unusedMethodsCount++;
+            return;
+        }
+        String desc = m.getAttributes().getNamedItem("name").getNodeValue() +
+            m.getAttributes().getNamedItem("desc").getNodeValue();
+
+        // we add the method only if it is covered
+        usedClassesAndMethods.get(m.getParentNode().getAttributes().getNamedItem("name").getNodeValue()).add(desc);
+    }
+
     private boolean isCovered(Node c, String entity)
     {
         // we look for a child node like <counter type="entity" ... covered="?"> if ? equals "0" it is not covered,
@@ -114,19 +137,6 @@ public class JacocoReportReader
         return true;
     }
 
-    private void visitMethod(Node m)
-    {
-        if (!isCovered(m, "METHOD")) {
-            unusedMethodsCount++;
-            return;
-        }
-        String desc = m.getAttributes().getNamedItem("name").getNodeValue() +
-            m.getAttributes().getNamedItem("desc").getNodeValue();
-
-        // we add the method only if it is covered
-        usedClassesAndMethods.get(m.getParentNode().getAttributes().getNamedItem("name").getNodeValue()).add(desc);
-    }
-
     private void writeAgentCoverage() throws IOException
     {
         try (BufferedReader reader = new BufferedReader(new FileReader(new File("agentCoverage.csv")))) {
@@ -136,13 +146,10 @@ public class JacocoReportReader
                 String type = splitLine[0].replace(".", "/");
                 String method = splitLine[1] + splitLine[2];
                 if (usedClassesAndMethods.containsKey(type)) {
-                    Set<String> methods = usedClassesAndMethods.get(type);
-                    if (methods == null) {
-                        usedClassesAndMethods.remove(type);
-                    } else {
-                        methods.remove(method);
+                    if (usedClassesAndMethods.containsKey(type)) {
+                        Set<String> methods = usedClassesAndMethods.computeIfAbsent(type, s -> new HashSet<>());
+                        methods.add(method);
                     }
-
                 }
                 line = reader.readLine();
             }
