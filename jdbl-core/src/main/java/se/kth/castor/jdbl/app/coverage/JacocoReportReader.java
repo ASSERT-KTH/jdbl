@@ -8,6 +8,7 @@ import java.io.StringReader;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.io.FileUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -47,6 +48,19 @@ public class JacocoReportReader
      */
     public UsageAnalysis getUsedClassesAndMethods(File xmlJacocoReport) throws IOException, SAXException
     {
+
+        System.out.println("***************************************************");
+        try (BufferedReader br = new BufferedReader(new FileReader(xmlJacocoReport.getAbsolutePath()))) {
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+            FileUtils.writeStringToFile(new File("coverageResult.xml"), sb.toString());
+
+        }
+        System.out.println("***************************************************");
+
         usageAnalysis = new UsageAnalysis();
         Document doc = dBuilder.parse(xmlJacocoReport);
         doc.getDocumentElement().normalize();

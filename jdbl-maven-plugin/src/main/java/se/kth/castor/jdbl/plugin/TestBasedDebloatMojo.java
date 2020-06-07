@@ -46,14 +46,16 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
         // Run yajta analysis
         YajtaCoverage yajtaCoverage = new YajtaCoverage(getProject(), mavenHome, DebloatTypeEnum.TEST_DEBLOAT);
         UsageAnalysis yajtaUsageAnalysis = yajtaCoverage.analyzeUsages();
-        System.out.println("Yajta:");
-        System.out.print(yajtaUsageAnalysis.toString());
-        printCoverageAnalysisResults(yajtaUsageAnalysis);
 
         // Run JaCoCo usage analysis
         JacocoCoverage jacocoCoverage = new JacocoCoverage(getProject(), mavenHome,
             new File(getProject().getBasedir().getAbsolutePath() + "/target/report.xml"), DebloatTypeEnum.TEST_DEBLOAT);
         UsageAnalysis jacocoUsageAnalysis = jacocoCoverage.analyzeUsages();
+
+        // Print Yajta and JaCoCo coverages
+        System.out.println("Yajta:");
+        System.out.print(yajtaUsageAnalysis.toString());
+        printCoverageAnalysisResults(yajtaUsageAnalysis);
         System.out.println("JaCoCo");
         System.out.print(jacocoUsageAnalysis.toString());
         printCoverageAnalysisResults(jacocoUsageAnalysis);

@@ -87,7 +87,7 @@ public class TestBasedMethodDebloat extends AbstractMethodDebloat
                     return new MethodExceptionThrower(mv);
                     // return null;
                 } else {
-                    LOGGER.info("Keep method: " + name + desc + " in " + clazz);
+                    // LOGGER.info("Keep method: " + name + desc + " in " + clazz);
                     // write report to file
                     writeReportToFile(name, desc, "UsedMethod, ", clazz);
                 }

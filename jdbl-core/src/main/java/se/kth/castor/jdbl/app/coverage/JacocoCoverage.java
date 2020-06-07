@@ -80,28 +80,27 @@ public class JacocoCoverage extends CoverageWrapper implements UsageAnalyzer
 
         MavenUtils mavenUtils = new MavenUtils(this.mavenHome, mavenProject.getBasedir());
 
+        // Write all the test classpath to a local file
         Properties propertyTestClasspath = new Properties();
         propertyTestClasspath.setProperty("mdep.outputFile", testClasspath);
         propertyTestClasspath.setProperty("scope", "test");
-
-        // write all the test classpath to a local file
         mavenUtils.runMaven(Collections.singletonList("dependency:build-classpath"), propertyTestClasspath);
 
+        // Do not copy the dependencies with non-compile scopes
         Properties propertyCopyDependencies = new Properties();
         propertyCopyDependencies.setProperty("outputDirectory", classesDir);
-
-        // do not copy the dependencies with non-compile scopes
         propertyCopyDependencies.setProperty("includeScope", "runtime");
         propertyCopyDependencies.setProperty("exclude", "runtime");
         mavenUtils.runMaven(Collections.singletonList("dependency:copy-dependencies"), propertyCopyDependencies);
 
-        // do not process the optional dependencies
+        // Do not process the optional dependencies
         OptionalDependencyIgnorer optionalDependencyIgnorer = new OptionalDependencyIgnorer(mavenProject);
         optionalDependencyIgnorer.removeOptionalDependencies(mavenUtils);
 
+        // Decompress the dependencies
         JarUtils.decompressJars(classesDir);
 
-        // apply bytecode transformations
+        // Apply bytecode transformations
         Iterator<File> itFiles = FileUtils.iterateFiles(new File(classesDir), new String[]{"class"}, true);
         while (itFiles.hasNext()) {
             File file = itFiles.next();
@@ -118,8 +117,10 @@ public class JacocoCoverage extends CoverageWrapper implements UsageAnalyzer
             }
         }
 
-        // instrument the code
+        // Instrument the code
         mavenUtils.runMaven(Collections.singletonList("org.jacoco:jacoco-maven-plugin:0.8.4:instrument"), null);
+
+        System.exit(1);
 
         switch (this.debloatTypeEnum) {
             case TEST_DEBLOAT:
@@ -141,19 +142,20 @@ public class JacocoCoverage extends CoverageWrapper implements UsageAnalyzer
                 break;
         }
 
-        // restore instrumented classes and generate the jacoco xml report
+        // Restore instrumented classes and generate the jacoco xml report
         mavenUtils.runMaven(Arrays.asList(
             "org.jacoco:jacoco-maven-plugin:0.8.4:restore-instrumented-classes",
             "org.jacoco:jacoco-maven-plugin:0.8.4:report"), null);
 
-        // copy the jacoco xml report
+        // Copy the jacoco xml report
         try {
-            FileUtils.copyFile(new File(mavenProject.getBasedir(), "target/site/jacoco/jacoco.xml"), this.report);
+            FileUtils.copyFile(new File(mavenProject.getBasedir().getAbsolutePath() + "/target/site/jacoco/jacoco.xml"),
+                report);
         } catch (IOException e) {
             LOGGER.error("Error copying jacoco.xml file.");
         }
 
-        // read the jacoco report
+        // Read the jacoco report
         JacocoReportReader reportReader = null;
         try {
             reportReader = new JacocoReportReader();
@@ -163,28 +165,11 @@ public class JacocoCoverage extends CoverageWrapper implements UsageAnalyzer
 
         try {
             assert reportReader != null;
-            return reportReader.getUsedClassesAndMethods(this.report);
+            return reportReader.getUsedClassesAndMethods(report);
         } catch (IOException | SAXException e) {
             LOGGER.error("Error getting unused classes and methods file.");
         }
         return null;
-    }
-
-    private void entryPointDebloat() throws IOException
-    {
-        LOGGER.info("Output directory: " + mavenProject.getBuild().getOutputDirectory());
-        LOGGER.info("entryClass: " + entryClass);
-        LOGGER.info("entryParameters: " + entryParameters);
-        // add jacoco to the classpath
-        String classpath = addJacocoToClasspath(mavenProject.getBasedir().getAbsolutePath() + "/target/test-classpath");
-        // execute the application from entry point
-        CmdExec cmdExecEntryPoint = new CmdExec();
-        Set<String> classesLoaded = cmdExecEntryPoint.execProcess(classpath, entryClass, entryParameters.split(" "));
-        // print info about the number of classes loaded
-        LOGGER.info("Number of classes loaded: " + classesLoaded.size());
-        ClassesLoadedSingleton.INSTANCE.setClassesLoaded(classesLoaded);
-        // list the classes loaded
-        ClassesLoadedSingleton.INSTANCE.printClassesLoaded();
     }
 
     private void testBasedDebloat() throws IOException
@@ -237,6 +222,21 @@ public class JacocoCoverage extends CoverageWrapper implements UsageAnalyzer
         ClassesLoadedSingleton.INSTANCE.setClassesLoaded(classesLoadedTestDebloat);
         // print the list of classes loaded
         ClassesLoadedSingleton.INSTANCE.printClassesLoaded();
+    }
+
+    private void entryPointDebloat() throws IOException
+    {
+        LOGGER.info("Output directory: " + mavenProject.getBuild().getOutputDirectory());
+        LOGGER.info("entryClass: " + entryClass);
+        LOGGER.info("entryParameters: " + entryParameters);
+        // add jacoco to the classpath
+        String classpath = addJacocoToClasspath(mavenProject.getBasedir().getAbsolutePath() + "/target/test-classpath");
+        // execute the application from entry point
+        CmdExec cmdExecEntryPoint = new CmdExec();
+        Set<String> classesLoaded = cmdExecEntryPoint.execProcess(classpath, entryClass, entryParameters.split(" "));
+        // print info about the number of classes loaded
+        LOGGER.info("Number of classes loaded: " + classesLoaded.size());
+        ClassesLoadedSingleton.INSTANCE.setClassesLoaded(classesLoaded);
     }
 
     private String addJacocoToClasspath(String file) throws IOException
