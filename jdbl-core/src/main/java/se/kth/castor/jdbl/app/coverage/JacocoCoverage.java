@@ -2,7 +2,6 @@ package se.kth.castor.jdbl.app.coverage;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -10,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -23,7 +21,6 @@ import org.apache.maven.project.MavenProject;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
-import se.kth.castor.jdbl.app.adapter.ConstantAdapter;
 import se.kth.castor.jdbl.app.debloat.DebloatTypeEnum;
 import se.kth.castor.jdbl.app.deptree.OptionalDependencyIgnorer;
 import se.kth.castor.jdbl.app.util.ClassesLoadedSingleton;
@@ -38,11 +35,7 @@ public class JacocoCoverage extends CoverageWrapper implements UsageAnalyzer
     private List<String> tests;
     private File report;
 
-    public JacocoCoverage(
-        MavenProject mavenProject,
-        File mavenHome,
-        File report,
-        DebloatTypeEnum debloatTypeEnum)
+    public JacocoCoverage(MavenProject mavenProject, File mavenHome, File report, DebloatTypeEnum debloatTypeEnum)
     {
         super(mavenProject, mavenHome, debloatTypeEnum);
         this.report = report;
@@ -52,14 +45,8 @@ public class JacocoCoverage extends CoverageWrapper implements UsageAnalyzer
         }
     }
 
-    public JacocoCoverage(
-        MavenProject mavenProject,
-        File report,
-        DebloatTypeEnum debloatTypeEnum,
-        String entryClass,
-        String entryMethod,
-        String entryParameters,
-        File mavenHome)
+    public JacocoCoverage(MavenProject mavenProject, File report, DebloatTypeEnum debloatTypeEnum, String entryClass,
+        String entryMethod, String entryParameters, File mavenHome)
     {
         super(mavenProject, mavenHome, debloatTypeEnum, entryClass, entryMethod, entryParameters);
         this.report = report;
@@ -100,22 +87,22 @@ public class JacocoCoverage extends CoverageWrapper implements UsageAnalyzer
         // Decompress the dependencies
         JarUtils.decompressJars(classesDir);
 
-        // Apply bytecode transformations
-        Iterator<File> itFiles = FileUtils.iterateFiles(new File(classesDir), new String[]{"class"}, true);
-        while (itFiles.hasNext()) {
-            File file = itFiles.next();
-            FileInputStream fileInputStream = null;
-            try {
-                fileInputStream = new FileInputStream(file);
-                ConstantAdapter constantAdapter = new ConstantAdapter(fileInputStream);
-                byte[] result = constantAdapter.addField();
-                FileUtils.forceDelete(file);
-                FileUtils.writeByteArrayToFile(new File(file.getAbsolutePath()), result);
-                fileInputStream.close();
-            } catch (IOException e) {
-                LOGGER.error("Error applying bytecode transformation.");
-            }
-        }
+        // // Apply bytecode transformations (warning: it causes issues such as JaCoCo not covering dependencies)
+        // Iterator<File> itFiles = FileUtils.iterateFiles(new File(classesDir), new String[]{"class"}, true);
+        // while (itFiles.hasNext()) {
+        //     File file = itFiles.next();
+        //     FileInputStream fileInputStream = null;
+        //     try {
+        //         fileInputStream = new FileInputStream(file);
+        //         ConstantAdapter constantAdapter = new ConstantAdapter(fileInputStream);
+        //         byte[] result = constantAdapter.addField();
+        //         FileUtils.forceDelete(file);
+        //         FileUtils.writeByteArrayToFile(new File(file.getAbsolutePath()), result);
+        //         fileInputStream.close();
+        //     } catch (IOException e) {
+        //         LOGGER.error("Error applying bytecode transformation.");
+        //     }
+        // }
 
         // Instrument the code
         mavenUtils.runMaven(Collections.singletonList("org.jacoco:jacoco-maven-plugin:0.8.4:instrument"), null);
@@ -174,7 +161,6 @@ public class JacocoCoverage extends CoverageWrapper implements UsageAnalyzer
     {
         Set<String> classesLoadedTestDebloat = new HashSet<>();
         FileUtils.deleteDirectory(new File("target/classes"));
-        // String agentParameter = "-javaagent:" + new File("coverageAgent.jar").getAbsoluteFile();
         List<String> args = new ArrayList<>();
         args.add("mvn");
         args.add("test");
@@ -183,6 +169,7 @@ public class JacocoCoverage extends CoverageWrapper implements UsageAnalyzer
         ProcessBuilder processBuilder = new ProcessBuilder(args);
         Map<String, String> environment = processBuilder.environment();
         environment.put("JAVA_HOME", System.getenv().get("JAVA_HOME"));
+        LOGGER.info("Running tests in verbose mode");
         Process p = processBuilder.start();
         new Thread(() -> {
             BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
