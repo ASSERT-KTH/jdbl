@@ -41,6 +41,7 @@ public class JacocoWrapper
    private File mavenHome;
    private File report;
    private DebloatTypeEnum debloatTypeEnum;
+   private int unusedMethodCount = 0;
 
    public JacocoWrapper(MavenProject mavenProject,
       File report,
@@ -141,8 +142,10 @@ public class JacocoWrapper
 
       // read the jacoco report
       JacocoReportReader reportReader = new JacocoReportReader();
+      Map<String, Set<String>> observedUsages = reportReader.getUsedClassesAndMethods(this.report);
 
-      return reportReader.getUsedClassesAndMethods(this.report);
+      unusedMethodCount = reportReader.getUnusedMethodCount();
+      return observedUsages;
    }
 
    public MavenProject getMavenProject()
@@ -249,4 +252,8 @@ public class JacocoWrapper
       }
       return tests;
    }
+
+	public int getUnusedMethodCount() {
+		return unusedMethodCount;
+	}
 }

@@ -108,6 +108,8 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
         printCustomStringToConsole("T E S T S    B A S E D    D E B L O A T    F I N I S H E D");
     }
 
+    int unusedMethodCount = 0;
+
     private void runYajtaAnalysis()
     {
         this.getLog().info("Running yajta");
@@ -315,6 +317,7 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
         Map<String, Set<String>> usageAnalysis = null;
         try {
             usageAnalysis = jacocoWrapper.analyzeUsages();
+            unusedMethodCount = jacocoWrapper.getUnusedMethodCount();
             this.printJaCoCoUsageAnalysisResults(usageAnalysis);
         } catch (IOException | ParserConfigurationException | SAXException e) {
             this.getLog().error(e);
@@ -331,6 +334,8 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
                 usageAnalysis.entrySet().stream().filter(e -> e.getValue() == null).count()));
         this.getLog().info(String.format("Total used methods: %d",
             usageAnalysis.values().stream().filter(Objects::nonNull).mapToInt(Set::size).sum()));
+        this.getLog().info(String.format("Total unused methods: %d",
+                unusedMethodCount));
         this.getLog().info(getLineSeparator());
     }
 
@@ -355,24 +360,20 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
                         // add the yajta coverage results to the jacoco analysis
                         final String className = String.valueOf(pair.getKey()).replace(".", "/");
                         ArrayList<String> yajtaMethods = map.get(pair.getKey());
-                        //this.getLog().error("yajta: class: " + className);
                         if (jaCoCoUsageAnalysis.containsKey(className)) {
                             Set<String> set = jaCoCoUsageAnalysis.get(className);
                             int nbMethodCoveredBefore = (set == null) ? 0 : set.size();
                             // if the method is covered by yajta then remove it from the set
                             if (set != null) {
-                                //this.getLog().error("yajta: class exist in jacoco report");
                                 set.addAll(yajtaMethods);
                                 jaCoCoUsageAnalysis.replace(className, set);
                                 newCoveredMethods += (set.size() - nbMethodCoveredBefore);
                             } else {
-                                //this.getLog().error("yajta: class does not exist in jacoco report");
                                 jaCoCoUsageAnalysis.put(className, new HashSet<>(yajtaMethods));
                                 newCoveredClasses++;
                                 newCoveredMethods += yajtaMethods.size();
                             }
                         } else {
-                            //this.getLog().error("yajta: class does not exist in jacoco report");
                             jaCoCoUsageAnalysis.put(className, new HashSet<>(yajtaMethods));
                             newCoveredClasses++;
                             newCoveredMethods += yajtaMethods.size();

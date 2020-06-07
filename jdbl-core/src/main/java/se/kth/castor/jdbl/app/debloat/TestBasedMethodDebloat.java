@@ -79,13 +79,13 @@ public class TestBasedMethodDebloat extends AbstractMethodDebloat
             {
                 MethodVisitor mv = cv.visitMethod(access, name, desc, signature, exceptions);
                 if (!usedMethods.contains(name + desc) && !(isDefaultConstructor(name + desc))) {
-                    LOGGER.info("Removed method: " + name + desc + " in " + clazz);
+                    //LOGGER.info("Removed method: " + name + desc + " in " + clazz);
                     // write report to file
                     writeReportToFile(name, desc, "BloatedMethod, ", clazz);
                     return new MethodExceptionThrower(mv);
                     // return null;
                 } else {
-                    LOGGER.info("Keep method: " + name + desc + " in " + clazz);
+                    //LOGGER.info("Keep method: " + name + desc + " in " + clazz);
                     // write report to file
                     writeReportToFile(name, desc, "UsedMethod, ", clazz);
                 }
@@ -103,7 +103,7 @@ public class TestBasedMethodDebloat extends AbstractMethodDebloat
     }
 
     private boolean isDefaultConstructor(String name) {
-        //return name.startsWith("<init>(") || name.startsWith("<clinit>(");
+        //Leave constructors and class initializer alone.
 	    return name.startsWith("<init>(") || name.startsWith("<clinit>(");
     }
 

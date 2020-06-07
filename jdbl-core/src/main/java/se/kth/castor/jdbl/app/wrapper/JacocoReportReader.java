@@ -23,7 +23,7 @@ import javax.xml.parsers.ParserConfigurationException;
 public class JacocoReportReader
 {
    private Map<String, Set<String>> usedClassesAndMethods;
-   int unusedMethodCound = 0;
+   private int unusedMethodCount = 0;
    private DocumentBuilder dBuilder;
 
    public JacocoReportReader() throws ParserConfigurationException
@@ -67,10 +67,7 @@ public class JacocoReportReader
             String type = splitLine[0].replace(".", "/");
             String method = splitLine[1] + splitLine[2];
             if (usedClassesAndMethods.containsKey(type)) {
-               Set<String> methods = usedClassesAndMethods.get(type);
-               if (methods == null) {
-                  usedClassesAndMethods.put(type, new HashSet<>());
-               }
+               Set<String> methods = usedClassesAndMethods.computeIfAbsent(type, s-> new HashSet<>());
                methods.add(method);
             }
             line = reader.readLine();
@@ -132,12 +129,16 @@ public class JacocoReportReader
    private void visitMethod(Node m)
    {
       if (!isCovered(m, "METHOD")) {
-         unusedMethodCound++;
+         unusedMethodCount++;
          return;
       }
       String desc = m.getAttributes().getNamedItem("name").getNodeValue() + m.getAttributes().getNamedItem("desc").getNodeValue();
 
       // we add the method only if it is covered
       usedClassesAndMethods.get(m.getParentNode().getAttributes().getNamedItem("name").getNodeValue()).add(desc);
+   }
+
+   public int getUnusedMethodCount() {
+      return unusedMethodCount;
    }
 }
