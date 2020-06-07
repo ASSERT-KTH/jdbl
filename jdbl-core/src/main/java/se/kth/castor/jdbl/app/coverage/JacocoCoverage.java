@@ -73,7 +73,7 @@ public class JacocoCoverage extends CoverageWrapper implements UsageAnalyzer
     }
 
     @Override
-    public Map<String, Set<String>> analyzeUsages()
+    public UsageAnalysis analyzeUsages()
     {
         final String classesDir = mavenProject.getBasedir().getAbsolutePath() + "/target/classes";
         final String testClasspath = mavenProject.getBasedir().getAbsolutePath() + "/target/test-classpath";

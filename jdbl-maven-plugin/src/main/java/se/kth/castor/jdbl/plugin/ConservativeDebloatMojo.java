@@ -11,6 +11,7 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 
 import se.kth.castor.jdbl.app.callgraph.JCallGraphModified;
+import se.kth.castor.jdbl.app.coverage.UsageAnalysis;
 import se.kth.castor.jdbl.app.debloat.AbstractMethodDebloat;
 import se.kth.castor.jdbl.app.debloat.ConservativeMethodDebloat;
 import se.kth.castor.jdbl.app.util.JDblFileUtils;
@@ -45,17 +46,17 @@ public class ConservativeDebloatMojo extends AbstractDebloatMojo
       JCallGraphModified jCallGraphModified = new JCallGraphModified();
 
       // run de static usage analysis
-      Map<String, Set<String>> usageAnalysis = jCallGraphModified
+      UsageAnalysis usageAnalysis = jCallGraphModified
          .runUsageAnalysis(getProject().getBuild().getOutputDirectory());
 
-      Set<String> classesUsed = usageAnalysis.keySet();
+      Set<String> classesUsed = usageAnalysis.getAnalysis().keySet();
 
       this.getLog().info(String.format("#Total classes: %d",
-         (long) usageAnalysis.entrySet().size()));
+         (long) usageAnalysis.getAnalysis().entrySet().size()));
       this.getLog().info(String.format("#Unused classes: %d",
-         usageAnalysis.entrySet().stream().filter(e -> e.getValue() == null).count()));
+         usageAnalysis.getAnalysis().entrySet().stream().filter(e -> e.getValue() == null).count()));
       this.getLog().info(String.format("#Unused methods: %d",
-         usageAnalysis.values().stream().filter(Objects::nonNull).mapToInt(Set::size).sum()));
+         usageAnalysis.getAnalysis().values().stream().filter(Objects::nonNull).mapToInt(Set::size).sum()));
 
       // delete unused classes
       JDblFileUtils JDblFileUtils = new JDblFileUtils(outputDirectory,

@@ -5,9 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import org.w3c.dom.Document;
@@ -22,7 +20,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 public class JacocoReportReader
 {
-    private Map<String, Set<String>> usedClassesAndMethods;
+    private UsageAnalysis usageAnalysis;
     private final DocumentBuilder dBuilder;
     private int unusedMethodsCount = 0;
 
@@ -47,9 +45,9 @@ public class JacocoReportReader
      * descriptor = (paramTypes;*)returnType
      * ex: method "contains(Ljava/lang/Object;)Z" is named contains and take an object as parameter and return a boolean
      */
-    public Map<String, Set<String>> getUsedClassesAndMethods(File xmlJacocoReport) throws IOException, SAXException
+    public UsageAnalysis getUsedClassesAndMethods(File xmlJacocoReport) throws IOException, SAXException
     {
-        usedClassesAndMethods = new HashMap<>();
+        usageAnalysis = new UsageAnalysis();
         Document doc = dBuilder.parse(xmlJacocoReport);
         doc.getDocumentElement().normalize();
 
@@ -57,20 +55,21 @@ public class JacocoReportReader
         for (int i = 0; i < packages.getLength(); i++) {
             visitPackage(packages.item(i));
         }
+
         if (new File("agentCoverage.csv").exists()) {
             writeAgentCoverage();
         }
 
         // Remove all classes that do not contain any covered method
         // TODO this is ugly, it should not be necessary
-        Map<String, Set<String>> usedClassesAndMethods2 = new HashMap<>();
-        for (String clazz : usedClassesAndMethods.keySet()) {
-            if (!usedClassesAndMethods.get(clazz).isEmpty()) {
-                usedClassesAndMethods2.put(clazz, usedClassesAndMethods.get(clazz));
+        UsageAnalysis usageAnalysis2 = new UsageAnalysis();
+        for (String clazz : usageAnalysis.getAnalysis().keySet()) {
+            if (!usageAnalysis.getAnalysis().get(clazz).isEmpty()) {
+                usageAnalysis2.getAnalysis().put(clazz, usageAnalysis.getAnalysis().get(clazz));
             }
         }
 
-        return usedClassesAndMethods2;
+        return usageAnalysis2;
     }
 
     private void visitPackage(Node p)
@@ -92,7 +91,7 @@ public class JacocoReportReader
         if (methods.getLength() == 0) {
             return;
         }
-        usedClassesAndMethods.put(c.getAttributes().getNamedItem("name").getNodeValue(), new HashSet<>());
+        usageAnalysis.getAnalysis().put(c.getAttributes().getNamedItem("name").getNodeValue(), new HashSet<>());
         for (int i = 0; i < methods.getLength(); i++) {
             Node n = methods.item(i);
             if (!n.getNodeName().equals("method")) {
@@ -112,7 +111,7 @@ public class JacocoReportReader
             m.getAttributes().getNamedItem("desc").getNodeValue();
 
         // we add the method only if it is covered
-        usedClassesAndMethods.get(m.getParentNode().getAttributes().getNamedItem("name").getNodeValue()).add(desc);
+        usageAnalysis.getAnalysis().get(m.getParentNode().getAttributes().getNamedItem("name").getNodeValue()).add(desc);
     }
 
     private boolean isCovered(Node c, String entity)
@@ -145,9 +144,9 @@ public class JacocoReportReader
                 String[] splitLine = line.split(",");
                 String type = splitLine[0].replace(".", "/");
                 String method = splitLine[1] + splitLine[2];
-                if (usedClassesAndMethods.containsKey(type)) {
-                    if (usedClassesAndMethods.containsKey(type)) {
-                        Set<String> methods = usedClassesAndMethods.computeIfAbsent(type, s -> new HashSet<>());
+                if (usageAnalysis.getAnalysis().containsKey(type)) {
+                    if (usageAnalysis.getAnalysis().containsKey(type)) {
+                        Set<String> methods = usageAnalysis.getAnalysis().computeIfAbsent(type, s -> new HashSet<>());
                         methods.add(method);
                     }
                 }

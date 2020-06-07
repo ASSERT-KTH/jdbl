@@ -19,11 +19,11 @@ class JacocoReportReaderTest
     {
         JacocoReportReader r = new JacocoReportReader();
         final File xmlJacocoReport = new File("src/test/resources/coverage/report.xml");
-        Map<String, Set<String>> observed = r.getUsedClassesAndMethods(xmlJacocoReport);
-        assertEquals(3, observed.size());
-        assertEquals(4, observed.get("org/dummy/pa/FullyCovered").size());
-        assertEquals(2, observed.get("org/dummy/pa/PartiallyCovered").size());
-        assertEquals(0, observed.get("org/dummy/pa/NotCovered").size());
-        assertEquals(false, observed.containsKey("org/dummy/pa/Missing"));
+        UsageAnalysis observed = r.getUsedClassesAndMethods(xmlJacocoReport);
+        assertEquals(3, observed.getAnalysis().size());
+        assertEquals(4, observed.getAnalysis().get("org/dummy/pa/FullyCovered").size());
+        assertEquals(2, observed.getAnalysis().get("org/dummy/pa/PartiallyCovered").size());
+        assertEquals(0, observed.getAnalysis().get("org/dummy/pa/NotCovered").size());
+        assertEquals(false, observed.getAnalysis().containsKey("org/dummy/pa/Missing"));
     }
 }

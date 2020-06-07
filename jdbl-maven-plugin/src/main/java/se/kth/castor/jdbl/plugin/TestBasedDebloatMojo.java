@@ -5,9 +5,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -16,6 +14,7 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 
 import se.kth.castor.jdbl.app.coverage.JacocoCoverage;
+import se.kth.castor.jdbl.app.coverage.UsageAnalysis;
 import se.kth.castor.jdbl.app.coverage.YajtaCoverage;
 import se.kth.castor.jdbl.app.debloat.AbstractMethodDebloat;
 import se.kth.castor.jdbl.app.debloat.DebloatTypeEnum;
@@ -46,21 +45,21 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
 
         // Run yajta analysis
         YajtaCoverage yajtaCoverage = new YajtaCoverage(getProject(), mavenHome, DebloatTypeEnum.TEST_DEBLOAT);
-        Map<String, Set<String>> yajtaUsageAnalysis = yajtaCoverage.analyzeUsages();
+        UsageAnalysis yajtaUsageAnalysis = yajtaCoverage.analyzeUsages();
+        System.out.println("Yajta:");
+        System.out.print(yajtaUsageAnalysis.toString());
+        printCoverageAnalysisResults(yajtaUsageAnalysis);
 
         // Run JaCoCo usage analysis
         JacocoCoverage jacocoCoverage = new JacocoCoverage(getProject(), mavenHome,
             new File(getProject().getBasedir().getAbsolutePath() + "/target/report.xml"), DebloatTypeEnum.TEST_DEBLOAT);
-        Map<String, Set<String>> jacocoUsageAnalysis = jacocoCoverage.analyzeUsages();
+        UsageAnalysis jacocoUsageAnalysis = jacocoCoverage.analyzeUsages();
+        System.out.println("JaCoCo");
+        System.out.print(jacocoUsageAnalysis.toString());
+        printCoverageAnalysisResults(jacocoUsageAnalysis);
 
         // Merge coverage analysis
-        System.out.println("Yajta:");
-        System.out.println(yajtaUsageAnalysis);
-        printCoverageAnalysisResults(yajtaUsageAnalysis);
-        System.out.println("JaCoCo");
-        System.out.println(jacocoUsageAnalysis);
-        printCoverageAnalysisResults(jacocoUsageAnalysis);
-        Map<String, Set<String>> mergedUsageAnalysis = mergeTwoUsageAnalysis(yajtaUsageAnalysis, jacocoUsageAnalysis);
+        UsageAnalysis mergedUsageAnalysis = mergeTwoUsageAnalysis(yajtaUsageAnalysis, jacocoUsageAnalysis);
 
         // Classes loaded
         Set<String> usedClasses = null;
@@ -105,16 +104,15 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
         printCustomStringToConsole("JDBL: TEST BASED DEBLOAT FINISHED");
     }
 
-    private Map<String, Set<String>> mergeTwoUsageAnalysis(Map<String, Set<String>> aUsageAnalysis,
-        Map<String, Set<String>> anotherUsageAnalysis)
+    private UsageAnalysis mergeTwoUsageAnalysis(UsageAnalysis aUsageAnalysis, UsageAnalysis anotherUsageAnalysis)
     {
-        Map<String, Set<String>> mergedUsageAnalysis = new HashMap<>();
-        aUsageAnalysis.keySet().forEach(clazz -> {
-            Set<String> methods = aUsageAnalysis.get(clazz);
-            if (anotherUsageAnalysis.containsKey(clazz)) {
-                methods.addAll(anotherUsageAnalysis.get(clazz));
+        UsageAnalysis mergedUsageAnalysis = new UsageAnalysis();
+        aUsageAnalysis.getAnalysis().keySet().forEach(clazz -> {
+            Set<String> methods = aUsageAnalysis.getAnalysis().get(clazz);
+            if (anotherUsageAnalysis.getAnalysis().containsKey(clazz)) {
+                methods.addAll(anotherUsageAnalysis.getAnalysis().get(clazz));
             }
-            mergedUsageAnalysis.put(clazz, methods);
+            mergedUsageAnalysis.getAnalysis().put(clazz, methods);
         });
         return mergedUsageAnalysis;
     }
@@ -181,7 +179,7 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
         this.getLog().info(getLineSeparator());
     }
 
-    private void removeUnusedMethods(final String outputDirectory, final Map<String, Set<String>> usageAnalysis,
+    private void removeUnusedMethods(final String outputDirectory, final UsageAnalysis usageAnalysis,
         Set<StackLine> failingMethods)
     {
         AbstractMethodDebloat testBasedMethodDebloat = new TestBasedMethodDebloat(outputDirectory,
@@ -208,11 +206,12 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
         }
     }
 
-    private static Set<String> getUsedClasses(final Map<String, Set<String>> usageAnalysis)
+    private static Set<String> getUsedClasses(final UsageAnalysis usageAnalysis)
     {
         // get the union of the JaCoCo output and the JVM class loader results
         Set<String> usedClasses = new HashSet<>(ClassesLoadedSingleton.INSTANCE.getClassesLoaded());
         usageAnalysis
+            .getAnalysis()
             .entrySet()
             .stream()
             .filter(e -> e.getValue() != null)
@@ -220,15 +219,15 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
         return usedClasses;
     }
 
-    private void printCoverageAnalysisResults(final Map<String, Set<String>> usageAnalysis)
+    private void printCoverageAnalysisResults(final UsageAnalysis usageAnalysis)
     {
         this.getLog().info("ANALYSIS RESULTS:");
         this.getLog().info(String.format("Total used classes: %d",
-            usageAnalysis.entrySet().stream().filter(e -> e.getValue() != null).count()));
+            usageAnalysis.getAnalysis().entrySet().stream().filter(e -> e.getValue() != null).count()));
         this.getLog().info(String.format("Total unused classes: %d",
-            usageAnalysis.entrySet().stream().filter(e -> e.getValue() == null).count()));
+            usageAnalysis.getAnalysis().entrySet().stream().filter(e -> e.getValue() == null).count()));
         this.getLog().info(String.format("Total used methods: %d",
-            usageAnalysis.values().stream().filter(Objects::nonNull).mapToInt(Set::size).sum()));
+            usageAnalysis.getAnalysis().values().stream().filter(Objects::nonNull).mapToInt(Set::size).sum()));
         this.getLog().info(getLineSeparator());
     }
 }

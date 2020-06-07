@@ -14,9 +14,11 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
+import se.kth.castor.jdbl.app.coverage.UsageAnalysis;
+
 public class ConservativeMethodDebloat extends AbstractMethodDebloat
 {
-   public ConservativeMethodDebloat(String outputDirectory, Map<String, Set<String>> usageAnalysis, File fileReport)
+   public ConservativeMethodDebloat(String outputDirectory, UsageAnalysis usageAnalysis, File fileReport)
    {
       super(outputDirectory, usageAnalysis, fileReport);
    }

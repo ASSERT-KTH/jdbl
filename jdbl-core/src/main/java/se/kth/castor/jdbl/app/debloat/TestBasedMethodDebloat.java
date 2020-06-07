@@ -24,6 +24,7 @@ import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.LineNumberNode;
 import org.objectweb.asm.tree.MethodNode;
 
+import se.kth.castor.jdbl.app.coverage.UsageAnalysis;
 import se.kth.castor.jdbl.app.test.StackLine;
 
 public class TestBasedMethodDebloat extends AbstractMethodDebloat
@@ -31,7 +32,7 @@ public class TestBasedMethodDebloat extends AbstractMethodDebloat
     protected static final Logger LOGGER = LogManager.getLogger(TestBasedMethodDebloat.class);
     private final Set<StackLine> failingMethods;
 
-    public TestBasedMethodDebloat(String outputDirectory, Map<String, Set<String>> usageAnalysis,
+    public TestBasedMethodDebloat(String outputDirectory, UsageAnalysis usageAnalysis,
         File reportFile, Set<StackLine> failingMethods)
     {
         super(outputDirectory, usageAnalysis, reportFile);

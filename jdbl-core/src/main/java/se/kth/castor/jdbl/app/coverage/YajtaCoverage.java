@@ -6,7 +6,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
@@ -40,10 +39,10 @@ public class YajtaCoverage extends CoverageWrapper implements UsageAnalyzer
     }
 
     @Override
-    public Map<String, Set<String>> analyzeUsages()
+    public UsageAnalysis analyzeUsages()
     {
         writeCoverage();
-        Map<String, Set<String>> yajtaUsageAnalysis = new HashMap<>();
+        UsageAnalysis usageAnalysis = new UsageAnalysis();
         final String projectBasedir = mavenProject.getBasedir().getAbsolutePath();
         Set<String> filesInBasedir = listFilesInDirectory(projectBasedir);
         // yajta could produce more than one coverage file (in case of parallel testing), so we need to read all of them
@@ -62,14 +61,14 @@ public class YajtaCoverage extends CoverageWrapper implements UsageAnalyzer
                         // add the yajta coverage results to the jacoco analysis
                         final String className = String.valueOf(pair.getKey()).replace(".", "/");
                         ArrayList<String> yajtaMethods = map.get(pair.getKey());
-                        yajtaUsageAnalysis.put(className, new HashSet<>(yajtaMethods));
+                        usageAnalysis.getAnalysis().put(className, new HashSet<>(yajtaMethods));
                     }
                 } catch (IOException e) {
                     LOGGER.error("Error reading the yajta coverage file.");
                 }
             }
         }
-        return yajtaUsageAnalysis;
+        return usageAnalysis;
     }
 
     public void writeCoverage()

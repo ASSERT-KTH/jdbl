@@ -12,6 +12,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
 import se.kth.castor.jdbl.app.coverage.JacocoCoverage;
+import se.kth.castor.jdbl.app.coverage.UsageAnalysis;
 import se.kth.castor.jdbl.app.debloat.AbstractMethodDebloat;
 import se.kth.castor.jdbl.app.debloat.DebloatTypeEnum;
 import se.kth.castor.jdbl.app.debloat.EntryPointMethodDebloat;
@@ -66,15 +67,15 @@ public class EntryPointDebloatMojo extends AbstractDebloatMojo
             this.entryParameters,
             getMavenHome());
 
-        Map<String, Set<String>> usageAnalysis = null;
+        UsageAnalysis usageAnalysis = null;
 
         // run the usage analysis
         usageAnalysis = jacocoCoverage.analyzeUsages();
         // print some results
         this.getLog().info(String.format("#Unused classes: %d",
-            usageAnalysis.entrySet().stream().filter(e -> e.getValue() == null).count()));
+            usageAnalysis.getAnalysis().entrySet().stream().filter(e -> e.getValue() == null).count()));
         this.getLog().info(String.format("#Unused methods: %d",
-            usageAnalysis.values().stream().filter(Objects::nonNull).mapToInt(Set::size).sum()));
+            usageAnalysis.getAnalysis().values().stream().filter(Objects::nonNull).mapToInt(Set::size).sum()));
 
         // remove unused classes
         JDblFileUtils jDblFileUtils = new JDblFileUtils(outputDirectory, new HashSet<>(),
