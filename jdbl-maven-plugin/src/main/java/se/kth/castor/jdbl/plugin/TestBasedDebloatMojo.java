@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
@@ -52,20 +53,20 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
             new File(getProject().getBasedir().getAbsolutePath() + "/target/report.xml"), DebloatTypeEnum.TEST_DEBLOAT);
         Map<String, Set<String>> jacocoUsageAnalysis = jacocoCoverage.analyzeUsages();
 
-        // Combine coverage analysis
+        // Merge coverage analysis
         System.out.println("Yajta:");
         System.out.println(yajtaUsageAnalysis);
         printCoverageAnalysisResults(yajtaUsageAnalysis);
         System.out.println("JaCoCo");
         System.out.println(jacocoUsageAnalysis);
         printCoverageAnalysisResults(jacocoUsageAnalysis);
+        Map<String, Set<String>> mergedUsageAnalysis = mergeTwoUsageAnalysis(yajtaUsageAnalysis, jacocoUsageAnalysis);
 
-        System.exit(1);
-
+        // Classes loaded
         Set<String> usedClasses = null;
         try {
             this.printClassesLoaded();
-            usedClasses = TestBasedDebloatMojo.getUsedClasses(jacocoUsageAnalysis);
+            usedClasses = TestBasedDebloatMojo.getUsedClasses(mergedUsageAnalysis);
         } catch (RuntimeException e) {
             this.getLog().error("Error computing JaCoCo usage analysis.");
         }
@@ -76,7 +77,7 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
             usedClasses.add(failingMethod.getClassName());
         }
 
-        // write to a file with the status of classes (Used or Bloated) in each dependency
+        // Write to a file with the status of classes (Used or Bloated) in each dependency
         try {
             writeClassStatusPerDependency(usedClasses);
         } catch (RuntimeException e) {
@@ -89,7 +90,7 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
 
         // ----------------------------------------------------
         this.getLog().info("Starting removing unused methods...");
-        this.removeUnusedMethods(outputDirectory, jacocoUsageAnalysis, failingMethods);
+        this.removeUnusedMethods(outputDirectory, mergedUsageAnalysis, failingMethods);
 
         // ----------------------------------------------------
         try {
@@ -102,6 +103,20 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
         // ----------------------------------------------------
         writeTimeElapsedReportFile(start);
         printCustomStringToConsole("JDBL: TEST BASED DEBLOAT FINISHED");
+    }
+
+    private Map<String, Set<String>> mergeTwoUsageAnalysis(Map<String, Set<String>> aUsageAnalysis,
+        Map<String, Set<String>> anotherUsageAnalysis)
+    {
+        Map<String, Set<String>> mergedUsageAnalysis = new HashMap<>();
+        aUsageAnalysis.keySet().forEach(clazz -> {
+            Set<String> methods = aUsageAnalysis.get(clazz);
+            if (anotherUsageAnalysis.containsKey(clazz)) {
+                methods.addAll(anotherUsageAnalysis.get(clazz));
+            }
+            mergedUsageAnalysis.put(clazz, methods);
+        });
+        return mergedUsageAnalysis;
     }
 
     private void writeClassStatusPerDependency(final Set<String> usedClasses)
