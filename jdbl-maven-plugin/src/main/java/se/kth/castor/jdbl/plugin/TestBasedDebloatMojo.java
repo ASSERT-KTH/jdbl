@@ -1,44 +1,30 @@
 package se.kth.castor.jdbl.plugin;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
-import org.xml.sax.SAXException;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import javax.xml.parsers.ParserConfigurationException;
-import se.kth.castor.jdbl.app.DebloatTypeEnum;
+import se.kth.castor.jdbl.app.coverage.JacocoCoverage;
+import se.kth.castor.jdbl.app.coverage.YajtaCoverage;
 import se.kth.castor.jdbl.app.debloat.AbstractMethodDebloat;
+import se.kth.castor.jdbl.app.debloat.DebloatTypeEnum;
 import se.kth.castor.jdbl.app.debloat.TestBasedMethodDebloat;
 import se.kth.castor.jdbl.app.test.StackLine;
-import se.kth.castor.jdbl.app.test.TestResult;
 import se.kth.castor.jdbl.app.test.TestResultReader;
+import se.kth.castor.jdbl.app.test.TestRunner;
 import se.kth.castor.jdbl.app.util.ClassesLoadedSingleton;
 import se.kth.castor.jdbl.app.util.JDblFileUtils;
 import se.kth.castor.jdbl.app.util.JarUtils;
-import se.kth.castor.jdbl.app.util.MavenUtils;
-import se.kth.castor.jdbl.app.wrapper.JacocoWrapper;
-import se.kth.castor.offline.CoverageInstrumenter;
-import se.kth.castor.yajta.api.MalformedTrackingClassException;
 
 /**
  * This Mojo debloats the project according to the coverage of its test suite.
@@ -52,24 +38,34 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
     @Override
     public void doExecute()
     {
-        printCustomStringToConsole("S T A R T I N G    T E S T    B A S E D    D E B L O A T");
+        printCustomStringToConsole("JDBL: STARTING TEST BASED DEBLOAT");
         Instant start = Instant.now();
         cleanReportFile();
         String outputDirectory = getProject().getBuild().getOutputDirectory();
 
-        // run yajta analysis
-        runYajtaAnalysis();
+        // Run yajta analysis
+        YajtaCoverage yajtaCoverage = new YajtaCoverage(getProject(), mavenHome, DebloatTypeEnum.TEST_DEBLOAT);
+        Map<String, Set<String>> yajtaUsageAnalysis = yajtaCoverage.analyzeUsages();
 
-        // run JaCoCo usage analysis
-        Map<String, Set<String>> jaCoCoUsageAnalysis = this.getJaCoCoUsageAnalysis();
+        // Run JaCoCo usage analysis
+        JacocoCoverage jacocoCoverage = new JacocoCoverage(getProject(), mavenHome,
+            new File(getProject().getBasedir().getAbsolutePath() + "/target/report.xml"), DebloatTypeEnum.TEST_DEBLOAT);
+        Map<String, Set<String>> jacocoUsageAnalysis = jacocoCoverage.analyzeUsages();
 
-        // add yajta trace analysis to jaCoCo traces
-        jaCoCoUsageAnalysis = addYajtaAnalysis(jaCoCoUsageAnalysis, getProject().getBasedir().getAbsolutePath());
+        // Combine coverage analysis
+        System.out.println("Yajta:");
+        System.out.println(yajtaUsageAnalysis);
+        printCoverageAnalysisResults(yajtaUsageAnalysis);
+        System.out.println("JaCoCo");
+        System.out.println(jacocoUsageAnalysis);
+        printCoverageAnalysisResults(jacocoUsageAnalysis);
+
+        System.exit(1);
 
         Set<String> usedClasses = null;
         try {
             this.printClassesLoaded();
-            usedClasses = TestBasedDebloatMojo.getUsedClasses(jaCoCoUsageAnalysis);
+            usedClasses = TestBasedDebloatMojo.getUsedClasses(jacocoUsageAnalysis);
         } catch (RuntimeException e) {
             this.getLog().error("Error computing JaCoCo usage analysis.");
         }
@@ -93,117 +89,19 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
 
         // ----------------------------------------------------
         this.getLog().info("Starting removing unused methods...");
-        this.removeUnusedMethods(outputDirectory, jaCoCoUsageAnalysis, failingMethods);
+        this.removeUnusedMethods(outputDirectory, jacocoUsageAnalysis, failingMethods);
 
         // ----------------------------------------------------
         try {
             this.getLog().info("Starting running the test suite on the debloated version...");
-            rerunTests();
+            TestRunner.runTests(getProject());
         } catch (IOException e) {
             this.getLog().error("IOException when rerunning the tests");
         }
 
         // ----------------------------------------------------
         writeTimeElapsedReportFile(start);
-        printCustomStringToConsole("T E S T S    B A S E D    D E B L O A T    F I N I S H E D");
-    }
-
-    private void runYajtaAnalysis()
-    {
-        this.getLog().info("Running yajta");
-        final String classesDir = getProject().getBasedir().getAbsolutePath() + "/target/classes";
-        final String testDir = getProject().getBasedir().getAbsolutePath() + "/target/test-classes";
-        final String instrumentedDir = getProject().getBasedir().getAbsolutePath() + "/target/instrumented";
-        final String classesOriginalDir = getProject().getBasedir().getAbsolutePath() + "/target/classes-original";
-
-        // copy dependencies to be instrumented by yajta
-        MavenUtils mavenUtils = new MavenUtils(super.mavenHome, getProject().getBasedir());
-        mavenUtils.copyDependencies(classesDir);
-        JarUtils.decompressJars(classesDir);
-
-        // TODO Delete non class files (this should not happen in a new version of yajta)
-        File directory = new File(classesDir + "/META-INF");
-        try {
-            FileUtils.deleteDirectory(directory);
-        } catch (IOException e) {
-            this.getLog().error("Error deleting directory " + directory.getName());
-        }
-
-        try {
-            CoverageInstrumenter.main(new String[]{
-                "-i", classesDir,
-                "-o", instrumentedDir});
-        } catch (MalformedTrackingClassException e) {
-            this.getLog().error("Error executing yajta.");
-        }
-        try {
-            FileUtils.moveDirectory(new File(classesDir),
-                new File(classesOriginalDir));
-            FileUtils.moveDirectory(new File(instrumentedDir),
-                new File(classesDir));
-        } catch (IOException e) {
-            this.getLog().error("Error handling target/class directory.");
-        }
-        try {
-            mavenUtils.copyDependency("se.kth.castor:yajta-core:2.0.2", testDir);
-            mavenUtils.copyDependency("se.kth.castor:yajta-offline:2.0.2", testDir);
-            JarUtils.decompressJars(testDir);
-            rerunTests();
-        } catch (IOException e) {
-            this.getLog().error("Error rerunning the tests.");
-        }
-        try {
-            FileUtils.deleteDirectory(new File(classesDir));
-            FileUtils.moveDirectory(new File(classesOriginalDir),
-                new File(classesDir));
-        } catch (IOException e) {
-            this.getLog().error("Error rolling back the compiled classes.");
-        }
-    }
-
-    private void rerunTests() throws IOException
-    {
-        Runtime rt = Runtime.getRuntime();
-        Process p = rt.exec("mvn test -Dmaven.main.skip=true");
-
-        printProcessToStandardOutput(p);
-
-        try {
-            p.waitFor();
-        } catch (InterruptedException e) {
-            this.getLog().error("Re-testing process terminated unexpectedly.");
-            Thread.currentThread().interrupt();
-        }
-        TestResultReader testResultReader = new TestResultReader(".");
-        TestResult testResult = testResultReader.getResults();
-        writeTSResultsToFile(testResult);
-        if (testResult.errorTests() != 0 || testResult.failedTests() != 0) {
-            printCustomStringToConsole("T E S T S    B A S E D    D E B L O A T    F A I L E D");
-        }
-    }
-
-    private void printProcessToStandardOutput(final Process p) throws IOException
-    {
-        String line;
-        BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
-        while ((line = input.readLine()) != null) {
-            System.out.println(line);
-        }
-        input.close();
-    }
-
-    private void writeTSResultsToFile(final TestResult testResult)
-    {
-        this.getLog().info(testResult.getResults());
-        this.getLog().info("Writing ts-results.log to " +
-            new File(getProject().getBasedir().getAbsolutePath() + "/" + "ts-results.log"));
-        try {
-            final String reportTSResultsFileName = "ts-results.log";
-            FileUtils.writeStringToFile(new File(getProject().getBasedir().getAbsolutePath() + "/" +
-                reportTSResultsFileName), testResult.getResults(), StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            this.getLog().error("Error creating tests results report file.");
-        }
+        printCustomStringToConsole("JDBL: TEST BASED DEBLOAT FINISHED");
     }
 
     private void writeClassStatusPerDependency(final Set<String> usedClasses)
@@ -307,72 +205,15 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
         return usedClasses;
     }
 
-    private Map<String, Set<String>> getJaCoCoUsageAnalysis()
+    private void printCoverageAnalysisResults(final Map<String, Set<String>> usageAnalysis)
     {
-        JacocoWrapper jacocoWrapper = new JacocoWrapper(getProject(),
-            new File(getProject().getBasedir().getAbsolutePath() + "/target/report.xml"),
-            DebloatTypeEnum.TEST_DEBLOAT);
-        Map<String, Set<String>> usageAnalysis = null;
-        try {
-            usageAnalysis = jacocoWrapper.analyzeUsages();
-            this.printJaCoCoUsageAnalysisResults(usageAnalysis);
-        } catch (IOException | ParserConfigurationException | SAXException e) {
-            this.getLog().error(e);
-        }
-        return usageAnalysis;
-    }
-
-    private void printJaCoCoUsageAnalysisResults(final Map<String, Set<String>> usageAnalysis)
-    {
-        this.getLog().info("JaCoCo ANALYSIS RESULTS:");
+        this.getLog().info("ANALYSIS RESULTS:");
+        this.getLog().info(String.format("Total used classes: %d",
+            usageAnalysis.entrySet().stream().filter(e -> e.getValue() != null).count()));
         this.getLog().info(String.format("Total unused classes: %d",
             usageAnalysis.entrySet().stream().filter(e -> e.getValue() == null).count()));
-        this.getLog().info(String.format("Total unused methods: %d",
+        this.getLog().info(String.format("Total used methods: %d",
             usageAnalysis.values().stream().filter(Objects::nonNull).mapToInt(Set::size).sum()));
         this.getLog().info(getLineSeparator());
-    }
-
-    private Map<String, Set<String>> addYajtaAnalysis(Map<String, Set<String>> jaCoCoUsageAnalysis, String projectBasedir)
-    {
-        Set<String> filesInBasedir = listFilesInDirectory(projectBasedir);
-        // yajta could produce more than one coverage file (in case of parallel testing), so we need to read all of them
-        for (String fileName : filesInBasedir) {
-            if (fileName.startsWith("yajta_coverage")) {
-                String json;
-                try {
-                    json = new String(Files.readAllBytes(Paths.get(projectBasedir +
-                        "/" + fileName)), StandardCharsets.UTF_8);
-                    ObjectMapper mapper = new ObjectMapper();
-                    // convert JSON string to Map
-                    Map<String, ArrayList<String>> map = mapper.readValue(json, Map.class);
-                    Iterator it = map.entrySet().iterator();
-                    while (it.hasNext()) {
-                        Map.Entry pair = (Map.Entry) it.next();
-                        // add the yajta coverage results to the jacoco analysis
-                        final String className = String.valueOf(pair.getKey()).replace(".", "/");
-                        if (jaCoCoUsageAnalysis.containsKey(className)) {
-                            ArrayList<String> yajtaMethods = map.get(pair.getKey());
-                            Set<String> set = jaCoCoUsageAnalysis.get(className);
-                            // if the method is covered by yajta then remove it from the set
-                            if (set != null) {
-                                set.removeAll(yajtaMethods);
-                                jaCoCoUsageAnalysis.replace(className, set);
-                            }
-                        }
-                    }
-                } catch (IOException e) {
-                    this.getLog().error("Error reading the yajta coverage file.");
-                }
-            }
-        }
-        return jaCoCoUsageAnalysis;
-    }
-
-    private Set<String> listFilesInDirectory(String dir)
-    {
-        return Stream.of(new File(dir).listFiles())
-            .filter(file -> !file.isDirectory())
-            .map(File::getName)
-            .collect(Collectors.toSet());
     }
 }

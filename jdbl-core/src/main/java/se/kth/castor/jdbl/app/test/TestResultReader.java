@@ -20,7 +20,8 @@ public class TestResultReader
         this.path = path;
     }
 
-    private static Set<StackLine> extractError(String content) {
+    private static Set<StackLine> extractError(String content)
+    {
         Set<StackLine> output = new HashSet<>();
         String[] lines = content.split("\n");
         for (int i = 0; i < lines.length; i++) {
@@ -43,7 +44,9 @@ public class TestResultReader
         }
         return output;
     }
-    public Set<StackLine> getMethodFromStackTrace() {
+
+    public Set<StackLine> getMethodFromStackTrace()
+    {
         Set<StackLine> output = new HashSet<>();
         File file = new File(path + "/target/surefire-reports");
         if (!file.exists()) {
