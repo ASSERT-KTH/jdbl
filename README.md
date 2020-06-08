@@ -7,8 +7,6 @@
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=castor-software_jdbl&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=castor-software_jdbl)
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=castor-software_jdbl&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=castor-software_jdbl)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=castor-software_jdbl&metric=security_rating)](https://sonarcloud.io/dashboard?id=castor-software_jdbl)
-
-
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=castor-software_jdbl&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=castor-software_jdbl)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=castor-software_jdbl&metric=bugs)](https://sonarcloud.io/dashboard?id=castor-software_jdbl)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=castor-software_jdbl&metric=code_smells)](https://sonarcloud.io/dashboard?id=castor-software_jdbl)
