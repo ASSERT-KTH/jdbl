@@ -22,12 +22,11 @@
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/castor-software/jdbl/blob/master/LICENSE)
 -->
 
-
-### What is JDBL?
+## What is JDBL?
 
 JDBL is a tool for automatically specialize Java applications through dynamic and static debloat at build time. JDBL removes unused classes and methods from Maven projects (including its dependencies), as well as the Java Runtime Environment (JRE). To do so, JDBL collects execution traces by [instrumenting](https://en.wikipedia.org/wiki/Instrumentation_(computer_programming)) and transforming the bytecode on-the-fly during the distinct Maven building phases. JDBL can be used as a Maven plugin or executed out-of-the-box as a standalone Java application.
 
-### How does it work?
+## How does it work?
 
 JDBL runs before executing the `package` phase of the Maven build lifecycle. It detects all the types referenced in the project under analysis, as well as in its declared dependencies, at run-time. Then, JDBL removes all the unused class members (i.e., classes and methods), depending on the debloating strategy utilized.
 

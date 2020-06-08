@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -13,7 +15,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 public class TestResultReader
 {
-    private String path;
+    protected static final Logger LOGGER = LogManager.getLogger(TestResultReader.class);
+    private final String path;
 
     public TestResultReader(String path)
     {
@@ -73,7 +76,7 @@ public class TestResultReader
                         output.addAll(extractError(error.getTextContent()));
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    LOGGER.error("Error getting method from stacktrace.");
                 }
             }
         }
@@ -120,7 +123,7 @@ public class TestResultReader
                         nbSkip += Integer.parseInt(skipped);
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    LOGGER.error("Error getting tests results.");
                 }
             }
         }

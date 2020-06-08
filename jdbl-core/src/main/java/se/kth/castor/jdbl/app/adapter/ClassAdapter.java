@@ -10,7 +10,7 @@ import org.objectweb.asm.Opcodes;
 
 public class ClassAdapter extends ClassVisitor implements Opcodes
 {
-   public boolean isRemovable;
+   private boolean isRemovable = false;
 
    private String baseDir;
 

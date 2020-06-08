@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Agent {
-    public static Set<String> calledMethods = new HashSet<>();
+    protected static final Set<String> calledMethods = new HashSet<>();
 
     public static void premain(String agentArgs, Instrumentation inst) {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
