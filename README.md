@@ -1,13 +1,28 @@
-<img src="https://github.com/castor-software/jdbl/blob/master/logo.svg" height="100px"  alt="JDBL"/>
-
-[![PDD status](http://www.0pdd.com/svg?name=castor-software/jdbl)](http://www.0pdd.com/p?name=castor-software/jdbl)
-[![Build Status](https://travis-ci.org/castor-software/jdbl.svg?branch=master)](https://travis-ci.org/castor-software/jdbl)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/castor-software/jdbl/blob/master/LICENSE)
-
+<img align="left" src="https://github.com/castor-software/jdbl/blob/master/logo.svg" height="100px"  alt="JDBL logo"/>
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=castor-software_jdbl&metric=alert_status)](https://sonarcloud.io/dashboard?id=castor-software_jdbl)
-[![Hits-of-Code](https://hitsofcode.com/github/castor-software/jdbl)](https://hitsofcode.com/view/github/castor-software/jdbl)
-<!--[![Coverage Status](https://coveralls.io/repos/github/castor-software/jdbl/badge.svg?branch=master)](https://coveralls.io/github/castor-software/jdbl?branch=master)-->
+[![Build Status](https://travis-ci.org/castor-software/jdbl.svg?branch=master)](https://travis-ci.org/castor-software/jdbl)
+[![PDD status](http://www.0pdd.com/svg?name=castor-software/jdbl)](http://www.0pdd.com/p?name=castor-software/jdbl)
+
+
+
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=castor-software_jdbl&metric=bugs)](https://sonarcloud.io/dashboard?id=castor-software_jdbl)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=castor-software_jdbl&metric=code_smells)](https://sonarcloud.io/dashboard?id=castor-software_jdbl)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=castor-software_jdbl&metric=ncloc)](https://sonarcloud.io/dashboard?id=castor-software_jdbl)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=castor-software_jdbl&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=castor-software_jdbl)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=castor-software_jdbl&metric=coverage)](https://sonarcloud.io/dashboard?id=castor-software_jdbl)
+
+
+
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=castor-software_jdbl&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=castor-software_jdbl)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=castor-software_jdbl&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=castor-software_jdbl)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=castor-software_jdbl&metric=security_rating)](https://sonarcloud.io/dashboard?id=castor-software_jdbl)
+
+<!--
+[![hits of code](https://hitsofcode.com/github/castor-software/jdbl)](https://hitsofcode.com/view/github/castor-software/jdbl)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/castor-software/jdbl/blob/master/LICENSE)
+-->
+
 
 ### What is JDBL?
 
