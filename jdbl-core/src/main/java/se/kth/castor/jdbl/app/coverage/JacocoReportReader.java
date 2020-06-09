@@ -26,6 +26,7 @@ public class JacocoReportReader
     public JacocoReportReader() throws ParserConfigurationException
     {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+
         dBuilder = dbFactory.newDocumentBuilder();
         // Ignore the lack of DTD
         dBuilder.setEntityResolver((publicId, systemId) -> {
