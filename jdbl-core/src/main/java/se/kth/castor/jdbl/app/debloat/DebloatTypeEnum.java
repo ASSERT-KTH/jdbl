@@ -5,13 +5,13 @@ package se.kth.castor.jdbl.app.debloat;
  */
 public enum DebloatTypeEnum
 {
-   TEST_DEBLOAT,
-   ENTRY_POINT_DEBLOAT,
-   CONSERVATIVE_DEBLOAT;
+    TEST_DEBLOAT,
+    ENTRY_POINT_DEBLOAT,
+    CONSERVATIVE_DEBLOAT;
 
-   @Override
-   public String toString()
-   {
-      return this.name();
-   }
+    @Override
+    public String toString()
+    {
+        return this.name();
+    }
 }

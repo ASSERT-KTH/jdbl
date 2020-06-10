@@ -176,15 +176,14 @@ public class JacocoCoverage extends AbstractCoverage implements UsageAnalyzer
             String line;
             try {
                 while ((line = input.readLine()) != null) {
-                    if (line.contains("class,load") && line.endsWith("target/classes/")) {
-                        classesLoadedTestDebloat.add(line.split(" ")[1]);
-                    } else if (line.contains("[Loaded") && line.endsWith("target/classes/]")) {
+                    if ((line.contains("class,load") && line.endsWith("target/classes/")) ||
+                        (line.contains("[Loaded") && line.endsWith("target/classes/]"))) {
                         classesLoadedTestDebloat.add(line.split(" ")[1]);
                     }
                 }
             } catch (IOException e) {
                 // should not happen
-                LOGGER.error(e);
+                LOGGER.error("Error reading the classes loaded.");
             }
             input = new BufferedReader(new InputStreamReader(p.getErrorStream()));
             try {

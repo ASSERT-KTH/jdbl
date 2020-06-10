@@ -45,7 +45,7 @@ public class YajtaCoverage extends AbstractCoverage implements UsageAnalyzer
         UsageAnalysis usageAnalysis = new UsageAnalysis();
         final String projectBasedir = mavenProject.getBasedir().getAbsolutePath();
         Set<String> filesInBasedir = listFilesInDirectory(projectBasedir);
-        // yajta could produce more than one coverage file (in case of parallel testing), so we need to read all of them
+        // Yajta could produce more than one coverage file (in case of parallel testing), so we need to read all of them
         for (String fileName : filesInBasedir) {
             if (fileName.startsWith("yajta_coverage")) {
                 String json;
@@ -53,12 +53,12 @@ public class YajtaCoverage extends AbstractCoverage implements UsageAnalyzer
                     json = new String(Files.readAllBytes(Paths.get(projectBasedir +
                         "/" + fileName)), StandardCharsets.UTF_8);
                     ObjectMapper mapper = new ObjectMapper();
-                    // convert JSON string to Map
+                    // Convert JSON string to Map
                     Map<String, ArrayList<String>> map = mapper.readValue(json, Map.class);
                     Iterator it = map.entrySet().iterator();
                     while (it.hasNext()) {
                         Map.Entry pair = (Map.Entry) it.next();
-                        // add the yajta coverage results to the jacoco analysis
+                        // Add the yajta coverage results to the jacoco analysis
                         final String className = String.valueOf(pair.getKey()).replace(".", "/");
                         ArrayList<String> yajtaMethods = map.get(pair.getKey());
                         usageAnalysis.getAnalysis().put(className, new HashSet<>(yajtaMethods));
@@ -78,43 +78,19 @@ public class YajtaCoverage extends AbstractCoverage implements UsageAnalyzer
         final String testDir = mavenProject.getBasedir().getAbsolutePath() + "/target/test-classes";
         final String instrumentedDir = mavenProject.getBasedir().getAbsolutePath() + "/target/instrumented";
         final String classesOriginalDir = mavenProject.getBasedir().getAbsolutePath() + "/target/classes-original";
+        MavenUtils mavenUtils = copyDependencies(classesDir);
+        deleteNonClassFiles(classesDir);
+        instrument(classesDir, instrumentedDir);
+        replaceInstrumentedClasses(classesDir, instrumentedDir, classesOriginalDir);
+        addYajtaAsTestDependency(testDir, mavenUtils);
+        restoreOriginalClasses(classesDir, classesOriginalDir);
+    }
 
-        // copy dependencies to be instrumented by yajta
-        MavenUtils mavenUtils = new MavenUtils(super.mavenHome, mavenProject.getBasedir());
-        mavenUtils.copyDependencies(classesDir);
-        JarUtils.decompressJars(classesDir);
-
-        // Delete non class files to avoid wrong instrumentation attempts (e.g., resources)
-        File directory = new File(classesDir + "/META-INF");
-        try {
-            FileUtils.deleteDirectory(directory);
-        } catch (IOException e) {
-            LOGGER.error("Error deleting directory " + directory.getName());
-        }
-
-        try {
-            CoverageInstrumenter.main(new String[]{
-                "-i", classesDir,
-                "-o", instrumentedDir});
-        } catch (MalformedTrackingClassException e) {
-            LOGGER.error("Error executing yajta.");
-        }
-        try {
-            FileUtils.moveDirectory(new File(classesDir),
-                new File(classesOriginalDir));
-            FileUtils.moveDirectory(new File(instrumentedDir),
-                new File(classesDir));
-        } catch (IOException e) {
-            LOGGER.error("Error handling target/class directory.");
-        }
-        try {
-            mavenUtils.copyDependency("se.kth.castor:yajta-core:2.0.2", testDir);
-            mavenUtils.copyDependency("se.kth.castor:yajta-offline:2.0.2", testDir);
-            JarUtils.decompressJars(testDir);
-            TestRunner.runTests(mavenProject);
-        } catch (IOException e) {
-            LOGGER.error("Error rerunning the tests.");
-        }
+    /**
+     * Restore the (previously replaced) original classes with the original non-instrumented classes.
+     */
+    private void restoreOriginalClasses(final String classesDir, final String classesOriginalDir)
+    {
         try {
             FileUtils.deleteDirectory(new File(classesDir));
             FileUtils.moveDirectory(new File(classesOriginalDir),
@@ -124,6 +100,78 @@ public class YajtaCoverage extends AbstractCoverage implements UsageAnalyzer
         }
     }
 
+    /**
+     * The instrumented classes need yajta to compile with the inserted probes.
+     */
+    private void addYajtaAsTestDependency(final String testDir, final MavenUtils mavenUtils)
+    {
+        try {
+            mavenUtils.copyDependency("se.kth.castor:yajta-core:2.0.2", testDir);
+            mavenUtils.copyDependency("se.kth.castor:yajta-offline:2.0.2", testDir);
+            JarUtils.decompressJars(testDir);
+            TestRunner.runTests(mavenProject);
+        } catch (IOException e) {
+            LOGGER.error("Error rerunning the tests.");
+        }
+    }
+
+    /**
+     * Replace the original compiled classes with the instrumented classes.
+     */
+    private void replaceInstrumentedClasses(final String classesDir, final String instrumentedDir,
+        final String classesOriginalDir)
+    {
+        try {
+            FileUtils.moveDirectory(new File(classesDir),
+                new File(classesOriginalDir));
+            FileUtils.moveDirectory(new File(instrumentedDir),
+                new File(classesDir));
+        } catch (IOException e) {
+            LOGGER.error("Error handling target/class directory.");
+        }
+    }
+
+    /**
+     * Instrument classes with yajta.
+     */
+    private void instrument(final String classesDir, final String instrumentedDir)
+    {
+        try {
+            CoverageInstrumenter.main(new String[]{
+                "-i", classesDir,
+                "-o", instrumentedDir});
+        } catch (MalformedTrackingClassException e) {
+            LOGGER.error("Error executing yajta.");
+        }
+    }
+
+    /**
+     * Delete non class files to avoid wrong instrumentation attempts (e.g., resources).
+     */
+    private void deleteNonClassFiles(final String classesDir)
+    {
+        File directory = new File(classesDir + "/META-INF");
+        try {
+            FileUtils.deleteDirectory(directory);
+        } catch (IOException e) {
+            LOGGER.error("Error deleting directory " + directory.getName());
+        }
+    }
+
+    /**
+     * Copy dependencies to be instrumented by yajta
+     */
+    private MavenUtils copyDependencies(final String classesDir)
+    {
+        MavenUtils mavenUtils = new MavenUtils(super.mavenHome, mavenProject.getBasedir());
+        mavenUtils.copyDependencies(classesDir);
+        JarUtils.decompressJars(classesDir);
+        return mavenUtils;
+    }
+
+    /**
+     * Recursively retrieve the absolute paths of al the files in a directory.
+     */
     private Set<String> listFilesInDirectory(String dir)
     {
         return Stream.of(new File(dir).listFiles())

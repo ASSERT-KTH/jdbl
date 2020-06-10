@@ -18,13 +18,12 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import se.kth.castor.jdbl.app.adapter.CustomClassReader;
 
-public class JDblFileUtils
+public class FileUtils
 {
     /**
      * Counts the number of classes removed.
@@ -54,10 +53,11 @@ public class JDblFileUtils
     /**
      * Class logger.
      */
-    private static final Logger LOGGER = LogManager.getLogger(JDblFileUtils.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger(FileUtils.class.getName());
     private List<String> classpath;
 
-    public JDblFileUtils(String outputDirectory, Set<String> exclusionSet, Set<String> classesUsed, File reportFile, List<String> classpath)
+    public FileUtils(String outputDirectory, Set<String> exclusionSet, Set<String> classesUsed, File reportFile,
+        List<String> classpath)
     {
         this.classpath = classpath;
         this.nbClassesRemoved = 0;
@@ -85,7 +85,7 @@ public class JDblFileUtils
     /**
      * Recursively remove unused classes in a directory.
      *
-     * @param currentPath the start file path to delete.
+     * @param currentPath the absolute path of the directory to be processed.
      */
     public void deleteUnusedClasses(String currentPath) throws IOException
     {
@@ -177,7 +177,9 @@ public class JDblFileUtils
                     // remove the file
                     LOGGER.info("Removed class: " + currentClassName);
                     // write report
-                    FileUtils.writeStringToFile(this.reportFile, "BloatedClass," + currentClassName + "," + fileType +
+                    org.apache.commons.io.FileUtils.writeStringToFile(this.reportFile, "BloatedClass," +
+                        currentClassName + "," +
+                        fileType +
                         "\n", StandardCharsets.UTF_8, true);
                     Files.delete(classFile.toPath());
                     nbClassesRemoved++;
@@ -188,7 +190,9 @@ public class JDblFileUtils
                     }
                 } else {
                     // write report
-                    FileUtils.writeStringToFile(this.reportFile, "UsedClass," + currentClassName + "," + fileType +
+                    org.apache.commons.io.FileUtils.writeStringToFile(this.reportFile, "UsedClass," +
+                        currentClassName + "," +
+                        fileType +
                         "\n", StandardCharsets.UTF_8, true);
                 }
             }
@@ -202,7 +206,7 @@ public class JDblFileUtils
             .substring(outputDirectory.length() + 1, classFilePath.length() - 6);
     }
 
-    public int getNbClassesRemoved()
+    public int nbClassesRemoved()
     {
         return nbClassesRemoved;
     }

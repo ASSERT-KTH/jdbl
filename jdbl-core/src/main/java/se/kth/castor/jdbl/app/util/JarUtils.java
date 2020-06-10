@@ -31,9 +31,7 @@ public class JarUtils
     */
    private static final int BUFFER_SIZE = 16384;
 
-   private JarUtils()
-   {
-   }
+   private JarUtils() { }
 
    /**
     * Decompress all jar files located in a given directory.

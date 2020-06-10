@@ -43,35 +43,7 @@ public class TestBasedMethodDebloat extends AbstractMethodDebloat
     {
         FileInputStream in = new FileInputStream(new File(outputDirectory + "/" + clazz + ".class"));
         ClassReader cr = new ClassReader(in);
-
-        Set<StackLine> methods = new HashSet<>();
-        for (StackLine failingMethod : failingMethods) {
-            if (failingMethod.getClassName().equals(clazz.replace("/", "."))) {
-                methods.add(failingMethod);
-            }
-        }
-        ClassNode clNode = new ClassNode(Opcodes.ASM8);
-        cr.accept(clNode, Opcodes.ASM8);
-        for (MethodNode mNode : clNode.methods) {
-
-            // ignoreOneLineMethods(usedMethods, mNode);
-
-            for (StackLine failingMethod : methods) {
-                if (mNode.name.equals(failingMethod.getMethod())) {
-                    ListIterator<AbstractInsnNode> it = mNode.instructions.iterator();
-                    while (it.hasNext()) {
-                        AbstractInsnNode inNode = it.next();
-                        if (inNode instanceof LineNumberNode) {
-                            if (((LineNumberNode) inNode).line == failingMethod.getLine()) {
-                                LOGGER.info("Method in stacktrace: " + mNode.name + mNode.desc);
-                                usedMethods.add(mNode.name + mNode.desc);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
+        processStackTrace(clazz, usedMethods, cr);
         ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_MAXS);
         ClassVisitor cv = new ClassVisitor(Opcodes.ASM8, cw)
         {
@@ -81,17 +53,13 @@ public class TestBasedMethodDebloat extends AbstractMethodDebloat
                 MethodVisitor mv = cv.visitMethod(access, name, desc, signature, exceptions);
                 if (!usedMethods.contains(name + desc) && !(isDefaultConstructor(name + desc))) {
                     LOGGER.info("Removed method: " + name + desc + " in " + clazz);
-                    // write report to file
+                    // Write report to file
                     writeReportToFile(name, desc, "BloatedMethod, ", clazz);
-                    return new MethodExceptionThrower(mv);
-                    // return null;
+                    return new MethodExceptionThrower(mv); // to completely remove the method, just return null
                 } else {
-                    // LOGGER.info("Keep method: " + name + desc + " in " + clazz);
-                    // write report to file
                     writeReportToFile(name, desc, "UsedMethod, ", clazz);
                 }
                 return mv;
-                // return super.visitMethod(access, name, desc, signature, exceptions);
             }
         };
         cr.accept(cv, ClassReader.SKIP_DEBUG);
@@ -101,6 +69,42 @@ public class TestBasedMethodDebloat extends AbstractMethodDebloat
         } catch (Exception ignored) {
             LOGGER.error("Error replacing class " + clazz + " with debloated methods ");
         }
+    }
+
+    private void processStackTrace(final String clazz, final Set<String> usedMethods, final ClassReader cr)
+    {
+        Set<StackLine> methods = getStackLines(clazz);
+        ClassNode clNode = new ClassNode(Opcodes.ASM8);
+        cr.accept(clNode, Opcodes.ASM8);
+        for (MethodNode mNode : clNode.methods) {
+            // ignoreOneLineMethods(usedMethods, mNode);
+            for (StackLine failingMethod : methods) {
+                if (mNode.name.equals(failingMethod.getMethod())) {
+                    for (AbstractInsnNode inNode : mNode.instructions) {
+                        addStacktraceMethod(usedMethods, mNode, failingMethod, inNode);
+                    }
+                }
+            }
+        }
+    }
+
+    private void addStacktraceMethod(final Set<String> usedMethods, final MethodNode mNode, final StackLine failingMethod, final AbstractInsnNode inNode)
+    {
+        if (inNode instanceof LineNumberNode && ((LineNumberNode) inNode).line == failingMethod.getLine()) {
+            LOGGER.info("Method in stacktrace: " + mNode.name + mNode.desc);
+            usedMethods.add(mNode.name + mNode.desc);
+        }
+    }
+
+    private Set<StackLine> getStackLines(final String clazz)
+    {
+        Set<StackLine> methods = new HashSet<>();
+        for (StackLine failingMethod : failingMethods) {
+            if (failingMethod.getClassName().equals(clazz.replace("/", "."))) {
+                methods.add(failingMethod);
+            }
+        }
+        return methods;
     }
 
     private void ignoreOneLineMethods(final Set<String> usedMethods, final MethodNode mNode)
