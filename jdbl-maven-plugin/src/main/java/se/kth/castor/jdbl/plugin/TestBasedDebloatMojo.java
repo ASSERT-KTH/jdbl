@@ -9,7 +9,6 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 
@@ -23,7 +22,7 @@ import se.kth.castor.jdbl.app.test.StackLine;
 import se.kth.castor.jdbl.app.test.TestResultReader;
 import se.kth.castor.jdbl.app.test.TestRunner;
 import se.kth.castor.jdbl.app.util.ClassesLoadedSingleton;
-import se.kth.castor.jdbl.app.util.JDblFileUtils;
+import se.kth.castor.jdbl.app.util.FileUtils;
 import se.kth.castor.jdbl.app.util.JarUtils;
 
 /**
@@ -52,7 +51,7 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
             new File(getProject().getBasedir().getAbsolutePath() + "/target/report.xml"), DebloatTypeEnum.TEST_DEBLOAT);
         UsageAnalysis jacocoUsageAnalysis = jacocoCoverage.analyzeUsages();
 
-        // Print Yajta and JaCoCo coverage outputs
+        // Print out Yajta and JaCoCo coverage outputs
         System.out.println("Yajta:");
         System.out.print(yajtaUsageAnalysis.toString());
         printCoverageAnalysisResults(yajtaUsageAnalysis);
@@ -60,10 +59,10 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
         System.out.print(jacocoUsageAnalysis.toString());
         printCoverageAnalysisResults(jacocoUsageAnalysis);
 
-        // Merge coverage analysis
-        UsageAnalysis mergedUsageAnalysis = mergeTwoUsageAnalysis(yajtaUsageAnalysis, jacocoUsageAnalysis);
+        // Merge the coverage analysis
+        UsageAnalysis mergedUsageAnalysis = yajtaUsageAnalysis.mergeWith(jacocoUsageAnalysis);
 
-        // Classes loaded
+        // Get the classes loaded by the JVM
         Set<String> usedClasses = null;
         try {
             this.printClassesLoaded();
@@ -72,6 +71,7 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
             this.getLog().error("Error computing JaCoCo usage analysis.");
         }
 
+        // Read the failing methods from the stacktrace
         TestResultReader testResultReader = new TestResultReader(".");
         Set<StackLine> failingMethods = testResultReader.getMethodFromStackTrace();
         for (StackLine failingMethod : failingMethods) {
@@ -108,19 +108,6 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
         printCustomStringToConsole("JDBL: TEST BASED DEBLOAT FINISHED");
     }
 
-    private UsageAnalysis mergeTwoUsageAnalysis(UsageAnalysis aUsageAnalysis, UsageAnalysis anotherUsageAnalysis)
-    {
-        UsageAnalysis mergedUsageAnalysis = new UsageAnalysis();
-        aUsageAnalysis.getAnalysis().keySet().forEach(clazz -> {
-            Set<String> methods = aUsageAnalysis.getAnalysis().get(clazz);
-            if (anotherUsageAnalysis.getAnalysis().containsKey(clazz)) {
-                methods.addAll(anotherUsageAnalysis.getAnalysis().get(clazz));
-            }
-            mergedUsageAnalysis.getAnalysis().put(clazz, methods);
-        });
-        return mergedUsageAnalysis;
-    }
-
     private void writeClassStatusPerDependency(final Set<String> usedClasses)
     {
         final String reportClassStatusPerDependencyFileName = "debloat-dependencies-report.csv";
@@ -141,7 +128,7 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
             }
         }
         try {
-            FileUtils.writeStringToFile(new File(getProject().getBasedir().getAbsolutePath() + "/" +
+            org.apache.commons.io.FileUtils.writeStringToFile(new File(getProject().getBasedir().getAbsolutePath() + "/" +
                 reportClassStatusPerDependencyFileName), s.toString(), StandardCharsets.UTF_8);
         } catch (IOException e) {
             this.getLog().error("Error creating dependency bloat report file.");
@@ -158,7 +145,7 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
         this.getLog().info(timeElapsedInSeconds);
         try {
             final String reportExecutionTimeFileName = "debloat-execution-time.log";
-            FileUtils.writeStringToFile(new File(getProject().getBasedir().getAbsolutePath() + "/" +
+            org.apache.commons.io.FileUtils.writeStringToFile(new File(getProject().getBasedir().getAbsolutePath() + "/" +
                 reportExecutionTimeFileName), timeElapsedInSeconds, StandardCharsets.UTF_8);
         } catch (IOException e) {
             this.getLog().error("Error creating time elapsed report file.");
@@ -168,7 +155,7 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
     private void cleanReportFile()
     {
         try {
-            FileUtils.writeStringToFile(new File(getProject().getBasedir().getAbsolutePath() + "/" +
+            org.apache.commons.io.FileUtils.writeStringToFile(new File(getProject().getBasedir().getAbsolutePath() + "/" +
                 getReportFileName()), "", StandardCharsets.UTF_8);
         } catch (IOException e) {
             this.getLog().error("Error cleaning report file.");
@@ -199,12 +186,13 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
     private void removeUnusedClasses(final String outputDirectory, final Set<String> usedClasses)
     {
         try {
-            JDblFileUtils jdblFileUtils = new JDblFileUtils(outputDirectory,
+            FileUtils jdblFileUtils = new FileUtils(outputDirectory,
                 new HashSet<>(),
                 usedClasses,
                 new File(getProject().getBasedir().getAbsolutePath() + "/" + getReportFileName()),
                 getProject().getTestClasspathElements());
             jdblFileUtils.deleteUnusedClasses(outputDirectory);
+            this.getLog().info("Total classes removed: " + jdblFileUtils.nbClassesRemoved());
         } catch (Exception e) {
             this.getLog().error(String.format("Error deleting unused classes: %s", e));
         }

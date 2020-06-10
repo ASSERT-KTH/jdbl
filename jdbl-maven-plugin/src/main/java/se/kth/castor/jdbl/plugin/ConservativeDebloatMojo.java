@@ -3,7 +3,6 @@ package se.kth.castor.jdbl.plugin;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -14,7 +13,7 @@ import se.kth.castor.jdbl.app.callgraph.JCallGraphModified;
 import se.kth.castor.jdbl.app.coverage.UsageAnalysis;
 import se.kth.castor.jdbl.app.debloat.AbstractMethodDebloat;
 import se.kth.castor.jdbl.app.debloat.ConservativeMethodDebloat;
-import se.kth.castor.jdbl.app.util.JDblFileUtils;
+import se.kth.castor.jdbl.app.util.FileUtils;
 import se.kth.castor.jdbl.app.util.JarUtils;
 import se.kth.castor.jdbl.app.util.MavenUtils;
 
@@ -59,12 +58,12 @@ public class ConservativeDebloatMojo extends AbstractDebloatMojo
          usageAnalysis.getAnalysis().values().stream().filter(Objects::nonNull).mapToInt(Set::size).sum()));
 
       // delete unused classes
-      JDblFileUtils JDblFileUtils = new JDblFileUtils(outputDirectory,
+      FileUtils FileUtils = new FileUtils(outputDirectory,
          new HashSet<>(),
          classesUsed,
          new File(getProject().getBasedir().getAbsolutePath() + "/" + getReportFileName()), null);
       try {
-         JDblFileUtils.deleteUnusedClasses(outputDirectory);
+         FileUtils.deleteUnusedClasses(outputDirectory);
       } catch (IOException e) {
          this.getLog().error(String.format("Error deleting unused classes: %s", e));
       }
