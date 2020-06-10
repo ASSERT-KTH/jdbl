@@ -28,7 +28,7 @@ import se.kth.castor.jdbl.app.util.CmdExec;
 import se.kth.castor.jdbl.app.util.JarUtils;
 import se.kth.castor.jdbl.app.util.MavenUtils;
 
-public class JacocoCoverage extends CoverageWrapper implements UsageAnalyzer
+public class JacocoCoverage extends AbstractCoverage implements UsageAnalyzer
 {
     private static final Logger LOGGER = LogManager.getLogger(JacocoCoverage.class.getName());
 

@@ -26,7 +26,7 @@ import se.kth.castor.jdbl.app.util.MavenUtils;
 import se.kth.castor.offline.CoverageInstrumenter;
 import se.kth.castor.yajta.api.MalformedTrackingClassException;
 
-public class YajtaCoverage extends CoverageWrapper implements UsageAnalyzer
+public class YajtaCoverage extends AbstractCoverage implements UsageAnalyzer
 {
     private static final Logger LOGGER = LogManager.getLogger(YajtaCoverage.class.getName());
 
@@ -84,7 +84,7 @@ public class YajtaCoverage extends CoverageWrapper implements UsageAnalyzer
         mavenUtils.copyDependencies(classesDir);
         JarUtils.decompressJars(classesDir);
 
-        // TODO Delete non class files (this should not happen in a new version of yajta)
+        // Delete non class files to avoid wrong instrumentation attempts (e.g., resources)
         File directory = new File(classesDir + "/META-INF");
         try {
             FileUtils.deleteDirectory(directory);

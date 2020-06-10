@@ -6,7 +6,7 @@ import org.apache.maven.project.MavenProject;
 
 import se.kth.castor.jdbl.app.debloat.DebloatTypeEnum;
 
-public abstract class CoverageWrapper
+public abstract class AbstractCoverage
 {
     protected MavenProject mavenProject;
     protected File mavenHome;
@@ -15,7 +15,7 @@ public abstract class CoverageWrapper
     protected String entryMethod;
     protected String entryParameters;
 
-    public CoverageWrapper(MavenProject mavenProject, File mavenHome, DebloatTypeEnum debloatTypeEnum,
+    public AbstractCoverage(MavenProject mavenProject, File mavenHome, DebloatTypeEnum debloatTypeEnum,
         String entryClass, String entryMethod, String entryParameters)
     {
         this.mavenProject = mavenProject;
@@ -26,7 +26,7 @@ public abstract class CoverageWrapper
         this.entryParameters = entryParameters;
     }
 
-    public CoverageWrapper(MavenProject mavenProject, File mavenHome, DebloatTypeEnum debloatTypeEnum)
+    public AbstractCoverage(MavenProject mavenProject, File mavenHome, DebloatTypeEnum debloatTypeEnum)
     {
         this.mavenProject = mavenProject;
         this.mavenHome = mavenHome;
