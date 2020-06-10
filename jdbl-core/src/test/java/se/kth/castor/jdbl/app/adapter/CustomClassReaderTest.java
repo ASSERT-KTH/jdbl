@@ -1,28 +1,29 @@
 package se.kth.castor.jdbl.app.adapter;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-class CustomClassReaderTest
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+public class CustomClassReaderTest
 {
-   CustomClassReader ccr;
+    CustomClassReader ccr;
 
-   @Test
-   void testIsInterface()
-   {
-      ccr = new CustomClassReader("java.lang.Appendable");
-      Assertions.assertTrue(ccr.isInterface());
-      ccr = new CustomClassReader("java.lang.Character");
-      Assertions.assertFalse(ccr.isInterface());
-   }
+    @Test
+    public void testIsInterface()
+    {
+        ccr = new CustomClassReader("java.lang.Appendable");
+        assertTrue(ccr.isInterface());
+        ccr = new CustomClassReader("java.lang.Character");
+        assertFalse(ccr.isInterface());
+    }
 
-   @Test
-   void testIsException()
-   {
-      ccr = new CustomClassReader("java.io.FileNotFoundException");
-      Assertions.assertTrue(ccr.isException());
-
-      ccr = new CustomClassReader("java.io.Bits");
-      Assertions.assertFalse(ccr.isException());
-   }
+    @Test
+    public void testIsException()
+    {
+        ccr = new CustomClassReader("java.io.FileNotFoundException");
+        assertTrue(ccr.isException());
+        ccr = new CustomClassReader("java.io.Bits");
+        assertFalse(ccr.isException());
+    }
 }
