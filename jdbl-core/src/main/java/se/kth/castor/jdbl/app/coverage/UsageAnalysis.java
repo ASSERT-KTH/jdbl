@@ -19,9 +19,29 @@ public class UsageAnalysis
         this.analysis = analysis;
     }
 
+    public Set<String> methods(String clazz)
+    {
+        return analysis.get(clazz);
+    }
+
+    public void addEntry(String clazz, Set<String> methods)
+    {
+        analysis.put(clazz, methods);
+    }
+
     public Map<String, Set<String>> getAnalysis()
     {
         return analysis;
+    }
+
+    public boolean containsClazz(String clazz)
+    {
+        return analysis.containsKey(clazz);
+    }
+
+    public void removeUncoveredClasses()
+    {
+        analysis.entrySet().removeIf(entry -> entry.getValue().isEmpty());
     }
 
     @Override

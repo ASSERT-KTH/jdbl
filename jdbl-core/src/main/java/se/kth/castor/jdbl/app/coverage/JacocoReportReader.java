@@ -61,14 +61,9 @@ public class JacocoReportReader
         }
 
         // Remove all classes that do not contain any covered method
-        // TODO this is ugly, it should not be necessary
-        UsageAnalysis usageAnalysis2 = new UsageAnalysis();
-        for (String clazz : usageAnalysis.getAnalysis().keySet()) {
-            if (!usageAnalysis.getAnalysis().get(clazz).isEmpty()) {
-                usageAnalysis2.getAnalysis().put(clazz, usageAnalysis.getAnalysis().get(clazz));
-            }
-        }
-        return usageAnalysis2;
+        usageAnalysis.removeUncoveredClasses();
+
+        return usageAnalysis;
     }
 
     private void visitPackage(Node p)
@@ -90,7 +85,7 @@ public class JacocoReportReader
         if (methods.getLength() == 0) {
             return;
         }
-        usageAnalysis.getAnalysis().put(c.getAttributes().getNamedItem("name").getNodeValue(), new HashSet<>());
+        usageAnalysis.addEntry(c.getAttributes().getNamedItem("name").getNodeValue(), new HashSet<>());
         for (int i = 0; i < methods.getLength(); i++) {
             Node n = methods.item(i);
             if (!n.getNodeName().equals("method")) {
@@ -109,7 +104,7 @@ public class JacocoReportReader
             m.getAttributes().getNamedItem("desc").getNodeValue();
 
         // we add the method only if it is covered
-        usageAnalysis.getAnalysis().get(m.getParentNode().getAttributes().getNamedItem("name").getNodeValue()).add(desc);
+        usageAnalysis.methods(m.getParentNode().getAttributes().getNamedItem("name").getNodeValue()).add(desc);
     }
 
     private boolean isCovered(Node c, String entity)
@@ -142,8 +137,8 @@ public class JacocoReportReader
                 String[] splitLine = line.split(",");
                 String type = splitLine[0].replace(".", "/");
                 String method = splitLine[1] + splitLine[2];
-                if (usageAnalysis.getAnalysis().containsKey(type)) {
-                    if (usageAnalysis.getAnalysis().containsKey(type)) {
+                if (usageAnalysis.containsClazz(type)) {
+                    if (usageAnalysis.containsClazz(type)) {
                         Set<String> methods = usageAnalysis.getAnalysis().computeIfAbsent(type, s -> new HashSet<>());
                         methods.add(method);
                     }
