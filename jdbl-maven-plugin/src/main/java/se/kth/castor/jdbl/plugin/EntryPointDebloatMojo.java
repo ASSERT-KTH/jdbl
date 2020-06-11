@@ -16,7 +16,7 @@ import se.kth.castor.jdbl.app.debloat.AbstractMethodDebloat;
 import se.kth.castor.jdbl.app.debloat.DebloatTypeEnum;
 import se.kth.castor.jdbl.app.debloat.EntryPointMethodDebloat;
 import se.kth.castor.jdbl.app.util.ClassesLoadedSingleton;
-import se.kth.castor.jdbl.app.util.FileUtils;
+import se.kth.castor.jdbl.app.util.MyFileUtils;
 import se.kth.castor.jdbl.app.util.JarUtils;
 import se.kth.castor.jdbl.app.util.MavenUtils;
 
@@ -77,11 +77,11 @@ public class EntryPointDebloatMojo extends AbstractDebloatMojo
             usageAnalysis.getAnalysis().values().stream().filter(Objects::nonNull).mapToInt(Set::size).sum()));
 
         // remove unused classes
-        FileUtils fileUtils = new FileUtils(outputDirectory, new HashSet<>(),
+        MyFileUtils myFileUtils = new MyFileUtils(outputDirectory, new HashSet<>(),
             ClassesLoadedSingleton.INSTANCE.getClassesLoaded(),
             new File(getProject().getBasedir().getAbsolutePath() + "/" + getReportFileName()), null);
         try {
-            fileUtils.deleteUnusedClasses(outputDirectory);
+            myFileUtils.deleteUnusedClasses(outputDirectory);
         } catch (IOException e) {
             this.getLog().error(String.format("Error deleting unused classes: %s", e));
         }

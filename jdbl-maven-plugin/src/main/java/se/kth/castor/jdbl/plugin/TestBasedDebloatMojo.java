@@ -22,7 +22,7 @@ import se.kth.castor.jdbl.app.test.StackLine;
 import se.kth.castor.jdbl.app.test.TestResultReader;
 import se.kth.castor.jdbl.app.test.TestRunner;
 import se.kth.castor.jdbl.app.util.ClassesLoadedSingleton;
-import se.kth.castor.jdbl.app.util.FileUtils;
+import se.kth.castor.jdbl.app.util.MyFileUtils;
 import se.kth.castor.jdbl.app.util.JarUtils;
 
 /**
@@ -186,13 +186,13 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
     private void removeUnusedClasses(final String outputDirectory, final Set<String> usedClasses)
     {
         try {
-            FileUtils jdblFileUtils = new FileUtils(outputDirectory,
+            MyFileUtils myFileUtils = new MyFileUtils(outputDirectory,
                 new HashSet<>(),
                 usedClasses,
                 new File(getProject().getBasedir().getAbsolutePath() + "/" + getReportFileName()),
                 getProject().getTestClasspathElements());
-            jdblFileUtils.deleteUnusedClasses(outputDirectory);
-            this.getLog().info("Total classes removed: " + jdblFileUtils.nbClassesRemoved());
+            myFileUtils.deleteUnusedClasses(outputDirectory);
+            this.getLog().info("Total classes removed: " + myFileUtils.nbClassesRemoved());
         } catch (Exception e) {
             this.getLog().error(String.format("Error deleting unused classes: %s", e));
         }

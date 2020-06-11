@@ -23,7 +23,7 @@ import org.apache.log4j.Logger;
 
 import se.kth.castor.jdbl.app.adapter.CustomClassReader;
 
-public class FileUtils
+public class MyFileUtils
 {
     /**
      * Counts the number of classes removed.
@@ -53,10 +53,14 @@ public class FileUtils
     /**
      * Class logger.
      */
-    private static final Logger LOGGER = LogManager.getLogger(FileUtils.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger(MyFileUtils.class.getName());
+
+    /**
+     * The classpath of the classes
+     */
     private List<String> classpath;
 
-    public FileUtils(String outputDirectory, Set<String> exclusionSet, Set<String> classesUsed, File reportFile,
+    public MyFileUtils(String outputDirectory, Set<String> exclusionSet, Set<String> classesUsed, File reportFile,
         List<String> classpath)
     {
         this.classpath = classpath;
@@ -107,32 +111,29 @@ public class FileUtils
             } else if (classFile.getName().endsWith(".class")) {
                 String classFilePath = classFile.getAbsolutePath();
                 String currentClassName = getBinaryNameOfTestFile(classFilePath);
-                String fileType = "class";
-                if (currentClassName == null) {
-                    continue;
-                }
+                FileType fileType = FileType.CLASS;
                 try {
                     if (urlClassLoader != null) {
                         Class<?> aClass = urlClassLoader.loadClass(currentClassName);
                         if (aClass.isAnnotation()) {
-                            fileType = "annotation";
+                            fileType = FileType.ANNOTATION;
                             exclusionSet.add(currentClassName);
                         } else if (aClass.isInterface()) {
-                            fileType = "interface";
+                            fileType = FileType.INTERFACE;
                             exclusionSet.add(currentClassName);
                         } else if (aClass.isEnum()) {
-                            fileType = "enum";
+                            fileType = FileType.ENUM;
                             exclusionSet.add(currentClassName);
                         } else if (Modifier.isFinal(aClass.getModifiers())) {
-                            fileType = "constant";
+                            fileType = FileType.CONSTANT;
                             exclusionSet.add(currentClassName);
                         } else {
                             try {
                                 if (Modifier.isPrivate(aClass.getConstructor().getModifiers())) {
-                                    fileType = "constant";
+                                    fileType = FileType.CONSTANT;
                                     exclusionSet.add(currentClassName);
                                 }
-                            } catch (Throwable e) {
+                            } catch (Exception e) {
                                 // ignore
                             }
                             try {
@@ -144,25 +145,25 @@ public class FileUtils
                                     allStatic = allStatic && Modifier.isStatic(method.getModifiers());
                                 }
                                 if (allStatic) {
-                                    fileType = "constant";
+                                    fileType = FileType.CONSTANT;
                                     exclusionSet.add(currentClassName);
                                 }
-                            } catch (Throwable e) {
+                            } catch (Exception e) {
                                 // ignore
                             }
                             try {
                                 if (Modifier.isStatic(aClass.getField("INSTANCE").getModifiers())) {
-                                    fileType = "constant";
+                                    fileType = FileType.CONSTANT;
                                     exclusionSet.add(currentClassName);
                                 }
-                            } catch (Throwable e) {
+                            } catch (Exception e) {
                                 // ignore
                             }
                         }
                     }
                 } catch (Throwable e) {
                     // ignore
-                    fileType = "unknown";
+                    fileType = FileType.UNKNOWN;
                 }
                 // do not remove interfaces
                 CustomClassReader ccr = new CustomClassReader(new FileInputStream(classFilePath));
@@ -179,7 +180,7 @@ public class FileUtils
                     // write report
                     org.apache.commons.io.FileUtils.writeStringToFile(this.reportFile, "BloatedClass," +
                         currentClassName + "," +
-                        fileType +
+                        fileType.toString() +
                         "\n", StandardCharsets.UTF_8, true);
                     Files.delete(classFile.toPath());
                     nbClassesRemoved++;
@@ -192,7 +193,7 @@ public class FileUtils
                     // write report
                     org.apache.commons.io.FileUtils.writeStringToFile(this.reportFile, "UsedClass," +
                         currentClassName + "," +
-                        fileType +
+                        fileType.toString() +
                         "\n", StandardCharsets.UTF_8, true);
                 }
             }
