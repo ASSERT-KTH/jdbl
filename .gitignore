@@ -17,7 +17,6 @@
 *.ipr
 *.ids
 *.orig
-classes/
 out/
 
 ### Git files
