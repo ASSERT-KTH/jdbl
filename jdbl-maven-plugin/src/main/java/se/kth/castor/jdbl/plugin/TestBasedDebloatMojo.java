@@ -22,8 +22,8 @@ import se.kth.castor.jdbl.app.test.StackLine;
 import se.kth.castor.jdbl.app.test.TestResultReader;
 import se.kth.castor.jdbl.app.test.TestRunner;
 import se.kth.castor.jdbl.app.util.ClassesLoadedSingleton;
-import se.kth.castor.jdbl.app.util.MyFileUtils;
 import se.kth.castor.jdbl.app.util.JarUtils;
+import se.kth.castor.jdbl.app.util.MyFileUtils;
 
 /**
  * This Mojo debloats the project according to the coverage of its test suite.
@@ -117,12 +117,19 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
         Set<JarUtils.DependencyFileMapper> dependencyFileMappers = JarUtils.getDependencyFileMappers();
         for (JarUtils.DependencyFileMapper fileMapper : dependencyFileMappers) {
             for (final String dependencyJarName : fileMapper.getDependencyClassMap().keySet()) {
-                s.append(dependencyJarName).append("\n");
                 for (final String classInTheDependency : fileMapper.getDependencyClassMap().get(dependencyJarName)) {
                     if (usedClasses.contains(classInTheDependency)) {
-                        s.append("\t" + "UsedClass, ").append(classInTheDependency).append("\n");
+                        s.append(dependencyJarName)
+                            .append(",")
+                            .append("UsedClass,")
+                            .append(classInTheDependency)
+                            .append("\n");
                     } else {
-                        s.append("\t" + "BloatedClass, ").append(classInTheDependency).append("\n");
+                        s.append(dependencyJarName)
+                            .append(",")
+                            .append("BloatedClass,")
+                            .append(classInTheDependency)
+                            .append("\n");
                     }
                 }
             }
@@ -137,14 +144,14 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
 
     private void writeTimeElapsedReportFile(final Instant start)
     {
-        this.getLog().info("Writing dependency-bloat-report.csv to " +
+        final String reportExecutionTimeFileName = "debloat-execution-time.log";
+        this.getLog().info("Writing " + reportExecutionTimeFileName + " to " +
             new File(getProject().getBasedir().getAbsolutePath() + "/"));
         Instant finish = Instant.now();
         double timeElapsed = Duration.between(start, finish).toMillis();
         final String timeElapsedInSeconds = "Total debloat time: " + timeElapsed / 1000 + " s";
         this.getLog().info(timeElapsedInSeconds);
         try {
-            final String reportExecutionTimeFileName = "debloat-execution-time.log";
             org.apache.commons.io.FileUtils.writeStringToFile(new File(getProject().getBasedir().getAbsolutePath() + "/" +
                 reportExecutionTimeFileName), timeElapsedInSeconds, StandardCharsets.UTF_8);
         } catch (IOException e) {
