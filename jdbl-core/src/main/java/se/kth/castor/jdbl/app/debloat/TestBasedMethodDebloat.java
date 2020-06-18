@@ -47,20 +47,50 @@ public class TestBasedMethodDebloat extends AbstractMethodDebloat
         ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_MAXS);
         ClassVisitor cv = new ClassVisitor(Opcodes.ASM8, cw)
         {
+
+            boolean isEnum = false;
+
+            @Override
+            public void visit(final int version, final int access, final String name, final String signature,
+                final String superName, final String[] interfaces)
+            {
+                super.visit(version, access, name, signature, superName, interfaces);
+                if ((access & Opcodes.ACC_ENUM) != 0) {
+                    isEnum = true;
+                }
+            }
+
             @Override
             public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions)
             {
                 MethodVisitor mv = cv.visitMethod(access, name, desc, signature, exceptions);
-                if (!usedMethods.contains(name + desc) && !(isDefaultConstructor(name + desc))) {
-                    LOGGER.info("Removed method: " + name + desc + " in " + clazz);
+                String nameDesc = name + desc;
+
+                final String valuesMethod = "values()[L" + clazz + ";";
+                final String valuesOfMethod = "valueOf(Ljava/lang/String;)L" + clazz + ";";
+
+                if (!usedMethods.contains(name + desc) && !(isDefaultConstructor(nameDesc)) && !isEnum) {
+                    LOGGER.info("Removed method: " + nameDesc + " in " + clazz);
+                    // Write report to file
+                    writeReportToFile(name, desc, "BloatedMethod, ", clazz);
+                    return new MethodExceptionThrower(mv); // to completely remove the method, just return null
+                } else if (!usedMethods.contains(name + desc) && !(isDefaultConstructor(nameDesc)) &&
+                    isEnum &&
+                    !nameDesc.equals(valuesMethod) &&
+                    !nameDesc.equals(valuesOfMethod)
+                ) {
+                    LOGGER.info("Removed method: " + nameDesc + " in " + clazz);
                     // Write report to file
                     writeReportToFile(name, desc, "BloatedMethod, ", clazz);
                     return new MethodExceptionThrower(mv); // to completely remove the method, just return null
                 } else {
+                    LOGGER.info("Retained method: " + nameDesc + " in " + clazz);
                     writeReportToFile(name, desc, "UsedMethod, ", clazz);
+
                 }
                 return mv;
             }
+
         };
         cr.accept(cv, ClassReader.SKIP_DEBUG);
         byte[] code = cw.toByteArray();
