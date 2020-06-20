@@ -89,6 +89,18 @@
          <version>2.0.2</version>
       </dependency>
 
+      <!-- JaCoCo -->
+      <dependency>
+         <groupId>org.jacoco</groupId>
+         <artifactId>org.jacoco.core</artifactId>
+         <version>0.7.9</version>
+      </dependency>
+      <dependency>
+         <groupId>org.jacoco</groupId>
+         <artifactId>org.jacoco.report</artifactId>
+         <version>0.7.9</version>
+      </dependency>
+
       <!-- Testing -->
       <dependency>
          <groupId>org.junit.jupiter</groupId>

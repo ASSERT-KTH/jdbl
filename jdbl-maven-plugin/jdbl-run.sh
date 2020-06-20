@@ -1,4 +1,4 @@
-#!/bin/env zsh
+#!/bin/bash
 
 #echo "----- INSTALLING THE jdbl PLUGIN -----"
 cd ..

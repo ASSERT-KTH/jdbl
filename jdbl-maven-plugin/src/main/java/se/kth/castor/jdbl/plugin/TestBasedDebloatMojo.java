@@ -12,18 +12,19 @@ import java.util.Set;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 
-import se.kth.castor.jdbl.app.coverage.JacocoCoverage;
-import se.kth.castor.jdbl.app.coverage.UsageAnalysis;
-import se.kth.castor.jdbl.app.coverage.YajtaCoverage;
-import se.kth.castor.jdbl.app.debloat.AbstractMethodDebloat;
-import se.kth.castor.jdbl.app.debloat.DebloatTypeEnum;
-import se.kth.castor.jdbl.app.debloat.TestBasedMethodDebloat;
-import se.kth.castor.jdbl.app.test.StackLine;
-import se.kth.castor.jdbl.app.test.TestResultReader;
-import se.kth.castor.jdbl.app.test.TestRunner;
-import se.kth.castor.jdbl.app.util.ClassesLoadedSingleton;
-import se.kth.castor.jdbl.app.util.JarUtils;
-import se.kth.castor.jdbl.app.util.MyFileUtils;
+import se.kth.castor.jdbl.coverage.JVMClassCoverage;
+import se.kth.castor.jdbl.coverage.JacocoCoverage;
+import se.kth.castor.jdbl.coverage.UsageAnalysis;
+import se.kth.castor.jdbl.coverage.YajtaCoverage;
+import se.kth.castor.jdbl.debloat.AbstractMethodDebloat;
+import se.kth.castor.jdbl.debloat.DebloatTypeEnum;
+import se.kth.castor.jdbl.debloat.TestBasedMethodDebloat;
+import se.kth.castor.jdbl.test.StackLine;
+import se.kth.castor.jdbl.test.TestResultReader;
+import se.kth.castor.jdbl.test.TestRunner;
+import se.kth.castor.jdbl.util.ClassesLoadedSingleton;
+import se.kth.castor.jdbl.util.JarUtils;
+import se.kth.castor.jdbl.util.MyFileUtils;
 
 /**
  * This Mojo debloats the project according to the coverage of its test suite.
@@ -42,14 +43,21 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
         cleanReportFile();
         String outputDirectory = getProject().getBuild().getOutputDirectory();
 
-        // Run yajta analysis
+        // Run yajta usage analysis
         YajtaCoverage yajtaCoverage = new YajtaCoverage(getProject(), mavenHome, DebloatTypeEnum.TEST_DEBLOAT);
         UsageAnalysis yajtaUsageAnalysis = yajtaCoverage.analyzeUsages();
 
         // Run JaCoCo usage analysis
-        JacocoCoverage jacocoCoverage = new JacocoCoverage(getProject(), mavenHome,
-            new File(getProject().getBasedir().getAbsolutePath() + "/target/report.xml"), DebloatTypeEnum.TEST_DEBLOAT);
+        JacocoCoverage jacocoCoverage = new JacocoCoverage(getProject(), mavenHome, DebloatTypeEnum.TEST_DEBLOAT);
         UsageAnalysis jacocoUsageAnalysis = jacocoCoverage.analyzeUsages();
+
+        // Run JVM class usage analysis
+        JVMClassCoverage jvmClassCoverage = new JVMClassCoverage();
+        try {
+            jvmClassCoverage.runTestsInVerboseMode();
+        } catch (IOException e) {
+            getLog().error("Error executing the JVM class coverage.");
+        }
 
         // Print out Yajta and JaCoCo coverage outputs
         System.out.println("Yajta:");
@@ -58,6 +66,7 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
         System.out.println("JaCoCo");
         System.out.print(jacocoUsageAnalysis.toString());
         printCoverageAnalysisResults(jacocoUsageAnalysis);
+
 
         // Merge the coverage analysis
         UsageAnalysis mergedUsageAnalysis = yajtaUsageAnalysis.mergeWith(jacocoUsageAnalysis);
@@ -185,6 +194,7 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
             new File(getProject().getBasedir().getAbsolutePath() + "/" + getReportFileName()), failingMethods);
         try {
             testBasedMethodDebloat.removeUnusedMethods();
+            this.getLog().info("Total methods in used classes removed: " + testBasedMethodDebloat.nbMethodsRemoved());
         } catch (IOException e) {
             this.getLog().error(String.format("Error: %s", e));
         }
