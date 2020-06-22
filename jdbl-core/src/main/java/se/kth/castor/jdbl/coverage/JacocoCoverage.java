@@ -265,7 +265,7 @@ public class JacocoCoverage extends AbstractCoverage implements UsageAnalyzer
      */
     private void addJaCoCoAsTestDependency(String testDir, MavenUtils mavenUtils)
     {
-        mavenUtils.copyDependency("org.jacoco:org.jacoco.agent:0.7.9", testDir);
+        mavenUtils.copyDependency("org.jacoco:org.jacoco.agent:0.8.5", testDir);
         JarUtils.decompressJars(testDir);
     }
 
