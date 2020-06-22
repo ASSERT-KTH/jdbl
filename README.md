@@ -24,8 +24,6 @@
 
 JDBL is a **J**ava **D**e**BL**oat tool. With JDBL, developers can automatically specialize Java libraries at build-time through dynamic debloat. JDBL executes the library and removes the dependencies, classes, and methods that are not needed to provide the expected output. The result is a smaller bundled file (e.g., JAR or WAR), which is tailored to the specific needs of the client. JDBL is great because it saves space on disk, reduces the attack surface, and improves performance of the client application. JDBL can be used as a Maven plugin (see [usage](https://github.com/castor-software/jdbl/tree/master#usage)), with minimal or zero configuration effort.
 
-d transforming the bytecode on-the-fly before Maven creates the application bundle. 
-
 ## How does it work?
 
 JDBL is executed before the `package` phase of the Maven build lifecycle. First, JDBL compiles and [instruments](https://en.wikipedia.org/wiki/Instrumentation_(computer_programming) the bytecodes of the application and its dependencies. Then, JDBL collects [execution traces](https://en.wikipedia.org/wiki/Tracing_(software) by executing the application based on a given workload. All the API members (e.g., classes and methods) used during the execution are collected at run-time. JDBL removes the rest of unused API members through bytecode transformations. Finally, the debloated application continues the Maven `package` and the debloated application is bundled as a JAR or WAR file. 
@@ -66,7 +64,7 @@ To use JDBL as a Maven plugin, first clone this repository and run `mvn clean in
 </plugin>
 ```
 
-Where the property `${strategy}` can take one of the three debloating strategies supported by JDBL:
+The property `${strategy}` can take one of the two following values, depending on the debloating strategy adopted:
 
 - **test-based-debloat** Removes the API members that are not covered by the test suite of the Maven project.
 - **entry-point-debloat** Removes the API members that are used after compiling and executing the Maven project from a given entry-point.
