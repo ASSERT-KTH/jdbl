@@ -10,15 +10,15 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
-import se.kth.castor.jdbl.app.coverage.JacocoCoverage;
-import se.kth.castor.jdbl.app.coverage.UsageAnalysis;
-import se.kth.castor.jdbl.app.debloat.AbstractMethodDebloat;
-import se.kth.castor.jdbl.app.debloat.DebloatTypeEnum;
-import se.kth.castor.jdbl.app.debloat.EntryPointMethodDebloat;
-import se.kth.castor.jdbl.app.util.ClassesLoadedSingleton;
-import se.kth.castor.jdbl.app.util.MyFileUtils;
-import se.kth.castor.jdbl.app.util.JarUtils;
-import se.kth.castor.jdbl.app.util.MavenUtils;
+import se.kth.castor.jdbl.coverage.JacocoCoverageOld;
+import se.kth.castor.jdbl.coverage.UsageAnalysis;
+import se.kth.castor.jdbl.debloat.AbstractMethodDebloat;
+import se.kth.castor.jdbl.debloat.DebloatTypeEnum;
+import se.kth.castor.jdbl.debloat.EntryPointMethodDebloat;
+import se.kth.castor.jdbl.util.ClassesLoadedSingleton;
+import se.kth.castor.jdbl.util.MyFileUtils;
+import se.kth.castor.jdbl.util.JarUtils;
+import se.kth.castor.jdbl.util.MavenUtils;
 
 /**
  * This Maven mojo instruments the project according to an entry point provided as parameters in Maven configuration.
@@ -57,7 +57,7 @@ public class EntryPointDebloatMojo extends AbstractDebloatMojo
         JarUtils.decompressJars(outputDirectory);
 
         // getting the used methods
-        JacocoCoverage jacocoCoverage = new JacocoCoverage(
+        JacocoCoverageOld jacocoCoverageOld = new JacocoCoverageOld(
             getProject(),
             new File(getProject().getBasedir().getAbsolutePath() + "/target/report.xml"),
             DebloatTypeEnum.ENTRY_POINT_DEBLOAT,
@@ -69,7 +69,7 @@ public class EntryPointDebloatMojo extends AbstractDebloatMojo
         UsageAnalysis usageAnalysis = null;
 
         // run the usage analysis
-        usageAnalysis = jacocoCoverage.analyzeUsages();
+        usageAnalysis = jacocoCoverageOld.analyzeUsages();
         // print some results
         this.getLog().info(String.format("#Unused classes: %d",
             usageAnalysis.getAnalysis().entrySet().stream().filter(e -> e.getValue() == null).count()));
