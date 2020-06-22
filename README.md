@@ -26,7 +26,7 @@ JDBL is a **J**ava **D**e**BL**oat tool. With JDBL, developers can automatically
 
 ## How does it work?
 
-JDBL is executed before the `package` phase of the Maven build lifecycle. First, JDBL compiles and [instruments](https://en.wikipedia.org/wiki/Instrumentation_(computer_programming) the bytecodes of the application and its dependencies. Then, JDBL collects [execution traces](https://en.wikipedia.org/wiki/Tracing_(software) by executing the application based on a given workload. All the API members (e.g., classes and methods) used during the execution are collected at run-time. JDBL removes the rest of unused API members through bytecode transformations. Finally, the debloated application continues the Maven `package` and the debloated application is bundled as a JAR or WAR file. 
+JDBL is executed before the `package` phase of the Maven build lifecycle. First, JDBL compiles and [instruments](https://en.wikipedia.org/wiki/Instrumentation_(computer_programming)) the bytecodes of the application and its dependencies. Then, JDBL collects [execution traces](https://en.wikipedia.org/wiki/Tracing_(software)) by executing the application based on a given workload. All the API members (e.g., classes and methods) used during the execution are collected at run-time. JDBL removes the rest of unused API members through bytecode transformations. Finally, the debloated application continues the Maven `package` and the debloated application is bundled as a JAR or WAR file. 
 
 **NOTE:** JDBL produces a smaller, specialized version of the Java application without modifying its source code. The modified version is automatically packaged as a JAR file as resulting from the Maven build lifecycle.
 
@@ -82,7 +82,7 @@ In the case of the **entry-point** strategy, the following additional configurat
 
 ## License
 
-JDBL is distributed under the MIT License. See [LICENSE](https://github.com/castor-software/jdbl/blob/master/LICENSE.md) for more information.
+JDBL is distributed under the MIT License. See [LICENSE](https://github.com/castor-software/jdbl/blob/master/LICENSE) for more information.
 
 ## Funding
 
