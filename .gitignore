@@ -3,6 +3,7 @@
 
 ### Package files
 *.jar
+!jdbl-core/src/test/resources/jars/org.jacoco.agent-0.7.9.jar
 *.war
 *.nar
 *.ear

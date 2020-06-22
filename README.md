@@ -22,11 +22,11 @@
 
 ## What is JDBL?
 
-JDBL is a tool for automatically specialize Java applications through dynamic and static debloat at build time. JDBL removes unused classes and methods from Maven projects (including its dependencies), as well as the Java Runtime Environment (JRE). To do so, JDBL collects execution traces by [instrumenting](https://en.wikipedia.org/wiki/Instrumentation_(computer_programming)) and transforming the bytecode on-the-fly during the distinct Maven building phases. JDBL can be used as a Maven plugin or executed out-of-the-box as a standalone Java application.
+JDBL is a **J**ava **D**e**B****L**oating tool. With JDBL, developers can specialize Java applications automatically through dynamic debloat at build time. JDBL executes the application and removes unused classes and methods from Maven projects (including its dependencies). To do so, JDBL collects execution traces by [instrumenting](https://en.wikipedia.org/wiki/Instrumentation_(computer_programming)) and transforming the bytecode on-the-fly before Maven creates the application bundle. JDBL can be used as a Maven plugin (see [usage](##usage)).
 
 ## How does it work?
 
-JDBL runs before executing the `package` phase of the Maven build lifecycle. It detects all the types referenced in the project under analysis, as well as in its declared dependencies, at run-time. Then, JDBL removes all the unused class members (i.e., classes and methods), depending on the debloating strategy utilized.
+JDBL is executed before executing the `package` phase of the Maven build lifecycle. It first exectutes and monitor all the types referenced in the project under analysis, as well as in its declared dependencies, at run-time. Then, JDBL removes all the unused class members (i.e., classes and methods), depending on the debloating strategy utilized.
 
 DepClean supports three types of debloating strategies:
 
@@ -40,11 +40,11 @@ The **test-based-debloat** strategy is similar to the **entry-point**; the diffe
 
 The **conservative-debloat** strategy is the less aggressive approach. It relies on static analysis to construct a call graph of class members calls, which contains all the class members referenced by the application. Then, the members that are not referenced (a.k.a [dead code](https://en.wikipedia.org/wiki/Dead_code)) are removed from the bytecode. This approach is similar to shrinking technique performed by [Proguard](https://www.guardsquare.com/en/products/proguard), with the difference JDBL executed the debloat thorough the Maven build phases.    
 
-Overall, JDBL produces a smaller, specialized version of the Java application without modifying its source code. The modified version is automatically packaged as a JAR file as resulting from the Maven build lifecycle.
+JDBL produces a smaller, specialized version of the Java application without modifying its source code. The modified version is automatically packaged as a JAR file as resulting from the Maven build lifecycle.
  
 ## Usage
 
-To use JDBL as a Maven plugin, first install it from source cloning this repo and running `mvn clean install`. Then, add the plugin to the `pom.xml` of the application to be debloated:
+To use JDBL as a Maven plugin, first install it from its sources by cloning this repo and running `mvn clean install`. Then, add the plugin to the `pom.xml` of the Maven project to be debloated:
 
 ```xml
 <plugin>
@@ -63,32 +63,9 @@ To use JDBL as a Maven plugin, first install it from source cloning this repo an
 
 Where the property `${strategy}` can take one of the three debloating strategies supported by JDBL.
 
-You also need to add the JaCoCo Maven plugin to your project:
-
-```xml
- <plugin>
-    <groupId>org.jacoco</groupId>
-    <artifactId>jacoco-maven-plugin</artifactId>
-    <version>0.8.5</version>
-    <executions>
-      <execution>
-          <goals>
-              <goal>prepare-agent</goal>
-          </goals>
-      </execution>
-      <execution>
-          <id>report</id>
-          <phase>prepare-package</phase>
-          <goals>
-              <goal>report</goal>
-          </goals>
-      </execution>
-    </executions>
-</plugin>
-```
 ### Optional parameters
 
-In the case of the **entry-point** strategy, the following additional configuration parameters are should be provided:
+In the case of the **entry-point** strategy, the following additional configuration parameters can be provided:
 
 | Name   |  Type |   Description      | 
 |:----------|:-------------:| :-------------| 
@@ -97,6 +74,13 @@ In the case of the **entry-point** strategy, the following additional configurat
 | `<entryParameters>` | `Set<String>` | Parameters of the `<entryMethod>` used provided. Only string values separated by commas are permitted.
 | `<skipJDBL>` | `boolean` | Skip plugin execution completely. **Default value is:** `false`.|
 
+
 ## License
 
-Distributed under the MIT License. See [LICENSE](https://github.com/castor-software/jdbl/blob/master/LICENSE) for more information.
+Distributed under the MIT License. See [LICENSE](https://github.com/castor-software/depclean/blob/master/LICENSE.md) for more information.
+
+## Funding
+
+DepClean is partially funded by the [Wallenberg Autonomous Systems and Software Program (WASP)](https://wasp-sweden.org).
+
+<img src="https://github.com/castor-software/depclean/blob/master/wasp.svg" height="50px" alt="Wallenberg Autonomous Systems and Software Program (WASP)"/>
