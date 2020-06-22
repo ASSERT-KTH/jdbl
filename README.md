@@ -22,29 +22,34 @@
 
 ## What is JDBL?
 
-JDBL is a **J**ava **D**e**B****L**oating tool. With JDBL, developers can specialize Java applications automatically through dynamic debloat at build time. JDBL executes the application and removes unused classes and methods from Maven projects (including its dependencies). To do so, JDBL collects execution traces by [instrumenting](https://en.wikipedia.org/wiki/Instrumentation_(computer_programming)) and transforming the bytecode on-the-fly before Maven creates the application bundle. JDBL can be used as a Maven plugin (see [usage](##usage)).
+JDBL is a **J**ava **D**e**BL**oat tool. With JDBL, developers can automatically specialize Java libraries at build-time through dynamic debloat. JDBL executes the library and removes the dependencies, classes, and methods that are not needed to provide the expected output. The result is a smaller bundled file (e.g., JAR or WAR), which is tailored to the specific needs of the client. JDBL is great because it saves space on disk, reduces the attack surface, and improves performance of the client application. JDBL can be used as a Maven plugin (see [usage](https://github.com/castor-software/jdbl/tree/master#usage)), with minimal or zero configuration effort.
+
+d transforming the bytecode on-the-fly before Maven creates the application bundle. 
 
 ## How does it work?
 
-JDBL is executed before executing the `package` phase of the Maven build lifecycle. It first exectutes and monitor all the types referenced in the project under analysis, as well as in its declared dependencies, at run-time. Then, JDBL removes all the unused class members (i.e., classes and methods), depending on the debloating strategy utilized.
+JDBL is executed before the `package` phase of the Maven build lifecycle. First, JDBL compiles and [instruments](https://en.wikipedia.org/wiki/Instrumentation_(computer_programming) the bytecodes of the application and its dependencies. Then, JDBL collects [execution traces](https://en.wikipedia.org/wiki/Tracing_(software) by executing the application based on a given workload. All the API members (e.g., classes and methods) used during the execution are collected at run-time. JDBL removes the rest of unused API members through bytecode transformations. Finally, the debloated application continues the Maven `package` and the debloated application is bundled as a JAR or WAR file. 
 
-DepClean supports three types of debloating strategies:
+**NOTE:** JDBL produces a smaller, specialized version of the Java application without modifying its source code. The modified version is automatically packaged as a JAR file as resulting from the Maven build lifecycle.
+
+<!--
+JDBL supports three types of debloating strategies:
 
 - **entry-point-debloat:** removes the class members that used after running the application from a given entry-point.
 - **test-based-debloat:** removes the class members that are not covered by the test suite.
 - **conservative-debloat:** removes the class members that are not referenced by the application, as determined statically.
 
-The **entry-point-debloat** strategy is the most aggressive approach. In this case, the bytecode is instrumented during the Maven `compile` phase, probes are inserted in the bytecode, and the application is executed in order to collect [execution traces](https://en.wikipedia.org/wiki/Tracing_(software)). Then, the class members that were not covered are removed from the bytecode, and the transformed application is packaged as a specialized ad debloated JAR file.  
+The **entry-point-debloat** strategy is the most aggressive approach. In this case, the bytecode is instrumented during the Maven `compile` phase, probes are inserted in the bytecode, and the application is executed in order to collect ). Then, the class members that were not covered are removed from the bytecode, and the transformed application is packaged as a specialized ad debloated JAR file.  
 
 The **test-based-debloat** strategy is similar to the **entry-point**; the difference is that the execution traces are collected based on the execution of the test suite of the project.
 
 The **conservative-debloat** strategy is the less aggressive approach. It relies on static analysis to construct a call graph of class members calls, which contains all the class members referenced by the application. Then, the members that are not referenced (a.k.a [dead code](https://en.wikipedia.org/wiki/Dead_code)) are removed from the bytecode. This approach is similar to shrinking technique performed by [Proguard](https://www.guardsquare.com/en/products/proguard), with the difference JDBL executed the debloat thorough the Maven build phases.    
 
-JDBL produces a smaller, specialized version of the Java application without modifying its source code. The modified version is automatically packaged as a JAR file as resulting from the Maven build lifecycle.
+-->
  
 ## Usage
 
-To use JDBL as a Maven plugin, first install it from its sources by cloning this repo and running `mvn clean install`. Then, add the plugin to the `pom.xml` of the Maven project to be debloated:
+To use JDBL as a Maven plugin, first clone this repository and run `mvn clean install`. Then, add the plugin to the `pom.xml` of the Maven project to be debloated:
 
 ```xml
 <plugin>
@@ -61,7 +66,10 @@ To use JDBL as a Maven plugin, first install it from its sources by cloning this
 </plugin>
 ```
 
-Where the property `${strategy}` can take one of the three debloating strategies supported by JDBL.
+Where the property `${strategy}` can take one of the three debloating strategies supported by JDBL:
+
+- **test-based-debloat** Removes the API members that are not covered by the test suite of the Maven project.
+- **entry-point-debloat** Removes the API members that are used after compiling and executing the Maven project from a given entry-point.
 
 ### Optional parameters
 
@@ -74,13 +82,12 @@ In the case of the **entry-point** strategy, the following additional configurat
 | `<entryParameters>` | `Set<String>` | Parameters of the `<entryMethod>` used provided. Only string values separated by commas are permitted.
 | `<skipJDBL>` | `boolean` | Skip plugin execution completely. **Default value is:** `false`.|
 
-
 ## License
 
-Distributed under the MIT License. See [LICENSE](https://github.com/castor-software/depclean/blob/master/LICENSE.md) for more information.
+JDBL is distributed under the MIT License. See [LICENSE](https://github.com/castor-software/jdbl/blob/master/LICENSE.md) for more information.
 
 ## Funding
 
-DepClean is partially funded by the [Wallenberg Autonomous Systems and Software Program (WASP)](https://wasp-sweden.org).
+JDBL is partially funded by the [Wallenberg Autonomous Systems and Software Program (WASP)](https://wasp-sweden.org).
 
-<img src="https://github.com/castor-software/depclean/blob/master/wasp.svg" height="50px" alt="Wallenberg Autonomous Systems and Software Program (WASP)"/>
+<img src="https://github.com/castor-software/jdbl/blob/master/wasp.svg" height="50px" alt="Wallenberg Autonomous Systems and Software Program (WASP)"/>
