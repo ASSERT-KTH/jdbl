@@ -18,7 +18,6 @@ public class JVMClassCoverage
 {
     private static final Logger LOGGER = LogManager.getLogger(JVMClassCoverage.class.getName());
 
-
     public static void runTestsInVerboseMode() throws IOException
     {
         LOGGER.info("Starting executing tests in verbose mode to get JVM class loader report.");

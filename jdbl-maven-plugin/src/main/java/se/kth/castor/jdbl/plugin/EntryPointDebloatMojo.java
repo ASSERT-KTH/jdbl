@@ -10,15 +10,16 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
-import se.kth.castor.jdbl.coverage.JacocoCoverageOld;
+import se.kth.castor.jdbl.coverage.AbstractCoverage;
+import se.kth.castor.jdbl.coverage.JacocoCoverage;
 import se.kth.castor.jdbl.coverage.UsageAnalysis;
 import se.kth.castor.jdbl.debloat.AbstractMethodDebloat;
 import se.kth.castor.jdbl.debloat.DebloatTypeEnum;
 import se.kth.castor.jdbl.debloat.EntryPointMethodDebloat;
 import se.kth.castor.jdbl.util.ClassesLoadedSingleton;
-import se.kth.castor.jdbl.util.MyFileUtils;
 import se.kth.castor.jdbl.util.JarUtils;
 import se.kth.castor.jdbl.util.MavenUtils;
+import se.kth.castor.jdbl.util.MyFileUtils;
 
 /**
  * This Maven mojo instruments the project according to an entry point provided as parameters in Maven configuration.
@@ -57,19 +58,18 @@ public class EntryPointDebloatMojo extends AbstractDebloatMojo
         JarUtils.decompressJars(outputDirectory);
 
         // getting the used methods
-        JacocoCoverageOld jacocoCoverageOld = new JacocoCoverageOld(
+        AbstractCoverage jacocoCoverage = new JacocoCoverage(
             getProject(),
-            new File(getProject().getBasedir().getAbsolutePath() + "/target/report.xml"),
+            mavenHome,
             DebloatTypeEnum.ENTRY_POINT_DEBLOAT,
             this.entryClass,
             this.entryMethod,
-            this.entryParameters,
-            getMavenHome());
+            this.entryParameters);
 
         UsageAnalysis usageAnalysis = null;
 
         // run the usage analysis
-        usageAnalysis = jacocoCoverageOld.analyzeUsages();
+        usageAnalysis = jacocoCoverage.analyzeUsages();
         // print some results
         this.getLog().info(String.format("#Unused classes: %d",
             usageAnalysis.getAnalysis().entrySet().stream().filter(e -> e.getValue() == null).count()));

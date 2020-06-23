@@ -13,33 +13,48 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 import org.apache.maven.project.MavenProject;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import se.kth.castor.jdbl.debloat.DebloatTypeEnum;
-import se.kth.castor.jdbl.test.TestRunner;
 import se.kth.castor.jdbl.util.JarUtils;
 import se.kth.castor.jdbl.util.MavenUtils;
 import se.kth.castor.offline.CoverageInstrumenter;
 import se.kth.castor.yajta.api.MalformedTrackingClassException;
 
-public class YajtaCoverage extends AbstractCoverage implements UsageAnalyzer
+public class YajtaCoverage extends AbstractCoverage
 {
-    private static final Logger LOGGER = LogManager.getLogger(YajtaCoverage.class.getName());
-
-    public YajtaCoverage(
-        MavenProject mavenProject,
-        File mavenHome,
-        DebloatTypeEnum debloatTypeEnum)
+    public YajtaCoverage(MavenProject mavenProject, File mavenHome, DebloatTypeEnum debloatTypeEnum)
     {
         super(mavenProject, mavenHome, debloatTypeEnum);
+        LOGGER = LogManager.getLogger(YajtaCoverage.class.getName());
     }
 
-    @Override
-    public UsageAnalysis analyzeUsages()
+    public YajtaCoverage(MavenProject mavenProject, File mavenHome, DebloatTypeEnum debloatTypeEnum,
+        String entryClass, String entryMethod, String entryParameters)
+    {
+        super(mavenProject, mavenHome, debloatTypeEnum, entryClass, entryMethod, entryParameters);
+        LOGGER = LogManager.getLogger(YajtaCoverage.class.getName());
+    }
+
+    protected UsageAnalysis executeConservativeAnalysis()
+    {
+        // TODO implement the conservative approach
+        return null;
+    }
+
+    protected UsageAnalysis executeEntryPointAnalysis()
+    {
+        // TODO implement the entry point approach
+        LOGGER.info("Output directory: " + mavenProject.getBuild().getOutputDirectory());
+        LOGGER.info("entryClass: " + entryClass);
+        LOGGER.info("entryMethod: " + entryMethod);
+        LOGGER.info("entryParameters: " + entryParameters);
+        return null;
+    }
+
+    protected UsageAnalysis executeTestBasedAnalysis()
     {
         writeCoverage();
         UsageAnalysis usageAnalysis = new UsageAnalysis();
@@ -79,7 +94,7 @@ public class YajtaCoverage extends AbstractCoverage implements UsageAnalyzer
         final String instrumentedDir = mavenProject.getBasedir().getAbsolutePath() + "/target/instrumented";
         final String classesOriginalDir = mavenProject.getBasedir().getAbsolutePath() + "/target/classes-original";
         MavenUtils mavenUtils = copyDependencies(classesDir);
-        // deleteNonClassFiles(classesDir);
+        deleteNonClassFiles(classesDir);
         instrument(classesDir, instrumentedDir);
         replaceInstrumentedClasses(classesDir, instrumentedDir, classesOriginalDir);
         addYajtaAsTestDependency(testDir, mavenUtils);
@@ -87,50 +102,14 @@ public class YajtaCoverage extends AbstractCoverage implements UsageAnalyzer
     }
 
     /**
-     * Restore the (previously replaced) original classes with the original non-instrumented classes.
-     */
-    private void restoreOriginalClasses(final String classesDir, final String classesOriginalDir)
-    {
-        try {
-            FileUtils.deleteDirectory(new File(classesDir));
-            FileUtils.moveDirectory(new File(classesOriginalDir), new File(classesDir));
-        } catch (IOException e) {
-            LOGGER.error("Error rolling back the compiled classes.");
-        }
-    }
-
-    /**
      * The instrumented classes need yajta to compile with the inserted probes.
      */
     private void addYajtaAsTestDependency(final String testDir, final MavenUtils mavenUtils)
     {
-        try {
-            mavenUtils.copyDependency("se.kth.castor:yajta-core:2.0.2", testDir);
-            mavenUtils.copyDependency("se.kth.castor:yajta-offline:2.0.2", testDir);
-            JarUtils.decompressJars(testDir);
-            TestRunner.runTests(mavenProject);
-        } catch (IOException e) {
-            LOGGER.error("Error rerunning the tests.");
-        }
-    }
-
-    /**
-     * Replace the original compiled classes with the instrumented classes.
-     */
-    private void replaceInstrumentedClasses(String classesDir, String instrumentedDir, String classesOriginalDir)
-    {
-        LOGGER.info("Moving classes");
-        LOGGER.info(classesDir);
-        LOGGER.info(instrumentedDir);
-        LOGGER.info(classesOriginalDir);
-        try {
-            FileUtils.moveDirectory(new File(classesDir),
-                new File(classesOriginalDir));
-            FileUtils.moveDirectory(new File(instrumentedDir),
-                new File(classesDir));
-        } catch (IOException e) {
-            LOGGER.error("Error handling target/class directory.");
-        }
+        mavenUtils.copyDependency("se.kth.castor:yajta-core:2.0.2", testDir);
+        mavenUtils.copyDependency("se.kth.castor:yajta-offline:2.0.2", testDir);
+        JarUtils.decompressJars(testDir);
+        super.runTests();
     }
 
     /**
@@ -145,30 +124,6 @@ public class YajtaCoverage extends AbstractCoverage implements UsageAnalyzer
         } catch (MalformedTrackingClassException e) {
             LOGGER.error("Error executing yajta.");
         }
-    }
-
-    /**
-     * Delete non class files to avoid wrong instrumentation attempts (e.g., resources).
-     */
-    private void deleteNonClassFiles(final String classesDir)
-    {
-        File directory = new File(classesDir + "/META-INF");
-        try {
-            FileUtils.deleteDirectory(directory);
-        } catch (IOException e) {
-            LOGGER.error("Error deleting directory " + directory.getName());
-        }
-    }
-
-    /**
-     * Copy dependencies to be instrumented by yajta
-     */
-    private MavenUtils copyDependencies(final String classesDir)
-    {
-        MavenUtils mavenUtils = new MavenUtils(super.mavenHome, mavenProject.getBasedir());
-        mavenUtils.copyDependencies(classesDir);
-        JarUtils.decompressJars(classesDir);
-        return mavenUtils;
     }
 
     /**

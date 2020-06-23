@@ -13,9 +13,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 import org.apache.maven.project.MavenProject;
 import org.jacoco.core.analysis.Analyzer;
 import org.jacoco.core.analysis.CoverageBuilder;
@@ -35,7 +33,6 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import se.kth.castor.jdbl.debloat.DebloatTypeEnum;
-import se.kth.castor.jdbl.test.TestRunner;
 import se.kth.castor.jdbl.util.JarUtils;
 import se.kth.castor.jdbl.util.MavenUtils;
 
@@ -44,38 +41,60 @@ import se.kth.castor.jdbl.util.MavenUtils;
  *
  * @see <a https://www.jacoco.org/jacoco/trunk/doc/cli.html</a>
  */
-public class JacocoCoverage extends AbstractCoverage implements UsageAnalyzer
+public class JacocoCoverage extends AbstractCoverage
 {
-    private static final Logger LOGGER = LogManager.getLogger(JacocoCoverage.class.getName());
+    private static final int TAB_WIDTH = 4;
 
     private Instrumenter instrumenter;
+    private JacocoReportReader reportReader;
+
     private File dest;
+    private File xml;
+    private File report;
+
     private List<File> source;
     private List<File> execFiles;
     private List<File> classFiles;
     private List<File> sourceFiles;
-    private String name = "JaCoCo Coverage Report";
-    private File xml;
-    JacocoReportReader reportReader = null;
 
-    public JacocoCoverage(
-        MavenProject mavenProject,
-        File mavenHome,
-        DebloatTypeEnum debloatTypeEnum)
+    public JacocoCoverage(MavenProject mavenProject, File mavenHome, DebloatTypeEnum debloatTypeEnum)
     {
         super(mavenProject, mavenHome, debloatTypeEnum);
+        report = new File(mavenProject.getBasedir().getAbsolutePath() + "/target/report.xml");
+        LOGGER = LogManager.getLogger(JacocoCoverage.class.getName());
     }
 
-    @Override
-    public UsageAnalysis analyzeUsages()
+    public JacocoCoverage(MavenProject mavenProject, File mavenHome, DebloatTypeEnum debloatTypeEnum,
+        String entryClass, String entryMethod, String entryParameters)
     {
+        super(mavenProject, mavenHome, debloatTypeEnum, entryClass, entryMethod, entryParameters);
+        LOGGER = LogManager.getLogger(JacocoCoverage.class.getName());
+    }
+
+    protected UsageAnalysis executeConservativeAnalysis()
+    {
+        // TODO implement the conservative approach
+        return null;
+    }
+
+    protected UsageAnalysis executeEntryPointAnalysis()
+    {
+        // TODO implement the entry point approach
+        LOGGER.info("Output directory: " + mavenProject.getBuild().getOutputDirectory());
+        LOGGER.info("entryClass: " + entryClass);
+        LOGGER.info("entryMethod: " + entryMethod);
+        LOGGER.info("entryParameters: " + entryParameters);
+        return null;
+    }
+
+    protected UsageAnalysis executeTestBasedAnalysis()
+    {
+        // Write the JaCoCo coverage report to file
         try {
             writeCoverage();
         } catch (Exception e) {
             LOGGER.error("Error writing coverage file.");
         }
-
-        File report = new File(mavenProject.getBasedir().getAbsolutePath() + "/target/report.xml");
 
         // Read the jacoco report
         try {
@@ -83,17 +102,19 @@ public class JacocoCoverage extends AbstractCoverage implements UsageAnalyzer
         } catch (ParserConfigurationException e) {
             LOGGER.error("Error parsing jacoco.xml file.");
         }
+
+        // Retrieve the usage analysis report
         try {
             assert reportReader != null;
             return reportReader.getUsedClassesAndMethods(report);
         } catch (IOException | SAXException e) {
             LOGGER.error("Error getting unused classes and methods file.");
         }
-
         return null;
     }
 
-    private void writeCoverage() throws IOException
+    @Override
+    protected void writeCoverage()
     {
         LOGGER.info("Running JaCoCo");
         final String baseDir = mavenProject.getBasedir().getAbsolutePath();
@@ -107,20 +128,30 @@ public class JacocoCoverage extends AbstractCoverage implements UsageAnalyzer
         execFiles = Arrays.asList(new File(baseDir + "/jacoco.exec"));
         classFiles = Arrays.asList(new File(classesDir));
         sourceFiles = mavenProject.getCompileSourceRoots().stream().map(File::new).collect(Collectors.toList());
-
         xml = new File(baseDir + "/target/report.xml");
 
         MavenUtils mavenUtils = copyDependencies(classesDir);
         deleteNonClassFiles(classesDir);
-        executeInstrument();
+        try {
+            executeInstrumentation();
+        } catch (IOException e) {
+            LOGGER.error("Error executing instrumentation.");
+        }
         replaceInstrumentedClasses(classesDir, instrumentedDir, classesOriginalDir);
         addJaCoCoAsTestDependency(testDir, mavenUtils);
         runTests();
         restoreOriginalClasses(classesDir, classesOriginalDir);
-        executeReport();
+        try {
+            writeReports();
+        } catch (IOException e) {
+            LOGGER.error("Error writing coverage reports.");
+        }
     }
 
-    public int executeReport() throws IOException
+    /**
+     * Write the JaCoCo coverage reports.
+     */
+    private int writeReports() throws IOException
     {
         final ExecFileLoader loader = loadExecutionData();
         final IBundleCoverage bundle = analyze(loader.getExecutionDataStore());
@@ -128,6 +159,9 @@ public class JacocoCoverage extends AbstractCoverage implements UsageAnalyzer
         return 0;
     }
 
+    /**
+     * Reads the JaCoCo .exec data file.
+     */
     private ExecFileLoader loadExecutionData() throws IOException
     {
         final ExecFileLoader loader = new ExecFileLoader();
@@ -142,6 +176,9 @@ public class JacocoCoverage extends AbstractCoverage implements UsageAnalyzer
         return loader;
     }
 
+    /**
+     * Analyze the coverage of all the classes based on execution data.
+     */
     private IBundleCoverage analyze(final ExecutionDataStore data) throws IOException
     {
         final CoverageBuilder builder = new CoverageBuilder();
@@ -150,9 +187,13 @@ public class JacocoCoverage extends AbstractCoverage implements UsageAnalyzer
             analyzer.analyzeAll(f);
         }
         printNoMatchWarning(builder.getNoMatchClasses());
+        final String name = "JaCoCo Coverage Report";
         return builder.getBundle(name);
     }
 
+    /**
+     * Classes should match with the bytecode, otherwise the instrumentation could be inaccurate.
+     */
     private void printNoMatchWarning(final Collection<IClassCoverage> nomatch)
     {
         if (!nomatch.isEmpty()) {
@@ -164,6 +205,9 @@ public class JacocoCoverage extends AbstractCoverage implements UsageAnalyzer
         }
     }
 
+    /**
+     * Write coverage report.
+     */
     private void writeReports(final IBundleCoverage bundle, final ExecFileLoader loader) throws IOException
     {
         LOGGER.info("Analyzing " + Integer.valueOf(bundle.getClassCounter().getTotalCount()) + " classes");
@@ -173,6 +217,9 @@ public class JacocoCoverage extends AbstractCoverage implements UsageAnalyzer
         visitor.visitEnd();
     }
 
+    /**
+     * The IReportVisitor is needed to visit all the bytecode instructions in the report.
+     */
     private IReportVisitor createReportVisitor() throws IOException
     {
         final List<IReportVisitor> visitors = new ArrayList<>();
@@ -181,17 +228,22 @@ public class JacocoCoverage extends AbstractCoverage implements UsageAnalyzer
         return new MultiReportVisitor(visitors);
     }
 
+    /**
+     * The ISourceFileLocator is needed to look-up source files that will be included with the coverage report.
+     */
     private ISourceFileLocator getSourceLocator()
     {
-        int tabwidth = 4;
-        final MultiSourceFileLocator multi = new MultiSourceFileLocator(tabwidth);
+        final MultiSourceFileLocator multi = new MultiSourceFileLocator(TAB_WIDTH);
         for (final File f : sourceFiles) {
-            multi.add(new DirectorySourceFileLocator(f, null, tabwidth));
+            multi.add(new DirectorySourceFileLocator(f, null, TAB_WIDTH));
         }
         return multi;
     }
 
-    private void executeInstrument() throws IOException
+    /**
+     * Instrument the bytecode.
+     */
+    private void executeInstrumentation() throws IOException
     {
         final File absoluteDest = dest.getAbsoluteFile();
         instrumenter = new Instrumenter(new OfflineInstrumentationAccessGenerator());
@@ -206,6 +258,9 @@ public class JacocoCoverage extends AbstractCoverage implements UsageAnalyzer
         LOGGER.info(Integer.valueOf(total) + " classes instrumented to " + absoluteDest);
     }
 
+    /**
+     * Recursively instrument the bytecode of all the classes in the src directory and its sub-directories.
+     */
     private int instrumentRecursive(final File src, final File dest) throws IOException
     {
         int total = 0;
@@ -219,6 +274,9 @@ public class JacocoCoverage extends AbstractCoverage implements UsageAnalyzer
         return total;
     }
 
+    /**
+     * Instrument the bytecode by inserting probes at the branch level.
+     */
     private int instrument(final File src, final File dest) throws IOException
     {
         dest.getParentFile().mkdirs();
@@ -234,73 +292,11 @@ public class JacocoCoverage extends AbstractCoverage implements UsageAnalyzer
     }
 
     /**
-     * Restore the (previously replaced) original classes with the original non-instrumented classes.
-     */
-    private void restoreOriginalClasses(String classesDir, String classesOriginalDir)
-    {
-        try {
-            FileUtils.deleteDirectory(new File(classesDir));
-            FileUtils.moveDirectory(new File(classesOriginalDir), new File(classesDir));
-        } catch (IOException e) {
-            LOGGER.error("Error rolling back the compiled classes.");
-        }
-    }
-
-    /**
-     * Replace the original compiled classes with the instrumented classes.
-     */
-    private void replaceInstrumentedClasses(String classesDir, String instrumentedDir, String classesOriginalDir)
-    {
-        LOGGER.info("Starting replacing instrumented classes.");
-        try {
-            FileUtils.moveDirectory(new File(classesDir),
-                new File(classesOriginalDir));
-            FileUtils.moveDirectory(new File(instrumentedDir),
-                new File(classesDir));
-        } catch (Exception e) {
-            LOGGER.error("Error replacing instrumented classes with in target/classes directory.");
-        }
-    }
-
-    /**
      * The instrumented classes need JaCoCo to compile with the inserted probes.
      */
     private void addJaCoCoAsTestDependency(String testDir, MavenUtils mavenUtils)
     {
         mavenUtils.copyDependency("org.jacoco:org.jacoco.agent:0.8.5", testDir);
         JarUtils.decompressJars(testDir);
-    }
-
-    private void runTests()
-    {
-        try {
-            TestRunner.runTests(mavenProject);
-        } catch (IOException e) {
-            LOGGER.error("Error running the tests.");
-        }
-    }
-
-    /**
-     * Delete non class files to avoid wrong instrumentation attempts (e.g., resources).
-     */
-    private void deleteNonClassFiles(String classesDir)
-    {
-        File directory = new File(classesDir + "/META-INF");
-        try {
-            FileUtils.deleteDirectory(directory);
-        } catch (IOException e) {
-            LOGGER.error("Error deleting directory " + directory.getName());
-        }
-    }
-
-    /**
-     * Copy dependencies to be instrumented by JaCoCo
-     */
-    private MavenUtils copyDependencies(String classesDir)
-    {
-        MavenUtils mavenUtils = new MavenUtils(super.mavenHome, mavenProject.getBasedir());
-        mavenUtils.copyDependencies(classesDir);
-        JarUtils.decompressJars(classesDir);
-        return mavenUtils;
     }
 }
