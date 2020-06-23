@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.LogManager;
@@ -105,7 +106,8 @@ public class JacocoCoverage extends AbstractCoverage implements UsageAnalyzer
         dest = new File(instrumentedDir);
         execFiles = Arrays.asList(new File(baseDir + "/jacoco.exec"));
         classFiles = Arrays.asList(new File(classesDir));
-        sourceFiles = Arrays.asList(new File(mavenProject.getBasedir() + "/src/main/java"));
+        sourceFiles = mavenProject.getCompileSourceRoots().stream().map(File::new).collect(Collectors.toList());
+
         xml = new File(baseDir + "/target/report.xml");
 
         MavenUtils mavenUtils = copyDependencies(classesDir);
