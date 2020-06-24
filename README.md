@@ -13,9 +13,11 @@
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=castor-software_jdbl&metric=ncloc)](https://sonarcloud.io/dashboard?id=castor-software_jdbl)
 [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=castor-software_jdbl&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=castor-software_jdbl)
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=castor-software_jdbl&metric=sqale_index)](https://sonarcloud.io/dashboard?id=castor-software_jdbl)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=castor-software_jdbl&metric=coverage)](https://sonarcloud.io/dashboard?id=castor-software_jdbl)
+[![Coverage Status](https://coveralls.io/repos/github/castor-software/jdbl/badge.svg)](https://coveralls.io/github/castor-software/jdbl)
+
 
 <!--
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=castor-software_jdbl&metric=coverage)](https://sonarcloud.io/dashboard?id=castor-software_jdbl)
 [![hits of code](https://hitsofcode.com/github/castor-software/jdbl)](https://hitsofcode.com/view/github/castor-software/jdbl)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/castor-software/jdbl/blob/master/LICENSE)
 -->
