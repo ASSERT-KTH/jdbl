@@ -22,7 +22,7 @@ import se.kth.castor.jdbl.debloat.TestBasedMethodDebloat;
 import se.kth.castor.jdbl.test.StackLine;
 import se.kth.castor.jdbl.test.TestResultReader;
 import se.kth.castor.jdbl.test.TestRunner;
-import se.kth.castor.jdbl.util.ClassesLoadedSingleton;
+import se.kth.castor.jdbl.coverage.JVMClassesCoveredSingleton;
 import se.kth.castor.jdbl.util.JarUtils;
 import se.kth.castor.jdbl.util.MyFileUtils;
 
@@ -180,9 +180,9 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
 
     private void printClassesLoaded()
     {
-        final int nbOfClassesLoaded = ClassesLoadedSingleton.INSTANCE.getClassesLoaded().size();
+        final int nbOfClassesLoaded = JVMClassesCoveredSingleton.INSTANCE.getClassesLoaded().size();
         this.getLog().info("Loaded classes (" + nbOfClassesLoaded + ')');
-        ClassesLoadedSingleton.INSTANCE.printClassesLoaded();
+        JVMClassesCoveredSingleton.INSTANCE.printClassesLoaded();
         this.getLog().info(getLineSeparator());
     }
 
@@ -218,7 +218,7 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
     private static Set<String> getUsedClasses(final UsageAnalysis usageAnalysis)
     {
         // get the union of the JaCoCo output and the JVM class loader results
-        Set<String> usedClasses = new HashSet<>(ClassesLoadedSingleton.INSTANCE.getClassesLoaded());
+        Set<String> usedClasses = new HashSet<>(JVMClassesCoveredSingleton.INSTANCE.getClassesLoaded());
         usageAnalysis
             .getAnalysis()
             .entrySet()

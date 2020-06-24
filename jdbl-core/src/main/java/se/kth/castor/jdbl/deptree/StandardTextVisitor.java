@@ -6,23 +6,23 @@ package se.kth.castor.jdbl.deptree;
  */
 public class StandardTextVisitor extends AbstractTextVisitor
 {
-   @Override
-   public String getTreeSymbols(Node node)
-   {
-      if (node == node.getParent().getLastChildNode()) {
-         return "\\- ";
-      } else {
-         return "+- ";
-      }
-   }
+    @Override
+    public String getTreeSymbols(Node node)
+    {
+        if (node == node.getParent().getLastChildNode()) {
+            return "\\- ";
+        } else {
+            return "+- ";
+        }
+    }
 
-   @Override
-   public String getParentTreeSymbols(Node node)
-   {
-      if (node == node.getParent().getLastChildNode()) {
-         return "   ";
-      } else {
-         return "|  ";
-      }
-   }
+    @Override
+    public String getParentTreeSymbols(Node node)
+    {
+        if (node == node.getParent().getLastChildNode()) {
+            return "   ";
+        } else {
+            return "|  ";
+        }
+    }
 }

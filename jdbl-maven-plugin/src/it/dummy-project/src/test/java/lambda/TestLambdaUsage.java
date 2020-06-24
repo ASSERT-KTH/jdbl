@@ -218,7 +218,7 @@ public class TestLambdaUsage
      * Shows the Java 8 way of doing things using the JDK Standard Functional Interfaces.
      * <p>
      * Given we only have 1 method with 1 arg in our {@link OrderMatcher} interface, we could use the
-     * inbuilt JDK functional interfaces defined in the <code>java.util.function<code> package.
+     * inbuilt JDK functional interfaces defined in the <code>java.se.kth.castor.jdbl.util.util.function<code> package.
      * <p>
      * More detail on standard functions here:
      * http://download.java.net/lambda/b81/docs/api/java/util/function/package-summary.html

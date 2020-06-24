@@ -77,17 +77,17 @@ public class MainReflection {
 
         /*Get Type Parameters*/
         //Get Type parameters (generics)
-        TypeVariable<?>[] typeParameters = Class.forName("java.util.HashMap").getTypeParameters();
+        TypeVariable<?>[] typeParameters = Class.forName("java.se.kth.castor.jdbl.util.util.HashMap").getTypeParameters();
         for (TypeVariable<?> t : typeParameters)
             System.out.print(t.getName() + ",");
 
 
         /*Get Implemented Interfaces*/
-        Type[] interfaces = Class.forName("java.util.HashMap").getGenericInterfaces();
-        //prints "[java.util.Map<K, V>, interface java.lang.Cloneable, interface java.io.Serializable]"
+        Type[] interfaces = Class.forName("java.se.kth.castor.jdbl.util.util.HashMap").getGenericInterfaces();
+        //prints "[java.se.kth.castor.jdbl.util.util.Map<K, V>, interface java.lang.Cloneable, interface java.io.Serializable]"
         System.out.println(Arrays.toString(interfaces));
-        //prints "[interface java.util.Map, interface java.lang.Cloneable, interface java.io.Serializable]"
-        System.out.println(Arrays.toString(Class.forName("java.util.HashMap").getInterfaces()));
+        //prints "[interface java.se.kth.castor.jdbl.util.util.Map, interface java.lang.Cloneable, interface java.io.Serializable]"
+        System.out.println(Arrays.toString(Class.forName("java.se.kth.castor.jdbl.util.util.HashMap").getInterfaces()));
 
 
         /*Get All Public Methods*/

@@ -1,9 +1,0 @@
-GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-dummy-project,reflection,BaseInterface,3,0,0,0,0,0,1,0,1,0
-dummy-project,org.apache.commons.collections4,FunctorException,19,0,0,0,8,0,5,0,5,0
-dummy-project,annotations,ObjectToJsonConverter,27,153,1,13,4,28,1,13,0,7
-dummy-project,annotations,Person,36,49,0,0,0,10,9,2,9,2
-dummy-project,annotations,JsonSerializationException,7,0,0,0,2,0,2,0,2,0
-dummy-project,bag,BagClass,0,37,0,0,0,8,0,2,0,2
-dummy-project,calc,CalculatorB,0,3,0,0,0,1,0,1,0,1
-dummy-project,calc,Calculator,8,17,0,0,0,6,2,3,2,3

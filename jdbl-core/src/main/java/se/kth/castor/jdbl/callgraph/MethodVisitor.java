@@ -57,100 +57,100 @@ import org.apache.bcel.generic.Type;
 public class MethodVisitor extends EmptyVisitor
 {
 
-   //--------------------------------/
-   //-------- CLASS FIELD/S --------/
-   //------------------------------/
+    //--------------------------------/
+    //-------- CLASS FIELD/S --------/
+    //------------------------------/
 
-   private MethodGen mg;
-   private ConstantPoolGen cp;
-   private String format;
-   private List<String> methodCalls = new ArrayList<>();
+    private MethodGen mg;
+    private ConstantPoolGen cp;
+    private String format;
+    private List<String> methodCalls = new ArrayList<>();
 
-   //--------------------------------/
-   //-------- CONSTRUCTOR/S --------/
-   //------------------------------/
+    //--------------------------------/
+    //-------- CONSTRUCTOR/S --------/
+    //------------------------------/
 
-   public MethodVisitor(MethodGen m, JavaClass jc)
-   {
-      mg = m;
-      cp = mg.getConstantPool();
-      format = "M:" + jc.getClassName() + ":" + mg.getName() + "(" + argumentList(mg.getArgumentTypes()) + ")"
-         + " " + "(%s)%s:%s(%s)";
-   }
+    public MethodVisitor(MethodGen m, JavaClass jc)
+    {
+        mg = m;
+        cp = mg.getConstantPool();
+        format = "M:" + jc.getClassName() + ":" + mg.getName() + "(" + argumentList(mg.getArgumentTypes()) + ")"
+            + " " + "(%s)%s:%s(%s)";
+    }
 
-   //--------------------------------/
-   //------- PUBLIC METHOD/S -------/
-   //------------------------------/
+    //--------------------------------/
+    //------- PUBLIC METHOD/S -------/
+    //------------------------------/
 
-   public List<String> start()
-   {
-      if (mg.isAbstract() || mg.isNative()) {
-         return Collections.emptyList();
-      }
+    public List<String> start()
+    {
+        if (mg.isAbstract() || mg.isNative()) {
+            return Collections.emptyList();
+        }
 
-      for (InstructionHandle ih = mg.getInstructionList().getStart();
-           ih != null; ih = ih.getNext()) {
-         Instruction i = ih.getInstruction();
+        for (InstructionHandle ih = mg.getInstructionList().getStart();
+             ih != null; ih = ih.getNext()) {
+            Instruction i = ih.getInstruction();
 
-         if (!visitInstruction(i)) {
-            i.accept(this);
-         }
-      }
-      return methodCalls;
-   }
+            if (!visitInstruction(i)) {
+                i.accept(this);
+            }
+        }
+        return methodCalls;
+    }
 
-   @Override
-   public void visitINVOKEVIRTUAL(INVOKEVIRTUAL i)
-   {
-      methodCalls.add(String.format(format, "M", i.getReferenceType(cp), i.getMethodName(cp), argumentList(i.getArgumentTypes(cp))));
-   }
+    @Override
+    public void visitINVOKEVIRTUAL(INVOKEVIRTUAL i)
+    {
+        methodCalls.add(String.format(format, "M", i.getReferenceType(cp), i.getMethodName(cp), argumentList(i.getArgumentTypes(cp))));
+    }
 
-   @Override
-   public void visitINVOKEINTERFACE(INVOKEINTERFACE i)
-   {
-      methodCalls.add(String.format(format, "I", i.getReferenceType(cp), i.getMethodName(cp), argumentList(i.getArgumentTypes(cp))));
-   }
+    @Override
+    public void visitINVOKEINTERFACE(INVOKEINTERFACE i)
+    {
+        methodCalls.add(String.format(format, "I", i.getReferenceType(cp), i.getMethodName(cp), argumentList(i.getArgumentTypes(cp))));
+    }
 
-   @Override
-   public void visitINVOKESPECIAL(INVOKESPECIAL i)
-   {
-      methodCalls.add(String.format(format, "O", i.getReferenceType(cp), i.getMethodName(cp), argumentList(i.getArgumentTypes(cp))));
-   }
+    @Override
+    public void visitINVOKESPECIAL(INVOKESPECIAL i)
+    {
+        methodCalls.add(String.format(format, "O", i.getReferenceType(cp), i.getMethodName(cp), argumentList(i.getArgumentTypes(cp))));
+    }
 
-   @Override
-   public void visitINVOKESTATIC(INVOKESTATIC i)
-   {
-      methodCalls.add(String.format(format, "S", i.getReferenceType(cp), i.getMethodName(cp), argumentList(i.getArgumentTypes(cp))));
-   }
+    @Override
+    public void visitINVOKESTATIC(INVOKESTATIC i)
+    {
+        methodCalls.add(String.format(format, "S", i.getReferenceType(cp), i.getMethodName(cp), argumentList(i.getArgumentTypes(cp))));
+    }
 
-   @Override
-   public void visitINVOKEDYNAMIC(INVOKEDYNAMIC i)
-   {
-      methodCalls.add(String.format(format, "D", i.getType(cp), i.getMethodName(cp),
-         argumentList(i.getArgumentTypes(cp))));
-   }
+    @Override
+    public void visitINVOKEDYNAMIC(INVOKEDYNAMIC i)
+    {
+        methodCalls.add(String.format(format, "D", i.getType(cp), i.getMethodName(cp),
+            argumentList(i.getArgumentTypes(cp))));
+    }
 
-   //--------------------------------/
-   //------ PRIVATE METHOD/S -------/
-   //------------------------------/
+    //--------------------------------/
+    //------ PRIVATE METHOD/S -------/
+    //------------------------------/
 
-   private boolean visitInstruction(Instruction i)
-   {
-      short opcode = i.getOpcode();
-      return ((InstructionConst.getInstruction(opcode) != null)
-         && !(i instanceof ConstantPushInstruction)
-         && !(i instanceof ReturnInstruction));
-   }
+    private boolean visitInstruction(Instruction i)
+    {
+        short opcode = i.getOpcode();
+        return ((InstructionConst.getInstruction(opcode) != null)
+            && !(i instanceof ConstantPushInstruction)
+            && !(i instanceof ReturnInstruction));
+    }
 
-   private String argumentList(Type[] arguments)
-   {
-      StringBuilder sb = new StringBuilder();
-      for (int i = 0; i < arguments.length; i++) {
-         if (i != 0) {
-            sb.append(",");
-         }
-         sb.append(arguments[i].toString());
-      }
-      return sb.toString();
-   }
+    private String argumentList(Type[] arguments)
+    {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < arguments.length; i++) {
+            if (i != 0) {
+                sb.append(",");
+            }
+            sb.append(arguments[i].toString());
+        }
+        return sb.toString();
+    }
 }

@@ -12,13 +12,11 @@ import java.util.Set;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import se.kth.castor.jdbl.util.ClassesLoadedSingleton;
-
 public class JVMClassCoverage
 {
     private static final Logger LOGGER = LogManager.getLogger(JVMClassCoverage.class.getName());
 
-    public static void runTestsInVerboseMode() throws IOException
+    public void runTestsInVerboseMode() throws IOException
     {
         LOGGER.info("Starting executing tests in verbose mode to get JVM class loader report.");
         Set<String> classesLoadedTestDebloat = new HashSet<>();
@@ -42,15 +40,15 @@ public class JVMClassCoverage
                     }
                 }
             } catch (IOException e) {
-                // should not happen
+                LOGGER.error("Error parsing line.");
             }
             input = new BufferedReader(new InputStreamReader(p.getErrorStream()));
             try {
                 while ((line = input.readLine()) != null) {
-                    System.out.println(line);
+                    LOGGER.info(line);
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                LOGGER.error("Error reading line.");
             }
         }).start();
 
@@ -61,6 +59,6 @@ public class JVMClassCoverage
         }
 
         // print info about the number of classes loaded
-        ClassesLoadedSingleton.INSTANCE.setClassesLoaded(classesLoadedTestDebloat);
+        JVMClassesCoveredSingleton.INSTANCE.setClassesLoaded(classesLoadedTestDebloat);
     }
 }

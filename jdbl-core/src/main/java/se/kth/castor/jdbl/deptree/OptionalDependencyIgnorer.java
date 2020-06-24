@@ -8,7 +8,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -44,9 +43,8 @@ public class OptionalDependencyIgnorer
                 String version = dependency.getVersion();
                 String scope = dependency.getScope();
                 String description = dependency.getScope();
-                boolean omitted = false;
                 optionalDependencies.add(new Node(groupId, artifactId, packaging, classifier,
-                    version, scope, description, omitted));
+                    version, scope, description, false));
             }
         }
         return optionalDependencies;
@@ -62,23 +60,28 @@ public class OptionalDependencyIgnorer
             Parser parser = type.newParser();
             Node tree = parser.parse(r);
             for (Node optionalDependency : getOptionalDependencies()) {
-                try {
-                    // fist, remove the dependencies of the direct optional dependency
-                    LinkedList<Node> nodeLinkedList = tree.getChildNodes();
-                    for (Node node : nodeLinkedList) {
-                        if (equalGAV(optionalDependency, node)) {
-                            final String nodeGAV = node.getGroupId() + ":" + node.getArtifactId() + ":" + node.getVersion();
-                            final String outputDirectory = mavenProject.getBuild().getOutputDirectory();
-                            LOGGER.info("Ignoring optional dependency " + outputDirectory + "/" + nodeGAV);
-                            deleteNodes(node);
-                        }
-                    }
-                } catch (IOException e) {
-                    LOGGER.error("Error removing optional dependency.");
-                }
+                processOptionalDependency(tree, optionalDependency);
             }
         } catch (IOException | RuntimeException | ParseException e) {
             LOGGER.error("Error getting dependency tree.");
+        }
+    }
+
+    private void processOptionalDependency(final Node tree, final Node optionalDependency)
+    {
+        try {
+            // fist, remove the dependencies of the direct optional dependency
+            List<Node> nodeLinkedList = tree.getChildNodes();
+            for (Node node : nodeLinkedList) {
+                if (equalGAV(optionalDependency, node)) {
+                    final String nodeGAV = node.getGroupId() + ":" + node.getArtifactId() + ":" + node.getVersion();
+                    final String outputDirectory = mavenProject.getBuild().getOutputDirectory();
+                    LOGGER.info("Ignoring optional dependency " + outputDirectory + "/" + nodeGAV);
+                    deleteNodes(node);
+                }
+            }
+        } catch (IOException e) {
+            LOGGER.error("Error removing optional dependency.");
         }
     }
 
@@ -91,7 +94,7 @@ public class OptionalDependencyIgnorer
 
     private void deleteNodes(Node node) throws IOException
     {
-        LinkedList<Node> nodes = node.getChildNodes();
+        List<Node> nodes = node.getChildNodes();
         String outputDirectory = mavenProject.getBuild().getOutputDirectory();
         if (!nodes.isEmpty()) {
             for (Node child : nodes) {

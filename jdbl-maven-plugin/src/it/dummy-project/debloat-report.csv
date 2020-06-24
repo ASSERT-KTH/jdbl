@@ -1,570 +1,720 @@
-BloatedClass, reflection.ConcreteClass
-BloatedClass, reflection.ConcreteClass$ConcreteClassDefaultClass
-BloatedClass, reflection.BaseClass
-BloatedClass, reflection.ConcreteClass$ConcreteClassProtectedClass
-BloatedClass, reflection.BaseClass$BaseClassInnerClass
-UsedClass, reflection.BaseInterface
-BloatedClass, reflection.MainReflection
-BloatedClass, reflection.BaseClass$BaseClassMemberEnum
-BloatedClass, reflection.ConcreteClass$ConcreteClassPrivateClass
-BloatedClass, reflection.ConcreteClass$ConcreteClassPublicEnum
-UsedClass, reflection.ConcreteClass$ConcreteClassPublicInterface
-BloatedClass, reflection.ConcreteClass$ConcreteClassDefaultEnum
-BloatedClass, reflection.ConcreteClass$ConcreteClassPublicClass
-UsedClass, bag.BagClass
-BloatedClass, bag.MainBag
-BloatedClass, neverused.Main2
-BloatedClass, neverused.OtherClass
-BloatedClass, neverused.UntestedClass
-UsedClass, annotations.ObjectToJsonConverter
-UsedClass, annotations.Person
-UsedClass, annotations.Init
-UsedClass, annotations.JsonElement
-UsedClass, annotations.JsonSerializationException
-UsedClass, annotations.JsonSerializable
-UsedClass, calc.CalculatorInt
-UsedClass, calc.CalcAnnotation
-BloatedClass, calc.MainCalculator
-UsedClass, calc.CalculatorB
-BloatedClass, calc.StaticCl
-UsedClass, calc.Calculator
-BloatedClass, org.apache.commons.collections4.bidimap.TreeBidiMap
-BloatedClass, org.apache.commons.collections4.bidimap.AbstractDualBidiMap$KeySetIterator
-BloatedClass, org.apache.commons.collections4.bidimap.TreeBidiMap$ValueView
-BloatedClass, org.apache.commons.collections4.bidimap.AbstractDualBidiMap$KeySet
-BloatedClass, org.apache.commons.collections4.bidimap.DualTreeBidiMap$ViewMap
-BloatedClass, org.apache.commons.collections4.bidimap.AbstractDualBidiMap$EntrySetIterator
-BloatedClass, org.apache.commons.collections4.bidimap.AbstractDualBidiMap$BidiMapIterator
-BloatedClass, org.apache.commons.collections4.bidimap.TreeBidiMap$Inverse
-BloatedClass, org.apache.commons.collections4.bidimap.AbstractDualBidiMap$EntrySet
-BloatedClass, org.apache.commons.collections4.bidimap.UnmodifiableSortedBidiMap
-BloatedClass, org.apache.commons.collections4.bidimap.AbstractDualBidiMap
-BloatedClass, org.apache.commons.collections4.bidimap.DualTreeBidiMap$BidiOrderedMapIterator
-BloatedClass, org.apache.commons.collections4.bidimap.DualTreeBidiMap
-BloatedClass, org.apache.commons.collections4.bidimap.TreeBidiMap$Node
-BloatedClass, org.apache.commons.collections4.bidimap.DualLinkedHashBidiMap
-BloatedClass, org.apache.commons.collections4.bidimap.AbstractDualBidiMap$ValuesIterator
-BloatedClass, org.apache.commons.collections4.bidimap.DualHashBidiMap
-BloatedClass, org.apache.commons.collections4.bidimap.AbstractBidiMapDecorator
-BloatedClass, org.apache.commons.collections4.bidimap.TreeBidiMap$EntryView
-BloatedClass, org.apache.commons.collections4.bidimap.TreeBidiMap$DataElement
-BloatedClass, org.apache.commons.collections4.bidimap.TreeBidiMap$1
-BloatedClass, org.apache.commons.collections4.bidimap.UnmodifiableBidiMap
-BloatedClass, org.apache.commons.collections4.bidimap.AbstractSortedBidiMapDecorator
-BloatedClass, org.apache.commons.collections4.bidimap.TreeBidiMap$ViewIterator
-BloatedClass, org.apache.commons.collections4.bidimap.UnmodifiableOrderedBidiMap
-BloatedClass, org.apache.commons.collections4.bidimap.TreeBidiMap$ViewMapEntryIterator
-BloatedClass, org.apache.commons.collections4.bidimap.AbstractOrderedBidiMapDecorator
-BloatedClass, org.apache.commons.collections4.bidimap.TreeBidiMap$View
-BloatedClass, org.apache.commons.collections4.bidimap.AbstractDualBidiMap$MapEntry
-BloatedClass, org.apache.commons.collections4.bidimap.TreeBidiMap$ViewMapIterator
-BloatedClass, org.apache.commons.collections4.bidimap.TreeBidiMap$InverseViewMapEntryIterator
-BloatedClass, org.apache.commons.collections4.bidimap.TreeBidiMap$InverseEntryView
-BloatedClass, org.apache.commons.collections4.bidimap.AbstractDualBidiMap$Values
-BloatedClass, org.apache.commons.collections4.bidimap.TreeBidiMap$InverseViewMapIterator
-BloatedClass, org.apache.commons.collections4.bidimap.TreeBidiMap$KeyView
-BloatedClass, org.apache.commons.collections4.bidimap.AbstractDualBidiMap$View
-BloatedClass, org.apache.commons.collections4.IterableUtils$8
-BloatedClass, org.apache.commons.collections4.MultiSetUtils
-BloatedClass, org.apache.commons.collections4.IterableUtils$2
-BloatedClass, org.apache.commons.collections4.splitmap.AbstractIterableGetMapDecorator
-BloatedClass, org.apache.commons.collections4.splitmap.TransformedSplitMap
-BloatedClass, org.apache.commons.collections4.IterableUtils$UnmodifiableIterable
-BloatedClass, org.apache.commons.collections4.FactoryUtils
-BloatedClass, org.apache.commons.collections4.IterableUtils$2$1
-BloatedClass, org.apache.commons.collections4.functors.NonePredicate
-BloatedClass, org.apache.commons.collections4.functors.ComparatorPredicate$1
-BloatedClass, org.apache.commons.collections4.functors.NOPClosure
-BloatedClass, org.apache.commons.collections4.functors.TruePredicate
-BloatedClass, org.apache.commons.collections4.functors.NotPredicate
-BloatedClass, org.apache.commons.collections4.functors.AnyPredicate
-BloatedClass, org.apache.commons.collections4.functors.ChainedTransformer
-BloatedClass, org.apache.commons.collections4.functors.InstanceofPredicate
-BloatedClass, org.apache.commons.collections4.functors.OrPredicate
-BloatedClass, org.apache.commons.collections4.functors.IfClosure
-BloatedClass, org.apache.commons.collections4.functors.NotNullPredicate
-BloatedClass, org.apache.commons.collections4.functors.InstantiateTransformer
-BloatedClass, org.apache.commons.collections4.functors.UniquePredicate
-BloatedClass, org.apache.commons.collections4.functors.InvokerTransformer
-BloatedClass, org.apache.commons.collections4.functors.ExceptionTransformer
-BloatedClass, org.apache.commons.collections4.functors.ClosureTransformer
-BloatedClass, org.apache.commons.collections4.functors.NullIsFalsePredicate
-BloatedClass, org.apache.commons.collections4.functors.TransformedPredicate
-BloatedClass, org.apache.commons.collections4.functors.InstantiateFactory
-BloatedClass, org.apache.commons.collections4.functors.PrototypeFactory$PrototypeSerializationFactory
-BloatedClass, org.apache.commons.collections4.functors.SwitchClosure
-BloatedClass, org.apache.commons.collections4.functors.NOPTransformer
-UsedClass, org.apache.commons.collections4.functors.PredicateDecorator
-BloatedClass, org.apache.commons.collections4.functors.ExceptionPredicate
-BloatedClass, org.apache.commons.collections4.functors.TransformerClosure
-BloatedClass, org.apache.commons.collections4.functors.IfTransformer
-BloatedClass, org.apache.commons.collections4.functors.CatchAndRethrowClosure
-BloatedClass, org.apache.commons.collections4.functors.AndPredicate
-BloatedClass, org.apache.commons.collections4.functors.PredicateTransformer
-BloatedClass, org.apache.commons.collections4.functors.AllPredicate
-BloatedClass, org.apache.commons.collections4.functors.FunctorUtils
-BloatedClass, org.apache.commons.collections4.functors.ExceptionClosure
-BloatedClass, org.apache.commons.collections4.functors.FalsePredicate
-BloatedClass, org.apache.commons.collections4.functors.PrototypeFactory
-BloatedClass, org.apache.commons.collections4.functors.EqualPredicate
-BloatedClass, org.apache.commons.collections4.functors.ChainedClosure
-BloatedClass, org.apache.commons.collections4.functors.ExceptionFactory
-BloatedClass, org.apache.commons.collections4.functors.StringValueTransformer
-BloatedClass, org.apache.commons.collections4.functors.AbstractQuantifierPredicate
-BloatedClass, org.apache.commons.collections4.functors.MapTransformer
-BloatedClass, org.apache.commons.collections4.functors.TransformerPredicate
-BloatedClass, org.apache.commons.collections4.functors.WhileClosure
-BloatedClass, org.apache.commons.collections4.functors.DefaultEquator
-BloatedClass, org.apache.commons.collections4.functors.NullPredicate
-BloatedClass, org.apache.commons.collections4.functors.ConstantFactory
-BloatedClass, org.apache.commons.collections4.functors.ComparatorPredicate$Criterion
-BloatedClass, org.apache.commons.collections4.functors.PrototypeFactory$1
-BloatedClass, org.apache.commons.collections4.functors.CloneTransformer
-BloatedClass, org.apache.commons.collections4.functors.FactoryTransformer
-BloatedClass, org.apache.commons.collections4.functors.PrototypeFactory$PrototypeCloneFactory
-BloatedClass, org.apache.commons.collections4.functors.ComparatorPredicate
-BloatedClass, org.apache.commons.collections4.functors.NullIsExceptionPredicate
-BloatedClass, org.apache.commons.collections4.functors.IdentityPredicate
-BloatedClass, org.apache.commons.collections4.functors.SwitchTransformer
-BloatedClass, org.apache.commons.collections4.functors.OnePredicate
-BloatedClass, org.apache.commons.collections4.functors.ForClosure
-BloatedClass, org.apache.commons.collections4.functors.NullIsTruePredicate
-BloatedClass, org.apache.commons.collections4.functors.ConstantTransformer
-UsedClass, org.apache.commons.collections4.OrderedIterator
-BloatedClass, org.apache.commons.collections4.QueueUtils
-BloatedClass, org.apache.commons.collections4.SplitMapUtils$1
-UsedClass, org.apache.commons.collections4.IterableMap
-BloatedClass, org.apache.commons.collections4.IterableUtils$1
-UsedClass, org.apache.commons.collections4.MultiSet$Entry
-BloatedClass, org.apache.commons.collections4.IteratorUtils
-UsedClass, org.apache.commons.collections4.IterableGet
-UsedClass, org.apache.commons.collections4.SortedBidiMap
-BloatedClass, org.apache.commons.collections4.bag.TransformedSortedBag
-BloatedClass, org.apache.commons.collections4.bag.TreeBag
-BloatedClass, org.apache.commons.collections4.bag.CollectionBag
-BloatedClass, org.apache.commons.collections4.bag.AbstractSortedBagDecorator
-BloatedClass, org.apache.commons.collections4.bag.AbstractMapBag$BagIterator
-BloatedClass, org.apache.commons.collections4.bag.AbstractBagDecorator
-BloatedClass, org.apache.commons.collections4.bag.PredicatedBag
-BloatedClass, org.apache.commons.collections4.bag.CollectionSortedBag
-BloatedClass, org.apache.commons.collections4.bag.TransformedBag
-BloatedClass, org.apache.commons.collections4.bag.UnmodifiableSortedBag
-BloatedClass, org.apache.commons.collections4.bag.HashBag
-BloatedClass, org.apache.commons.collections4.bag.AbstractMapBag
-BloatedClass, org.apache.commons.collections4.bag.AbstractMapBag$MutableInteger
-BloatedClass, org.apache.commons.collections4.bag.SynchronizedSortedBag
-BloatedClass, org.apache.commons.collections4.bag.SynchronizedBag$SynchronizedBagSet
-BloatedClass, org.apache.commons.collections4.bag.SynchronizedBag
-BloatedClass, org.apache.commons.collections4.bag.PredicatedSortedBag
-BloatedClass, org.apache.commons.collections4.bag.UnmodifiableBag
-BloatedClass, org.apache.commons.collections4.ListUtils$CharSequenceAsList
-BloatedClass, org.apache.commons.collections4.comparators.FixedOrderComparator$UnknownObjectBehavior
-BloatedClass, org.apache.commons.collections4.comparators.FixedOrderComparator$1
-BloatedClass, org.apache.commons.collections4.comparators.ComparatorChain
-BloatedClass, org.apache.commons.collections4.comparators.BooleanComparator
-BloatedClass, org.apache.commons.collections4.comparators.ReverseComparator
-BloatedClass, org.apache.commons.collections4.comparators.NullComparator
-BloatedClass, org.apache.commons.collections4.comparators.ComparableComparator
-BloatedClass, org.apache.commons.collections4.comparators.FixedOrderComparator
-BloatedClass, org.apache.commons.collections4.comparators.TransformingComparator
-BloatedClass, org.apache.commons.collections4.FluentIterable
-BloatedClass, org.apache.commons.collections4.CollectionUtils$3
-BloatedClass, org.apache.commons.collections4.SetUtils$SetView
-BloatedClass, org.apache.commons.collections4.IterableUtils$12
-UsedClass, org.apache.commons.collections4.OrderedMap
-BloatedClass, org.apache.commons.collections4.MultiMapUtils
-UsedClass, org.apache.commons.collections4.MultiMap
-BloatedClass, org.apache.commons.collections4.SplitMapUtils$WrappedGet
-UsedClass, org.apache.commons.collections4.OrderedBidiMap
-BloatedClass, org.apache.commons.collections4.map.MultiKeyMap
-BloatedClass, org.apache.commons.collections4.map.ListOrderedMap$ListOrderedMapEntry
-BloatedClass, org.apache.commons.collections4.map.AbstractLinkedMap$LinkEntry
-BloatedClass, org.apache.commons.collections4.map.ListOrderedMap$ListOrderedIterator
-BloatedClass, org.apache.commons.collections4.map.AbstractHashedMap
-BloatedClass, org.apache.commons.collections4.map.AbstractReferenceMap$ReferenceValues
-BloatedClass, org.apache.commons.collections4.map.ReferenceMap
-BloatedClass, org.apache.commons.collections4.map.SingletonMap
-BloatedClass, org.apache.commons.collections4.map.UnmodifiableEntrySet$UnmodifiableEntry
-BloatedClass, org.apache.commons.collections4.map.StaticBucketMap$1
-BloatedClass, org.apache.commons.collections4.map.AbstractReferenceMap$ReferenceStrength
-BloatedClass, org.apache.commons.collections4.map.ListOrderedMap$ListOrderedMapIterator
-BloatedClass, org.apache.commons.collections4.map.MultiValueMap$1$1
-BloatedClass, org.apache.commons.collections4.map.AbstractLinkedMap$KeySetIterator
-BloatedClass, org.apache.commons.collections4.map.AbstractReferenceMap$ReferenceBaseIterator
-BloatedClass, org.apache.commons.collections4.map.StaticBucketMap$EntryIterator
-BloatedClass, org.apache.commons.collections4.map.ListOrderedMap
-BloatedClass, org.apache.commons.collections4.map.UnmodifiableEntrySet
-BloatedClass, org.apache.commons.collections4.map.AbstractReferenceMap$WeakRef
-BloatedClass, org.apache.commons.collections4.map.AbstractLinkedMap$EntrySetIterator
-BloatedClass, org.apache.commons.collections4.map.LazyMap
-BloatedClass, org.apache.commons.collections4.map.StaticBucketMap$KeySet
-BloatedClass, org.apache.commons.collections4.map.AbstractInputCheckedMapDecorator
-BloatedClass, org.apache.commons.collections4.map.LinkedMap
-BloatedClass, org.apache.commons.collections4.map.PredicatedMap
-BloatedClass, org.apache.commons.collections4.map.AbstractLinkedMap$LinkMapIterator
-UsedClass, org.apache.commons.collections4.map.CompositeMap$MapMutator
-BloatedClass, org.apache.commons.collections4.map.PassiveExpiringMap$ConstantTimeToLiveExpirationPolicy
-BloatedClass, org.apache.commons.collections4.map.StaticBucketMap$EntrySet
-BloatedClass, org.apache.commons.collections4.map.AbstractHashedMap$KeySet
-BloatedClass, org.apache.commons.collections4.map.AbstractReferenceMap$ReferenceEntry
-BloatedClass, org.apache.commons.collections4.map.Flat3Map$EntrySet
-BloatedClass, org.apache.commons.collections4.map.LinkedMap$LinkedMapList
-BloatedClass, org.apache.commons.collections4.map.CompositeMap
-BloatedClass, org.apache.commons.collections4.map.UnmodifiableEntrySet$UnmodifiableEntrySetIterator
-BloatedClass, org.apache.commons.collections4.map.AbstractHashedMap$Values
-BloatedClass, org.apache.commons.collections4.map.AbstractLinkedMap$LinkIterator
-BloatedClass, org.apache.commons.collections4.map.AbstractInputCheckedMapDecorator$EntrySet
-BloatedClass, org.apache.commons.collections4.map.MultiValueMap$ReflectionFactory
-BloatedClass, org.apache.commons.collections4.map.Flat3Map$KeySetIterator
-BloatedClass, org.apache.commons.collections4.map.DefaultedMap
-BloatedClass, org.apache.commons.collections4.map.PredicatedSortedMap
-BloatedClass, org.apache.commons.collections4.map.LazySortedMap
-BloatedClass, org.apache.commons.collections4.map.Flat3Map$KeySet
-BloatedClass, org.apache.commons.collections4.map.ListOrderedMap$EntrySetView
-BloatedClass, org.apache.commons.collections4.map.ListOrderedMap$KeySetView$1
-BloatedClass, org.apache.commons.collections4.map.Flat3Map$Values
-BloatedClass, org.apache.commons.collections4.map.AbstractInputCheckedMapDecorator$MapEntry
-BloatedClass, org.apache.commons.collections4.map.AbstractIterableMap
-BloatedClass, org.apache.commons.collections4.map.FixedSizeMap
-BloatedClass, org.apache.commons.collections4.map.AbstractSortedMapDecorator$SortedMapIterator
-BloatedClass, org.apache.commons.collections4.map.Flat3Map$FlatMapIterator
-BloatedClass, org.apache.commons.collections4.map.SingletonMap$SingletonValues
-BloatedClass, org.apache.commons.collections4.map.UnmodifiableMap
-BloatedClass, org.apache.commons.collections4.map.HashedMap
-BloatedClass, org.apache.commons.collections4.map.PassiveExpiringMap
-BloatedClass, org.apache.commons.collections4.map.ListOrderedMap$ValuesView
-BloatedClass, org.apache.commons.collections4.map.ReferenceIdentityMap
-BloatedClass, org.apache.commons.collections4.map.Flat3Map$FlatMapEntry
-BloatedClass, org.apache.commons.collections4.map.AbstractReferenceMap$ReferenceEntrySetIterator
-BloatedClass, org.apache.commons.collections4.map.AbstractHashedMap$HashEntry
-BloatedClass, org.apache.commons.collections4.map.AbstractHashedMap$KeySetIterator
-BloatedClass, org.apache.commons.collections4.map.TransformedMap
-BloatedClass, org.apache.commons.collections4.map.AbstractReferenceMap$SoftRef
-BloatedClass, org.apache.commons.collections4.map.Flat3Map$EntryIterator
-BloatedClass, org.apache.commons.collections4.map.StaticBucketMap$Node
-BloatedClass, org.apache.commons.collections4.map.LRUMap
-BloatedClass, org.apache.commons.collections4.map.Flat3Map$EntrySetIterator
-UsedClass, org.apache.commons.collections4.map.PassiveExpiringMap$ExpirationPolicy
-BloatedClass, org.apache.commons.collections4.map.ListOrderedMap$ValuesView$1
-BloatedClass, org.apache.commons.collections4.map.AbstractHashedMap$ValuesIterator
-BloatedClass, org.apache.commons.collections4.map.StaticBucketMap$KeyIterator
-BloatedClass, org.apache.commons.collections4.map.StaticBucketMap$Lock
-BloatedClass, org.apache.commons.collections4.map.UnmodifiableOrderedMap
-BloatedClass, org.apache.commons.collections4.map.AbstractReferenceMap$ReferenceKeySetIterator
-BloatedClass, org.apache.commons.collections4.map.AbstractReferenceMap$ReferenceMapIterator
-BloatedClass, org.apache.commons.collections4.map.AbstractHashedMap$EntrySetIterator
-BloatedClass, org.apache.commons.collections4.map.StaticBucketMap
-BloatedClass, org.apache.commons.collections4.map.MultiValueMap$ValuesIterator
-BloatedClass, org.apache.commons.collections4.map.MultiValueMap$1
-BloatedClass, org.apache.commons.collections4.map.StaticBucketMap$ValueIterator
-BloatedClass, org.apache.commons.collections4.map.AbstractSortedMapDecorator
-BloatedClass, org.apache.commons.collections4.map.AbstractMapDecorator
-BloatedClass, org.apache.commons.collections4.map.AbstractReferenceMap$ReferenceValuesIterator
-BloatedClass, org.apache.commons.collections4.map.AbstractReferenceMap
-BloatedClass, org.apache.commons.collections4.map.AbstractHashedMap$EntrySet
-BloatedClass, org.apache.commons.collections4.map.CaseInsensitiveMap
-BloatedClass, org.apache.commons.collections4.map.EntrySetToMapIteratorAdapter
-BloatedClass, org.apache.commons.collections4.map.AbstractLinkedMap
-BloatedClass, org.apache.commons.collections4.map.MultiValueMap$1$1$1
-BloatedClass, org.apache.commons.collections4.map.AbstractHashedMap$HashMapIterator
-BloatedClass, org.apache.commons.collections4.map.MultiValueMap
-BloatedClass, org.apache.commons.collections4.map.FixedSizeSortedMap
-BloatedClass, org.apache.commons.collections4.map.MultiValueMap$Values
-BloatedClass, org.apache.commons.collections4.map.AbstractReferenceMap$ReferenceKeySet
-BloatedClass, org.apache.commons.collections4.map.SingletonMap$SingletonMapIterator
-BloatedClass, org.apache.commons.collections4.map.Flat3Map$ValuesIterator
-BloatedClass, org.apache.commons.collections4.map.AbstractReferenceMap$ReferenceEntrySet
-BloatedClass, org.apache.commons.collections4.map.AbstractOrderedMapDecorator
-BloatedClass, org.apache.commons.collections4.map.AbstractInputCheckedMapDecorator$EntrySetIterator
-BloatedClass, org.apache.commons.collections4.map.AbstractLinkedMap$ValuesIterator
-BloatedClass, org.apache.commons.collections4.map.UnmodifiableSortedMap
-BloatedClass, org.apache.commons.collections4.map.StaticBucketMap$BaseIterator
-BloatedClass, org.apache.commons.collections4.map.StaticBucketMap$Values
-BloatedClass, org.apache.commons.collections4.map.ListOrderedMap$KeySetView
-BloatedClass, org.apache.commons.collections4.map.TransformedSortedMap
-BloatedClass, org.apache.commons.collections4.map.Flat3Map
-BloatedClass, org.apache.commons.collections4.map.AbstractHashedMap$HashIterator
-UsedClass, org.apache.commons.collections4.Predicate
-BloatedClass, org.apache.commons.collections4.CollectionUtils
-UsedClass, org.apache.commons.collections4.BoundedMap
-UsedClass, org.apache.commons.collections4.OrderedMapIterator
-UsedClass, org.apache.commons.collections4.Put
-UsedClass, org.apache.commons.collections4.Closure
-BloatedClass, org.apache.commons.collections4.IterableUtils$7
-BloatedClass, org.apache.commons.collections4.CollectionUtils$SetOperationCardinalityHelper
-BloatedClass, org.apache.commons.collections4.IterableUtils
-BloatedClass, org.apache.commons.collections4.SetUtils$6
-UsedClass, org.apache.commons.collections4.BidiMap
-BloatedClass, org.apache.commons.collections4.CollectionUtils$2
-UsedClass, org.apache.commons.collections4.collection.CompositeCollection$CollectionMutator
-BloatedClass, org.apache.commons.collections4.collection.PredicatedCollection$Builder
-BloatedClass, org.apache.commons.collections4.collection.UnmodifiableCollection
-BloatedClass, org.apache.commons.collections4.collection.PredicatedCollection
-BloatedClass, org.apache.commons.collections4.collection.SynchronizedCollection
-BloatedClass, org.apache.commons.collections4.collection.CompositeCollection
-BloatedClass, org.apache.commons.collections4.collection.UnmodifiableBoundedCollection
-BloatedClass, org.apache.commons.collections4.collection.TransformedCollection
-BloatedClass, org.apache.commons.collections4.collection.AbstractCollectionDecorator
-BloatedClass, org.apache.commons.collections4.collection.IndexedCollection
-BloatedClass, org.apache.commons.collections4.ListUtils$Partition
-UsedClass, org.apache.commons.collections4.ListValuedMap
-BloatedClass, org.apache.commons.collections4.ArrayStack
-UsedClass, org.apache.commons.collections4.ResettableIterator
-UsedClass, org.apache.commons.collections4.SetValuedMap
-UsedClass, org.apache.commons.collections4.Trie
-BloatedClass, org.apache.commons.collections4.EnumerationUtils
-BloatedClass, org.apache.commons.collections4.SetUtils$1
-BloatedClass, org.apache.commons.collections4.SplitMapUtils$WrappedPut
-BloatedClass, org.apache.commons.collections4.iterators.AbstractUntypedIteratorDecorator
-BloatedClass, org.apache.commons.collections4.iterators.EmptyIterator
-BloatedClass, org.apache.commons.collections4.iterators.UnmodifiableListIterator
-BloatedClass, org.apache.commons.collections4.iterators.IteratorEnumeration
-BloatedClass, org.apache.commons.collections4.iterators.AbstractListIteratorDecorator
-BloatedClass, org.apache.commons.collections4.iterators.UnmodifiableMapIterator
-BloatedClass, org.apache.commons.collections4.iterators.PeekingIterator
-BloatedClass, org.apache.commons.collections4.iterators.ObjectGraphIterator
-BloatedClass, org.apache.commons.collections4.iterators.EmptyListIterator
-BloatedClass, org.apache.commons.collections4.iterators.EmptyOrderedMapIterator
-BloatedClass, org.apache.commons.collections4.iterators.IteratorIterable
-BloatedClass, org.apache.commons.collections4.iterators.TransformIterator
-BloatedClass, org.apache.commons.collections4.iterators.EmptyOrderedIterator
-BloatedClass, org.apache.commons.collections4.iterators.ObjectArrayIterator
-BloatedClass, org.apache.commons.collections4.iterators.ReverseListIterator
-BloatedClass, org.apache.commons.collections4.iterators.PushbackIterator
-BloatedClass, org.apache.commons.collections4.iterators.AbstractIteratorDecorator
-BloatedClass, org.apache.commons.collections4.iterators.PermutationIterator
-BloatedClass, org.apache.commons.collections4.iterators.CollatingIterator
-BloatedClass, org.apache.commons.collections4.iterators.LazyIteratorChain
-BloatedClass, org.apache.commons.collections4.iterators.FilterListIterator
-BloatedClass, org.apache.commons.collections4.iterators.ObjectArrayListIterator
-BloatedClass, org.apache.commons.collections4.iterators.IteratorIterable$1
-BloatedClass, org.apache.commons.collections4.iterators.ArrayListIterator
-BloatedClass, org.apache.commons.collections4.iterators.FilterIterator
-BloatedClass, org.apache.commons.collections4.iterators.IteratorChain
-BloatedClass, org.apache.commons.collections4.iterators.NodeListIterator
-BloatedClass, org.apache.commons.collections4.iterators.LoopingIterator
-BloatedClass, org.apache.commons.collections4.iterators.ArrayIterator
-BloatedClass, org.apache.commons.collections4.iterators.UnmodifiableIterator
-BloatedClass, org.apache.commons.collections4.iterators.LoopingListIterator
-BloatedClass, org.apache.commons.collections4.iterators.UnmodifiableOrderedMapIterator
-BloatedClass, org.apache.commons.collections4.iterators.SingletonListIterator
-BloatedClass, org.apache.commons.collections4.iterators.ZippingIterator
-BloatedClass, org.apache.commons.collections4.iterators.BoundedIterator
-BloatedClass, org.apache.commons.collections4.iterators.AbstractOrderedMapIteratorDecorator
-BloatedClass, org.apache.commons.collections4.iterators.UniqueFilterIterator
-BloatedClass, org.apache.commons.collections4.iterators.AbstractEmptyMapIterator
-BloatedClass, org.apache.commons.collections4.iterators.AbstractMapIteratorDecorator
-BloatedClass, org.apache.commons.collections4.iterators.EmptyMapIterator
-BloatedClass, org.apache.commons.collections4.iterators.AbstractEmptyIterator
-BloatedClass, org.apache.commons.collections4.iterators.EnumerationIterator
-BloatedClass, org.apache.commons.collections4.iterators.ListIteratorWrapper
-BloatedClass, org.apache.commons.collections4.iterators.SkippingIterator
-BloatedClass, org.apache.commons.collections4.iterators.SingletonIterator
-BloatedClass, org.apache.commons.collections4.iterators.EntrySetMapIterator
-UsedClass, org.apache.commons.collections4.KeyValue
-UsedClass, org.apache.commons.collections4.MapIterator
-BloatedClass, org.apache.commons.collections4.multimap.AbstractSetValuedMap
-BloatedClass, org.apache.commons.collections4.multimap.AbstractMultiValuedMap
-BloatedClass, org.apache.commons.collections4.multimap.AbstractSetValuedMap$WrappedSet
-BloatedClass, org.apache.commons.collections4.multimap.AbstractMultiValuedMapDecorator
-BloatedClass, org.apache.commons.collections4.multimap.AbstractMultiValuedMap$EntryValues
-BloatedClass, org.apache.commons.collections4.multimap.AbstractMultiValuedMap$WrappedCollection
-BloatedClass, org.apache.commons.collections4.multimap.AbstractMultiValuedMap$1
-BloatedClass, org.apache.commons.collections4.multimap.AbstractMultiValuedMap$Values
-BloatedClass, org.apache.commons.collections4.multimap.AbstractMultiValuedMap$AsMap$AsMapEntrySet
-BloatedClass, org.apache.commons.collections4.multimap.AbstractMultiValuedMap$AsMap$AsMapEntrySetIterator
-BloatedClass, org.apache.commons.collections4.multimap.HashSetValuedHashMap
-BloatedClass, org.apache.commons.collections4.multimap.AbstractMultiValuedMap$KeysMultiSet$MapEntryTransformer$1
-BloatedClass, org.apache.commons.collections4.multimap.AbstractMultiValuedMap$ValuesIterator
-BloatedClass, org.apache.commons.collections4.multimap.AbstractMultiValuedMap$KeysMultiSet$MapEntryTransformer
-BloatedClass, org.apache.commons.collections4.multimap.UnmodifiableMultiValuedMap
-BloatedClass, org.apache.commons.collections4.multimap.AbstractMultiValuedMap$EntryValues$1$1
-BloatedClass, org.apache.commons.collections4.multimap.ArrayListValuedHashMap
-BloatedClass, org.apache.commons.collections4.multimap.AbstractListValuedMap
-BloatedClass, org.apache.commons.collections4.multimap.AbstractMultiValuedMap$KeysMultiSet
-BloatedClass, org.apache.commons.collections4.multimap.TransformedMultiValuedMap
-BloatedClass, org.apache.commons.collections4.multimap.AbstractMultiValuedMap$MultiValuedMapEntry
-BloatedClass, org.apache.commons.collections4.multimap.AbstractListValuedMap$WrappedList
-BloatedClass, org.apache.commons.collections4.multimap.AbstractMultiValuedMap$AsMap
-BloatedClass, org.apache.commons.collections4.multimap.AbstractMultiValuedMap$MultiValuedMapIterator
-BloatedClass, org.apache.commons.collections4.multimap.AbstractListValuedMap$ValuesListIterator
-BloatedClass, org.apache.commons.collections4.multimap.AbstractMultiValuedMap$EntryValues$1
-BloatedClass, org.apache.commons.collections4.trie.KeyAnalyzer
-BloatedClass, org.apache.commons.collections4.trie.AbstractPatriciaTrie$RangeEntryMap
-BloatedClass, org.apache.commons.collections4.trie.AbstractPatriciaTrie$Values
-BloatedClass, org.apache.commons.collections4.trie.AbstractPatriciaTrie$TrieMapIterator
-BloatedClass, org.apache.commons.collections4.trie.AbstractPatriciaTrie$EntrySet$EntryIterator
-BloatedClass, org.apache.commons.collections4.trie.AbstractPatriciaTrie$RangeMap
-BloatedClass, org.apache.commons.collections4.trie.AbstractPatriciaTrie
-BloatedClass, org.apache.commons.collections4.trie.AbstractPatriciaTrie$Reference
-BloatedClass, org.apache.commons.collections4.trie.PatriciaTrie
-BloatedClass, org.apache.commons.collections4.trie.AbstractPatriciaTrie$PrefixRangeMap
-BloatedClass, org.apache.commons.collections4.trie.AbstractPatriciaTrie$Values$ValueIterator
-BloatedClass, org.apache.commons.collections4.trie.AbstractBitwiseTrie$BasicEntry
-BloatedClass, org.apache.commons.collections4.trie.AbstractPatriciaTrie$1
-BloatedClass, org.apache.commons.collections4.trie.AbstractPatriciaTrie$RangeEntrySet$EntryIterator
-BloatedClass, org.apache.commons.collections4.trie.UnmodifiableTrie
-BloatedClass, org.apache.commons.collections4.trie.AbstractPatriciaTrie$PrefixRangeEntrySet$SingletonIterator
-BloatedClass, org.apache.commons.collections4.trie.AbstractPatriciaTrie$EntrySet
-BloatedClass, org.apache.commons.collections4.trie.AbstractBitwiseTrie
-BloatedClass, org.apache.commons.collections4.trie.AbstractPatriciaTrie$KeySet$KeyIterator
-BloatedClass, org.apache.commons.collections4.trie.analyzer.StringKeyAnalyzer
-BloatedClass, org.apache.commons.collections4.trie.AbstractPatriciaTrie$TrieIterator
-BloatedClass, org.apache.commons.collections4.trie.AbstractPatriciaTrie$RangeEntrySet
-BloatedClass, org.apache.commons.collections4.trie.AbstractPatriciaTrie$PrefixRangeEntrySet$EntryIterator
-BloatedClass, org.apache.commons.collections4.trie.AbstractPatriciaTrie$KeySet
-BloatedClass, org.apache.commons.collections4.trie.AbstractPatriciaTrie$TrieEntry
-BloatedClass, org.apache.commons.collections4.trie.AbstractPatriciaTrie$PrefixRangeEntrySet
-UsedClass, org.apache.commons.collections4.MultiSet
-BloatedClass, org.apache.commons.collections4.SetUtils$2
-BloatedClass, org.apache.commons.collections4.ListUtils$1
-BloatedClass, org.apache.commons.collections4.set.ListOrderedSet$OrderedSetIterator
-UsedClass, org.apache.commons.collections4.set.CompositeSet$SetMutator
-BloatedClass, org.apache.commons.collections4.set.AbstractNavigableSetDecorator
-BloatedClass, org.apache.commons.collections4.set.AbstractSetDecorator
-BloatedClass, org.apache.commons.collections4.set.PredicatedNavigableSet
-BloatedClass, org.apache.commons.collections4.set.ListOrderedSet
-BloatedClass, org.apache.commons.collections4.set.PredicatedSortedSet
-BloatedClass, org.apache.commons.collections4.set.MapBackedSet
-BloatedClass, org.apache.commons.collections4.set.AbstractSerializableSetDecorator
-BloatedClass, org.apache.commons.collections4.set.TransformedSortedSet
-BloatedClass, org.apache.commons.collections4.set.AbstractSortedSetDecorator
-BloatedClass, org.apache.commons.collections4.set.PredicatedSet
-BloatedClass, org.apache.commons.collections4.set.UnmodifiableSet
-BloatedClass, org.apache.commons.collections4.set.ListOrderedSet$1
-BloatedClass, org.apache.commons.collections4.set.TransformedNavigableSet
-BloatedClass, org.apache.commons.collections4.set.CompositeSet
-BloatedClass, org.apache.commons.collections4.set.UnmodifiableSortedSet
-BloatedClass, org.apache.commons.collections4.set.UnmodifiableNavigableSet
-BloatedClass, org.apache.commons.collections4.set.TransformedSet
-UsedClass, org.apache.commons.collections4.IterableSortedMap
-BloatedClass, org.apache.commons.collections4.BagUtils
-BloatedClass, org.apache.commons.collections4.SetUtils$5
-UsedClass, org.apache.commons.collections4.BoundedCollection
-BloatedClass, org.apache.commons.collections4.IterableUtils$5
-BloatedClass, org.apache.commons.collections4.TransformerUtils
-UsedClass, org.apache.commons.collections4.Factory
-BloatedClass, org.apache.commons.collections4.SplitMapUtils
-BloatedClass, org.apache.commons.collections4.IterableUtils$6
-BloatedClass, org.apache.commons.collections4.sequence.SequencesComparator$Snake
-UsedClass, org.apache.commons.collections4.sequence.ReplacementsHandler
-BloatedClass, org.apache.commons.collections4.sequence.KeepCommand
-BloatedClass, org.apache.commons.collections4.sequence.DeleteCommand
-BloatedClass, org.apache.commons.collections4.sequence.EditScript
-BloatedClass, org.apache.commons.collections4.sequence.EditCommand
-UsedClass, org.apache.commons.collections4.sequence.CommandVisitor
-BloatedClass, org.apache.commons.collections4.sequence.ReplacementsFinder
-BloatedClass, org.apache.commons.collections4.sequence.InsertCommand
-BloatedClass, org.apache.commons.collections4.sequence.SequencesComparator
-BloatedClass, org.apache.commons.collections4.IterableUtils$9
-UsedClass, org.apache.commons.collections4.MultiValuedMap
-BloatedClass, org.apache.commons.collections4.list.FixedSizeList
-BloatedClass, org.apache.commons.collections4.list.AbstractLinkedList$LinkedSubList
-BloatedClass, org.apache.commons.collections4.list.GrowthList
-BloatedClass, org.apache.commons.collections4.list.FixedSizeList$FixedSizeListIterator
-BloatedClass, org.apache.commons.collections4.list.SetUniqueList
-BloatedClass, org.apache.commons.collections4.list.AbstractListDecorator
-BloatedClass, org.apache.commons.collections4.list.PredicatedList
-BloatedClass, org.apache.commons.collections4.list.CursorableLinkedList$Cursor
-BloatedClass, org.apache.commons.collections4.list.SetUniqueList$SetListListIterator
-BloatedClass, org.apache.commons.collections4.list.TreeList$TreeListIterator
-BloatedClass, org.apache.commons.collections4.list.AbstractLinkedList$LinkedListIterator
-BloatedClass, org.apache.commons.collections4.list.TransformedList
-BloatedClass, org.apache.commons.collections4.list.AbstractLinkedList
-BloatedClass, org.apache.commons.collections4.list.AbstractSerializableListDecorator
-BloatedClass, org.apache.commons.collections4.list.TransformedList$TransformedListIterator
-BloatedClass, org.apache.commons.collections4.list.TreeList
-BloatedClass, org.apache.commons.collections4.list.NodeCachingLinkedList
-BloatedClass, org.apache.commons.collections4.list.LazyList
-BloatedClass, org.apache.commons.collections4.list.UnmodifiableList
-BloatedClass, org.apache.commons.collections4.list.TreeList$1
-BloatedClass, org.apache.commons.collections4.list.SetUniqueList$SetListIterator
-BloatedClass, org.apache.commons.collections4.list.CursorableLinkedList$SubCursor
-BloatedClass, org.apache.commons.collections4.list.AbstractLinkedList$Node
-BloatedClass, org.apache.commons.collections4.list.AbstractLinkedList$LinkedSubListIterator
-BloatedClass, org.apache.commons.collections4.list.PredicatedList$PredicatedListIterator
-BloatedClass, org.apache.commons.collections4.list.CursorableLinkedList
-BloatedClass, org.apache.commons.collections4.list.TreeList$AVLNode
-BloatedClass, org.apache.commons.collections4.CollectionUtils$CardinalityHelper
-UsedClass, org.apache.commons.collections4.SortedBag
-UsedClass, org.apache.commons.collections4.Get
-BloatedClass, org.apache.commons.collections4.IterableUtils$11
-BloatedClass, org.apache.commons.collections4.ArrayUtils
-BloatedClass, org.apache.commons.collections4.keyvalue.AbstractKeyValue
-BloatedClass, org.apache.commons.collections4.keyvalue.MultiKey
-BloatedClass, org.apache.commons.collections4.keyvalue.TiedMapEntry
-BloatedClass, org.apache.commons.collections4.keyvalue.AbstractMapEntryDecorator
-BloatedClass, org.apache.commons.collections4.keyvalue.AbstractMapEntry
-BloatedClass, org.apache.commons.collections4.keyvalue.UnmodifiableMapEntry
-BloatedClass, org.apache.commons.collections4.keyvalue.DefaultKeyValue
-BloatedClass, org.apache.commons.collections4.keyvalue.DefaultMapEntry
-BloatedClass, org.apache.commons.collections4.MapUtils
-UsedClass, org.apache.commons.collections4.Transformer
-BloatedClass, org.apache.commons.collections4.MapUtils$1
-BloatedClass, org.apache.commons.collections4.ClosureUtils
-BloatedClass, org.apache.commons.collections4.TrieUtils
-BloatedClass, org.apache.commons.collections4.IterableUtils$13
-BloatedClass, org.apache.commons.collections4.queue.CircularFifoQueue$1
-BloatedClass, org.apache.commons.collections4.queue.AbstractQueueDecorator
-BloatedClass, org.apache.commons.collections4.queue.PredicatedQueue
-BloatedClass, org.apache.commons.collections4.queue.UnmodifiableQueue
-BloatedClass, org.apache.commons.collections4.queue.CircularFifoQueue
-BloatedClass, org.apache.commons.collections4.queue.TransformedQueue
-BloatedClass, org.apache.commons.collections4.queue.SynchronizedQueue
-BloatedClass, org.apache.commons.collections4.ListUtils
-UsedClass, org.apache.commons.collections4.FunctorException
-BloatedClass, org.apache.commons.collections4.CollectionUtils$1
-BloatedClass, org.apache.commons.collections4.MapUtils$2
-BloatedClass, org.apache.commons.collections4.SetUtils$4
-BloatedClass, org.apache.commons.collections4.IterableUtils$3
-UsedClass, org.apache.commons.collections4.Unmodifiable
-UsedClass, org.apache.commons.collections4.ResettableListIterator
-BloatedClass, org.apache.commons.collections4.properties.SortedProperties
-BloatedClass, org.apache.commons.collections4.SetUtils$3
-BloatedClass, org.apache.commons.collections4.IterableUtils$7$1
-BloatedClass, org.apache.commons.collections4.ComparatorUtils
-UsedClass, org.apache.commons.collections4.Equator
-BloatedClass, org.apache.commons.collections4.PredicateUtils
-BloatedClass, org.apache.commons.collections4.IterableUtils$10
-UsedClass, org.apache.commons.collections4.Bag
-BloatedClass, org.apache.commons.collections4.ListUtils$LcsVisitor
-BloatedClass, org.apache.commons.collections4.IterableUtils$4
-BloatedClass, org.apache.commons.collections4.SetUtils
-BloatedClass, org.apache.commons.collections4.CollectionUtils$EquatorWrapper
-BloatedClass, org.apache.commons.collections4.multiset.AbstractMapMultiSet
-BloatedClass, org.apache.commons.collections4.multiset.AbstractMultiSet$AbstractEntry
-BloatedClass, org.apache.commons.collections4.multiset.AbstractMultiSetDecorator
-BloatedClass, org.apache.commons.collections4.multiset.AbstractMapMultiSet$MutableInteger
-BloatedClass, org.apache.commons.collections4.multiset.SynchronizedMultiSet
-BloatedClass, org.apache.commons.collections4.multiset.AbstractMapMultiSet$UniqueSetIterator
-BloatedClass, org.apache.commons.collections4.multiset.SynchronizedMultiSet$SynchronizedSet
-BloatedClass, org.apache.commons.collections4.multiset.AbstractMultiSet$UniqueSet
-BloatedClass, org.apache.commons.collections4.multiset.AbstractMapMultiSet$MapBasedMultiSetIterator
-BloatedClass, org.apache.commons.collections4.multiset.AbstractMultiSet$MultiSetIterator
-BloatedClass, org.apache.commons.collections4.multiset.UnmodifiableMultiSet
-BloatedClass, org.apache.commons.collections4.multiset.AbstractMultiSet$1
-BloatedClass, org.apache.commons.collections4.multiset.HashMultiSet
-BloatedClass, org.apache.commons.collections4.multiset.AbstractMultiSet$EntrySet
-BloatedClass, org.apache.commons.collections4.multiset.AbstractMapMultiSet$EntrySetIterator
-BloatedClass, org.apache.commons.collections4.multiset.PredicatedMultiSet
-BloatedClass, org.apache.commons.collections4.multiset.AbstractMapMultiSet$MultiSetEntry
-BloatedClass, org.apache.commons.collections4.multiset.AbstractMultiSet
+BloatedClass,reflection.ConcreteClass,CLASS
+BloatedClass,reflection.ConcreteClass$ConcreteClassDefaultClass,CLASS
+BloatedClass,reflection.BaseClass,CLASS
+BloatedClass,reflection.ConcreteClass$ConcreteClassProtectedClass,CLASS
+BloatedClass,reflection.BaseClass$BaseClassInnerClass,CLASS
+UsedClass,reflection.BaseInterface,INTERFACE
+BloatedClass,reflection.MainReflection,CLASS
+UsedClass,reflection.BaseClass$BaseClassMemberEnum,ENUM
+BloatedClass,reflection.ConcreteClass$ConcreteClassPrivateClass,CLASS
+UsedClass,reflection.ConcreteClass$ConcreteClassPublicEnum,ENUM
+UsedClass,reflection.ConcreteClass$ConcreteClassPublicInterface,INTERFACE
+UsedClass,reflection.ConcreteClass$ConcreteClassDefaultEnum,ENUM
+BloatedClass,reflection.ConcreteClass$ConcreteClassPublicClass,CLASS
+UsedClass,bag.BagClass,CLASS
+BloatedClass,bag.MainBag,CLASS
+BloatedClass,lambda.LambdaScoping$FirstLevel,CLASS
+UsedClass,lambda.OrderMatcher,INTERFACE
+UsedClass,lambda.OrderMatcherWithFees,INTERFACE
+BloatedClass,lambda.LambdaScoping,CLASS
+UsedClass,lambda.OrderBookAnalyser,CONSTANT
+BloatedClass,neverused.Main2,CLASS
+BloatedClass,neverused.OtherClass,CLASS
+BloatedClass,neverused.UntestedClass,CLASS
+UsedClass,common.Order,CLASS
+UsedClass,common.Order$Type,ENUM
+UsedClass,common.Order$Market,ENUM
+UsedClass,annotations.ObjectToJsonConverter,CLASS
+UsedClass,annotations.Person,CLASS
+UsedClass,annotations.Init,ANNOTATION
+UsedClass,annotations.JsonElement,ANNOTATION
+UsedClass,annotations.JsonSerializationException,CLASS
+UsedClass,annotations.JsonSerializable,ANNOTATION
+UsedClass,calc.CalculatorInt,INTERFACE
+BloatedClass,calc.MainCalculator,CLASS
+UsedClass,calc.CalculatorB,CLASS
+BloatedClass,calc.StaticCl,CLASS
+UsedClass,calc.Calculator,CLASS
+BloatedClass,interfaces.MultiAlarmCar,CLASS
+BloatedClass,interfaces.Application,CLASS
+UsedClass,interfaces.Car,CLASS
+UsedClass,interfaces.Vehicle,INTERFACE
+UsedClass,interfaces.Alarm,INTERFACE
+UsedClass,interfaces.Motorbike,CLASS
+UsedClass,defaultmethods.TradingApi,INTERFACE
+UsedClass,defaultmethods.MyTradingApi,CLASS
+BloatedClass,org.apache.commons.collections4.bidimap.TreeBidiMap,CLASS
+BloatedClass,org.apache.commons.collections4.bidimap.AbstractDualBidiMap$KeySetIterator,CLASS
+BloatedClass,org.apache.commons.collections4.bidimap.TreeBidiMap$ValueView,CLASS
+BloatedClass,org.apache.commons.collections4.bidimap.AbstractDualBidiMap$KeySet,CLASS
+BloatedClass,org.apache.commons.collections4.bidimap.DualTreeBidiMap$ViewMap,CLASS
+BloatedClass,org.apache.commons.collections4.bidimap.AbstractDualBidiMap$EntrySetIterator,CLASS
+BloatedClass,org.apache.commons.collections4.bidimap.AbstractDualBidiMap$BidiMapIterator,CLASS
+BloatedClass,org.apache.commons.collections4.bidimap.TreeBidiMap$Inverse,CLASS
+BloatedClass,org.apache.commons.collections4.bidimap.AbstractDualBidiMap$EntrySet,CLASS
+UsedClass,org.apache.commons.collections4.bidimap.UnmodifiableSortedBidiMap,CONSTANT
+BloatedClass,org.apache.commons.collections4.bidimap.AbstractDualBidiMap,CLASS
+BloatedClass,org.apache.commons.collections4.bidimap.DualTreeBidiMap$BidiOrderedMapIterator,CLASS
+BloatedClass,org.apache.commons.collections4.bidimap.DualTreeBidiMap,CLASS
+BloatedClass,org.apache.commons.collections4.bidimap.TreeBidiMap$Node,CLASS
+BloatedClass,org.apache.commons.collections4.bidimap.DualLinkedHashBidiMap,CLASS
+BloatedClass,org.apache.commons.collections4.bidimap.AbstractDualBidiMap$ValuesIterator,CLASS
+BloatedClass,org.apache.commons.collections4.bidimap.DualHashBidiMap,CLASS
+BloatedClass,org.apache.commons.collections4.bidimap.AbstractBidiMapDecorator,CLASS
+BloatedClass,org.apache.commons.collections4.bidimap.TreeBidiMap$EntryView,CLASS
+UsedClass,org.apache.commons.collections4.bidimap.TreeBidiMap$DataElement,ENUM
+BloatedClass,org.apache.commons.collections4.bidimap.TreeBidiMap$1,CLASS
+UsedClass,org.apache.commons.collections4.bidimap.UnmodifiableBidiMap,CONSTANT
+BloatedClass,org.apache.commons.collections4.bidimap.AbstractSortedBidiMapDecorator,CLASS
+BloatedClass,org.apache.commons.collections4.bidimap.TreeBidiMap$ViewIterator,CLASS
+UsedClass,org.apache.commons.collections4.bidimap.UnmodifiableOrderedBidiMap,CONSTANT
+BloatedClass,org.apache.commons.collections4.bidimap.TreeBidiMap$ViewMapEntryIterator,CLASS
+BloatedClass,org.apache.commons.collections4.bidimap.AbstractOrderedBidiMapDecorator,CLASS
+BloatedClass,org.apache.commons.collections4.bidimap.TreeBidiMap$View,CLASS
+BloatedClass,org.apache.commons.collections4.bidimap.AbstractDualBidiMap$MapEntry,CLASS
+BloatedClass,org.apache.commons.collections4.bidimap.TreeBidiMap$ViewMapIterator,CLASS
+BloatedClass,org.apache.commons.collections4.bidimap.TreeBidiMap$InverseViewMapEntryIterator,CLASS
+BloatedClass,org.apache.commons.collections4.bidimap.TreeBidiMap$InverseEntryView,CLASS
+BloatedClass,org.apache.commons.collections4.bidimap.AbstractDualBidiMap$Values,CLASS
+BloatedClass,org.apache.commons.collections4.bidimap.TreeBidiMap$InverseViewMapIterator,CLASS
+BloatedClass,org.apache.commons.collections4.bidimap.TreeBidiMap$KeyView,CLASS
+BloatedClass,org.apache.commons.collections4.bidimap.AbstractDualBidiMap$View,CLASS
+BloatedClass,org.apache.commons.collections4.IterableUtils$8,CLASS
+BloatedClass,org.apache.commons.collections4.MultiSetUtils,CLASS
+BloatedClass,org.apache.commons.collections4.IterableUtils$2,CLASS
+BloatedClass,org.apache.commons.collections4.splitmap.AbstractIterableGetMapDecorator,CLASS
+BloatedClass,org.apache.commons.collections4.splitmap.TransformedSplitMap,CLASS
+UsedClass,org.apache.commons.collections4.IterableUtils$UnmodifiableIterable,CONSTANT
+BloatedClass,org.apache.commons.collections4.FactoryUtils,CLASS
+BloatedClass,org.apache.commons.collections4.IterableUtils$2$1,CLASS
+UsedClass,org.apache.commons.collections4.functors.NonePredicate,CONSTANT
+BloatedClass,org.apache.commons.collections4.functors.ComparatorPredicate$1,CLASS
+UsedClass,org.apache.commons.collections4.functors.NOPClosure,CONSTANT
+UsedClass,org.apache.commons.collections4.functors.TruePredicate,CONSTANT
+UsedClass,org.apache.commons.collections4.functors.NotPredicate,CONSTANT
+UsedClass,org.apache.commons.collections4.functors.AnyPredicate,CONSTANT
+BloatedClass,org.apache.commons.collections4.functors.ChainedTransformer,CLASS
+UsedClass,org.apache.commons.collections4.functors.InstanceofPredicate,CONSTANT
+UsedClass,org.apache.commons.collections4.functors.OrPredicate,CONSTANT
+BloatedClass,org.apache.commons.collections4.functors.IfClosure,CLASS
+UsedClass,org.apache.commons.collections4.functors.NotNullPredicate,CONSTANT
+BloatedClass,org.apache.commons.collections4.functors.InstantiateTransformer,CLASS
+UsedClass,org.apache.commons.collections4.functors.UniquePredicate,CONSTANT
+BloatedClass,org.apache.commons.collections4.functors.InvokerTransformer,CLASS
+UsedClass,org.apache.commons.collections4.functors.ExceptionTransformer,CONSTANT
+BloatedClass,org.apache.commons.collections4.functors.ClosureTransformer,CLASS
+UsedClass,org.apache.commons.collections4.functors.NullIsFalsePredicate,CONSTANT
+UsedClass,org.apache.commons.collections4.functors.TransformedPredicate,CONSTANT
+BloatedClass,org.apache.commons.collections4.functors.InstantiateFactory,CLASS
+BloatedClass,org.apache.commons.collections4.functors.PrototypeFactory$PrototypeSerializationFactory,CLASS
+BloatedClass,org.apache.commons.collections4.functors.SwitchClosure,CLASS
+UsedClass,org.apache.commons.collections4.functors.NOPTransformer,CONSTANT
+UsedClass,org.apache.commons.collections4.functors.PredicateDecorator,INTERFACE
+UsedClass,org.apache.commons.collections4.functors.ExceptionPredicate,CONSTANT
+BloatedClass,org.apache.commons.collections4.functors.TransformerClosure,CLASS
+BloatedClass,org.apache.commons.collections4.functors.IfTransformer,CLASS
+BloatedClass,org.apache.commons.collections4.functors.CatchAndRethrowClosure,CLASS
+UsedClass,org.apache.commons.collections4.functors.AndPredicate,CONSTANT
+BloatedClass,org.apache.commons.collections4.functors.PredicateTransformer,CLASS
+UsedClass,org.apache.commons.collections4.functors.AllPredicate,CONSTANT
+BloatedClass,org.apache.commons.collections4.functors.FunctorUtils,CLASS
+UsedClass,org.apache.commons.collections4.functors.ExceptionClosure,CONSTANT
+UsedClass,org.apache.commons.collections4.functors.FalsePredicate,CONSTANT
+BloatedClass,org.apache.commons.collections4.functors.PrototypeFactory,CLASS
+UsedClass,org.apache.commons.collections4.functors.EqualPredicate,CONSTANT
+BloatedClass,org.apache.commons.collections4.functors.ChainedClosure,CLASS
+UsedClass,org.apache.commons.collections4.functors.ExceptionFactory,CONSTANT
+UsedClass,org.apache.commons.collections4.functors.StringValueTransformer,CONSTANT
+BloatedClass,org.apache.commons.collections4.functors.AbstractQuantifierPredicate,CLASS
+UsedClass,org.apache.commons.collections4.functors.MapTransformer,CONSTANT
+UsedClass,org.apache.commons.collections4.functors.TransformerPredicate,CONSTANT
+BloatedClass,org.apache.commons.collections4.functors.WhileClosure,CLASS
+UsedClass,org.apache.commons.collections4.functors.DefaultEquator,CONSTANT
+UsedClass,org.apache.commons.collections4.functors.NullPredicate,CONSTANT
+BloatedClass,org.apache.commons.collections4.functors.ConstantFactory,CLASS
+UsedClass,org.apache.commons.collections4.functors.ComparatorPredicate$Criterion,ENUM
+BloatedClass,org.apache.commons.collections4.functors.PrototypeFactory$1,CLASS
+UsedClass,org.apache.commons.collections4.functors.CloneTransformer,CONSTANT
+BloatedClass,org.apache.commons.collections4.functors.FactoryTransformer,CLASS
+BloatedClass,org.apache.commons.collections4.functors.PrototypeFactory$PrototypeCloneFactory,CLASS
+BloatedClass,org.apache.commons.collections4.functors.ComparatorPredicate,CLASS
+UsedClass,org.apache.commons.collections4.functors.NullIsExceptionPredicate,CONSTANT
+UsedClass,org.apache.commons.collections4.functors.IdentityPredicate,CONSTANT
+BloatedClass,org.apache.commons.collections4.functors.SwitchTransformer,CLASS
+UsedClass,org.apache.commons.collections4.functors.OnePredicate,CONSTANT
+BloatedClass,org.apache.commons.collections4.functors.ForClosure,CLASS
+UsedClass,org.apache.commons.collections4.functors.NullIsTruePredicate,CONSTANT
+BloatedClass,org.apache.commons.collections4.functors.ConstantTransformer,CLASS
+UsedClass,org.apache.commons.collections4.OrderedIterator,INTERFACE
+BloatedClass,org.apache.commons.collections4.QueueUtils,CLASS
+BloatedClass,org.apache.commons.collections4.SplitMapUtils$1,CLASS
+UsedClass,org.apache.commons.collections4.IterableMap,INTERFACE
+BloatedClass,org.apache.commons.collections4.IterableUtils$1,CLASS
+UsedClass,org.apache.commons.collections4.MultiSet$Entry,INTERFACE
+BloatedClass,org.apache.commons.collections4.IteratorUtils,CLASS
+UsedClass,org.apache.commons.collections4.IterableGet,INTERFACE
+UsedClass,org.apache.commons.collections4.SortedBidiMap,INTERFACE
+BloatedClass,org.apache.commons.collections4.bag.TransformedSortedBag,CLASS
+BloatedClass,org.apache.commons.collections4.bag.TreeBag,CLASS
+UsedClass,org.apache.commons.collections4.bag.CollectionBag,CONSTANT
+BloatedClass,org.apache.commons.collections4.bag.AbstractSortedBagDecorator,CLASS
+BloatedClass,org.apache.commons.collections4.bag.AbstractMapBag$BagIterator,CLASS
+BloatedClass,org.apache.commons.collections4.bag.AbstractBagDecorator,CLASS
+BloatedClass,org.apache.commons.collections4.bag.PredicatedBag,CLASS
+UsedClass,org.apache.commons.collections4.bag.CollectionSortedBag,CONSTANT
+BloatedClass,org.apache.commons.collections4.bag.TransformedBag,CLASS
+UsedClass,org.apache.commons.collections4.bag.UnmodifiableSortedBag,CONSTANT
+UsedClass,org.apache.commons.collections4.bag.HashBag,CLASS
+UsedClass,org.apache.commons.collections4.bag.AbstractMapBag,CLASS
+UsedClass,org.apache.commons.collections4.bag.AbstractMapBag$MutableInteger,CLASS
+BloatedClass,org.apache.commons.collections4.bag.SynchronizedSortedBag,CLASS
+BloatedClass,org.apache.commons.collections4.bag.SynchronizedBag$SynchronizedBagSet,CLASS
+BloatedClass,org.apache.commons.collections4.bag.SynchronizedBag,CLASS
+BloatedClass,org.apache.commons.collections4.bag.PredicatedSortedBag,CLASS
+UsedClass,org.apache.commons.collections4.bag.UnmodifiableBag,CONSTANT
+UsedClass,org.apache.commons.collections4.ListUtils$CharSequenceAsList,CONSTANT
+UsedClass,org.apache.commons.collections4.comparators.FixedOrderComparator$UnknownObjectBehavior,ENUM
+BloatedClass,org.apache.commons.collections4.comparators.FixedOrderComparator$1,CLASS
+BloatedClass,org.apache.commons.collections4.comparators.ComparatorChain,CLASS
+UsedClass,org.apache.commons.collections4.comparators.BooleanComparator,CONSTANT
+BloatedClass,org.apache.commons.collections4.comparators.ReverseComparator,CLASS
+BloatedClass,org.apache.commons.collections4.comparators.NullComparator,CLASS
+UsedClass,org.apache.commons.collections4.comparators.ComparableComparator,CONSTANT
+BloatedClass,org.apache.commons.collections4.comparators.FixedOrderComparator,CLASS
+BloatedClass,org.apache.commons.collections4.comparators.TransformingComparator,CLASS
+BloatedClass,org.apache.commons.collections4.FluentIterable,CLASS
+BloatedClass,org.apache.commons.collections4.CollectionUtils$3,CLASS
+BloatedClass,org.apache.commons.collections4.SetUtils$SetView,CLASS
+BloatedClass,org.apache.commons.collections4.IterableUtils$12,CLASS
+UsedClass,org.apache.commons.collections4.OrderedMap,INTERFACE
+BloatedClass,org.apache.commons.collections4.MultiMapUtils,CLASS
+UsedClass,org.apache.commons.collections4.MultiMap,INTERFACE
+BloatedClass,org.apache.commons.collections4.SplitMapUtils$WrappedGet,CLASS
+UsedClass,org.apache.commons.collections4.OrderedBidiMap,INTERFACE
+BloatedClass,org.apache.commons.collections4.map.MultiKeyMap,CLASS
+BloatedClass,org.apache.commons.collections4.map.ListOrderedMap$ListOrderedMapEntry,CLASS
+BloatedClass,org.apache.commons.collections4.map.AbstractLinkedMap$LinkEntry,CLASS
+BloatedClass,org.apache.commons.collections4.map.ListOrderedMap$ListOrderedIterator,CLASS
+BloatedClass,org.apache.commons.collections4.map.AbstractHashedMap,CLASS
+BloatedClass,org.apache.commons.collections4.map.AbstractReferenceMap$ReferenceValues,CLASS
+BloatedClass,org.apache.commons.collections4.map.ReferenceMap,CLASS
+BloatedClass,org.apache.commons.collections4.map.SingletonMap,CLASS
+BloatedClass,org.apache.commons.collections4.map.UnmodifiableEntrySet$UnmodifiableEntry,CLASS
+BloatedClass,org.apache.commons.collections4.map.StaticBucketMap$1,CLASS
+UsedClass,org.apache.commons.collections4.map.AbstractReferenceMap$ReferenceStrength,ENUM
+BloatedClass,org.apache.commons.collections4.map.ListOrderedMap$ListOrderedMapIterator,CLASS
+BloatedClass,org.apache.commons.collections4.map.MultiValueMap$1$1,CLASS
+BloatedClass,org.apache.commons.collections4.map.AbstractLinkedMap$KeySetIterator,CLASS
+BloatedClass,org.apache.commons.collections4.map.AbstractReferenceMap$ReferenceBaseIterator,CLASS
+BloatedClass,org.apache.commons.collections4.map.StaticBucketMap$EntryIterator,CLASS
+BloatedClass,org.apache.commons.collections4.map.ListOrderedMap,CLASS
+UsedClass,org.apache.commons.collections4.map.UnmodifiableEntrySet,CONSTANT
+BloatedClass,org.apache.commons.collections4.map.AbstractReferenceMap$WeakRef,CLASS
+BloatedClass,org.apache.commons.collections4.map.AbstractLinkedMap$EntrySetIterator,CLASS
+BloatedClass,org.apache.commons.collections4.map.LazyMap,CLASS
+BloatedClass,org.apache.commons.collections4.map.StaticBucketMap$KeySet,CLASS
+BloatedClass,org.apache.commons.collections4.map.AbstractInputCheckedMapDecorator,CLASS
+BloatedClass,org.apache.commons.collections4.map.LinkedMap,CLASS
+BloatedClass,org.apache.commons.collections4.map.PredicatedMap,CLASS
+BloatedClass,org.apache.commons.collections4.map.AbstractLinkedMap$LinkMapIterator,CLASS
+UsedClass,org.apache.commons.collections4.map.CompositeMap$MapMutator,INTERFACE
+BloatedClass,org.apache.commons.collections4.map.PassiveExpiringMap$ConstantTimeToLiveExpirationPolicy,CLASS
+BloatedClass,org.apache.commons.collections4.map.StaticBucketMap$EntrySet,CLASS
+BloatedClass,org.apache.commons.collections4.map.AbstractHashedMap$KeySet,CLASS
+BloatedClass,org.apache.commons.collections4.map.AbstractReferenceMap$ReferenceEntry,CLASS
+BloatedClass,org.apache.commons.collections4.map.Flat3Map$EntrySet,CLASS
+BloatedClass,org.apache.commons.collections4.map.LinkedMap$LinkedMapList,CLASS
+BloatedClass,org.apache.commons.collections4.map.CompositeMap,CLASS
+BloatedClass,org.apache.commons.collections4.map.UnmodifiableEntrySet$UnmodifiableEntrySetIterator,CLASS
+BloatedClass,org.apache.commons.collections4.map.AbstractHashedMap$Values,CLASS
+BloatedClass,org.apache.commons.collections4.map.AbstractLinkedMap$LinkIterator,CLASS
+BloatedClass,org.apache.commons.collections4.map.AbstractInputCheckedMapDecorator$EntrySet,CLASS
+BloatedClass,org.apache.commons.collections4.map.MultiValueMap$ReflectionFactory,CLASS
+BloatedClass,org.apache.commons.collections4.map.Flat3Map$KeySetIterator,CLASS
+BloatedClass,org.apache.commons.collections4.map.DefaultedMap,CLASS
+BloatedClass,org.apache.commons.collections4.map.PredicatedSortedMap,CLASS
+BloatedClass,org.apache.commons.collections4.map.LazySortedMap,CLASS
+BloatedClass,org.apache.commons.collections4.map.Flat3Map$KeySet,CLASS
+BloatedClass,org.apache.commons.collections4.map.ListOrderedMap$EntrySetView,CLASS
+BloatedClass,org.apache.commons.collections4.map.ListOrderedMap$KeySetView$1,CLASS
+BloatedClass,org.apache.commons.collections4.map.Flat3Map$Values,CLASS
+BloatedClass,org.apache.commons.collections4.map.AbstractInputCheckedMapDecorator$MapEntry,CLASS
+BloatedClass,org.apache.commons.collections4.map.AbstractIterableMap,CLASS
+BloatedClass,org.apache.commons.collections4.map.FixedSizeMap,CLASS
+BloatedClass,org.apache.commons.collections4.map.AbstractSortedMapDecorator$SortedMapIterator,CLASS
+BloatedClass,org.apache.commons.collections4.map.Flat3Map$FlatMapIterator,CLASS
+BloatedClass,org.apache.commons.collections4.map.SingletonMap$SingletonValues,CLASS
+UsedClass,org.apache.commons.collections4.map.UnmodifiableMap,CONSTANT
+BloatedClass,org.apache.commons.collections4.map.HashedMap,CLASS
+BloatedClass,org.apache.commons.collections4.map.PassiveExpiringMap,CLASS
+BloatedClass,org.apache.commons.collections4.map.ListOrderedMap$ValuesView,CLASS
+BloatedClass,org.apache.commons.collections4.map.ReferenceIdentityMap,CLASS
+BloatedClass,org.apache.commons.collections4.map.Flat3Map$FlatMapEntry,CLASS
+BloatedClass,org.apache.commons.collections4.map.AbstractReferenceMap$ReferenceEntrySetIterator,CLASS
+BloatedClass,org.apache.commons.collections4.map.AbstractHashedMap$HashEntry,CLASS
+BloatedClass,org.apache.commons.collections4.map.AbstractHashedMap$KeySetIterator,CLASS
+BloatedClass,org.apache.commons.collections4.map.TransformedMap,CLASS
+BloatedClass,org.apache.commons.collections4.map.AbstractReferenceMap$SoftRef,CLASS
+BloatedClass,org.apache.commons.collections4.map.Flat3Map$EntryIterator,CLASS
+UsedClass,org.apache.commons.collections4.map.StaticBucketMap$Node,CONSTANT
+BloatedClass,org.apache.commons.collections4.map.LRUMap,CLASS
+BloatedClass,org.apache.commons.collections4.map.Flat3Map$EntrySetIterator,CLASS
+UsedClass,org.apache.commons.collections4.map.PassiveExpiringMap$ExpirationPolicy,INTERFACE
+BloatedClass,org.apache.commons.collections4.map.ListOrderedMap$ValuesView$1,CLASS
+BloatedClass,org.apache.commons.collections4.map.AbstractHashedMap$ValuesIterator,CLASS
+BloatedClass,org.apache.commons.collections4.map.StaticBucketMap$KeyIterator,CLASS
+UsedClass,org.apache.commons.collections4.map.StaticBucketMap$Lock,CONSTANT
+UsedClass,org.apache.commons.collections4.map.UnmodifiableOrderedMap,CONSTANT
+BloatedClass,org.apache.commons.collections4.map.AbstractReferenceMap$ReferenceKeySetIterator,CLASS
+BloatedClass,org.apache.commons.collections4.map.AbstractReferenceMap$ReferenceMapIterator,CLASS
+BloatedClass,org.apache.commons.collections4.map.AbstractHashedMap$EntrySetIterator,CLASS
+UsedClass,org.apache.commons.collections4.map.StaticBucketMap,CONSTANT
+BloatedClass,org.apache.commons.collections4.map.MultiValueMap$ValuesIterator,CLASS
+BloatedClass,org.apache.commons.collections4.map.MultiValueMap$1,CLASS
+BloatedClass,org.apache.commons.collections4.map.StaticBucketMap$ValueIterator,CLASS
+BloatedClass,org.apache.commons.collections4.map.AbstractSortedMapDecorator,CLASS
+BloatedClass,org.apache.commons.collections4.map.AbstractMapDecorator,CLASS
+BloatedClass,org.apache.commons.collections4.map.AbstractReferenceMap$ReferenceValuesIterator,CLASS
+BloatedClass,org.apache.commons.collections4.map.AbstractReferenceMap,CLASS
+BloatedClass,org.apache.commons.collections4.map.AbstractHashedMap$EntrySet,CLASS
+BloatedClass,org.apache.commons.collections4.map.CaseInsensitiveMap,CLASS
+BloatedClass,org.apache.commons.collections4.map.EntrySetToMapIteratorAdapter,CLASS
+BloatedClass,org.apache.commons.collections4.map.AbstractLinkedMap,CLASS
+BloatedClass,org.apache.commons.collections4.map.MultiValueMap$1$1$1,CLASS
+BloatedClass,org.apache.commons.collections4.map.AbstractHashedMap$HashMapIterator,CLASS
+BloatedClass,org.apache.commons.collections4.map.MultiValueMap,CLASS
+BloatedClass,org.apache.commons.collections4.map.FixedSizeSortedMap,CLASS
+BloatedClass,org.apache.commons.collections4.map.MultiValueMap$Values,CLASS
+BloatedClass,org.apache.commons.collections4.map.AbstractReferenceMap$ReferenceKeySet,CLASS
+BloatedClass,org.apache.commons.collections4.map.SingletonMap$SingletonMapIterator,CLASS
+BloatedClass,org.apache.commons.collections4.map.Flat3Map$ValuesIterator,CLASS
+BloatedClass,org.apache.commons.collections4.map.AbstractReferenceMap$ReferenceEntrySet,CLASS
+BloatedClass,org.apache.commons.collections4.map.AbstractOrderedMapDecorator,CLASS
+BloatedClass,org.apache.commons.collections4.map.AbstractInputCheckedMapDecorator$EntrySetIterator,CLASS
+BloatedClass,org.apache.commons.collections4.map.AbstractLinkedMap$ValuesIterator,CLASS
+UsedClass,org.apache.commons.collections4.map.UnmodifiableSortedMap,CONSTANT
+BloatedClass,org.apache.commons.collections4.map.StaticBucketMap$BaseIterator,CLASS
+BloatedClass,org.apache.commons.collections4.map.StaticBucketMap$Values,CLASS
+BloatedClass,org.apache.commons.collections4.map.ListOrderedMap$KeySetView,CLASS
+BloatedClass,org.apache.commons.collections4.map.TransformedSortedMap,CLASS
+BloatedClass,org.apache.commons.collections4.map.Flat3Map,CLASS
+BloatedClass,org.apache.commons.collections4.map.AbstractHashedMap$HashIterator,CLASS
+UsedClass,org.apache.commons.collections4.Predicate,INTERFACE
+BloatedClass,org.apache.commons.collections4.CollectionUtils,CLASS
+UsedClass,org.apache.commons.collections4.BoundedMap,INTERFACE
+UsedClass,org.apache.commons.collections4.OrderedMapIterator,INTERFACE
+UsedClass,org.apache.commons.collections4.Put,INTERFACE
+UsedClass,org.apache.commons.collections4.Closure,INTERFACE
+BloatedClass,org.apache.commons.collections4.IterableUtils$7,CLASS
+BloatedClass,org.apache.commons.collections4.CollectionUtils$SetOperationCardinalityHelper,CLASS
+BloatedClass,org.apache.commons.collections4.IterableUtils,CLASS
+BloatedClass,org.apache.commons.collections4.SetUtils$6,CLASS
+UsedClass,org.apache.commons.collections4.BidiMap,INTERFACE
+BloatedClass,org.apache.commons.collections4.CollectionUtils$2,CLASS
+UsedClass,org.apache.commons.collections4.collection.CompositeCollection$CollectionMutator,INTERFACE
+BloatedClass,org.apache.commons.collections4.collection.PredicatedCollection$Builder,CLASS
+UsedClass,org.apache.commons.collections4.collection.UnmodifiableCollection,CONSTANT
+BloatedClass,org.apache.commons.collections4.collection.PredicatedCollection,CLASS
+BloatedClass,org.apache.commons.collections4.collection.SynchronizedCollection,CLASS
+BloatedClass,org.apache.commons.collections4.collection.CompositeCollection,CLASS
+UsedClass,org.apache.commons.collections4.collection.UnmodifiableBoundedCollection,CONSTANT
+BloatedClass,org.apache.commons.collections4.collection.TransformedCollection,CLASS
+UsedClass,org.apache.commons.collections4.collection.AbstractCollectionDecorator,CLASS
+BloatedClass,org.apache.commons.collections4.collection.IndexedCollection,CLASS
+BloatedClass,org.apache.commons.collections4.ListUtils$Partition,CLASS
+UsedClass,org.apache.commons.collections4.ListValuedMap,INTERFACE
+BloatedClass,org.apache.commons.collections4.ArrayStack,CLASS
+UsedClass,org.apache.commons.collections4.ResettableIterator,INTERFACE
+UsedClass,org.apache.commons.collections4.SetValuedMap,INTERFACE
+UsedClass,org.apache.commons.collections4.Trie,INTERFACE
+BloatedClass,org.apache.commons.collections4.EnumerationUtils,CLASS
+BloatedClass,org.apache.commons.collections4.SetUtils$1,CLASS
+BloatedClass,org.apache.commons.collections4.SplitMapUtils$WrappedPut,CLASS
+BloatedClass,org.apache.commons.collections4.iterators.AbstractUntypedIteratorDecorator,CLASS
+UsedClass,org.apache.commons.collections4.iterators.EmptyIterator,CONSTANT
+UsedClass,org.apache.commons.collections4.iterators.UnmodifiableListIterator,CONSTANT
+BloatedClass,org.apache.commons.collections4.iterators.IteratorEnumeration,CLASS
+BloatedClass,org.apache.commons.collections4.iterators.AbstractListIteratorDecorator,CLASS
+UsedClass,org.apache.commons.collections4.iterators.UnmodifiableMapIterator,CONSTANT
+BloatedClass,org.apache.commons.collections4.iterators.PeekingIterator,CLASS
+BloatedClass,org.apache.commons.collections4.iterators.ObjectGraphIterator,CLASS
+UsedClass,org.apache.commons.collections4.iterators.EmptyListIterator,CONSTANT
+UsedClass,org.apache.commons.collections4.iterators.EmptyOrderedMapIterator,CONSTANT
+BloatedClass,org.apache.commons.collections4.iterators.IteratorIterable,CLASS
+BloatedClass,org.apache.commons.collections4.iterators.TransformIterator,CLASS
+UsedClass,org.apache.commons.collections4.iterators.EmptyOrderedIterator,CONSTANT
+BloatedClass,org.apache.commons.collections4.iterators.ObjectArrayIterator,CLASS
+BloatedClass,org.apache.commons.collections4.iterators.ReverseListIterator,CLASS
+BloatedClass,org.apache.commons.collections4.iterators.PushbackIterator,CLASS
+BloatedClass,org.apache.commons.collections4.iterators.AbstractIteratorDecorator,CLASS
+BloatedClass,org.apache.commons.collections4.iterators.PermutationIterator,CLASS
+BloatedClass,org.apache.commons.collections4.iterators.CollatingIterator,CLASS
+BloatedClass,org.apache.commons.collections4.iterators.LazyIteratorChain,CLASS
+BloatedClass,org.apache.commons.collections4.iterators.FilterListIterator,CLASS
+BloatedClass,org.apache.commons.collections4.iterators.ObjectArrayListIterator,CLASS
+BloatedClass,org.apache.commons.collections4.iterators.IteratorIterable$1,CLASS
+BloatedClass,org.apache.commons.collections4.iterators.ArrayListIterator,CLASS
+BloatedClass,org.apache.commons.collections4.iterators.FilterIterator,CLASS
+BloatedClass,org.apache.commons.collections4.iterators.IteratorChain,CLASS
+BloatedClass,org.apache.commons.collections4.iterators.NodeListIterator,CLASS
+BloatedClass,org.apache.commons.collections4.iterators.LoopingIterator,CLASS
+BloatedClass,org.apache.commons.collections4.iterators.ArrayIterator,CLASS
+UsedClass,org.apache.commons.collections4.iterators.UnmodifiableIterator,CONSTANT
+BloatedClass,org.apache.commons.collections4.iterators.LoopingListIterator,CLASS
+UsedClass,org.apache.commons.collections4.iterators.UnmodifiableOrderedMapIterator,CONSTANT
+BloatedClass,org.apache.commons.collections4.iterators.SingletonListIterator,CLASS
+BloatedClass,org.apache.commons.collections4.iterators.ZippingIterator,CLASS
+BloatedClass,org.apache.commons.collections4.iterators.BoundedIterator,CLASS
+BloatedClass,org.apache.commons.collections4.iterators.AbstractOrderedMapIteratorDecorator,CLASS
+BloatedClass,org.apache.commons.collections4.iterators.UniqueFilterIterator,CLASS
+BloatedClass,org.apache.commons.collections4.iterators.AbstractEmptyMapIterator,CLASS
+BloatedClass,org.apache.commons.collections4.iterators.AbstractMapIteratorDecorator,CLASS
+UsedClass,org.apache.commons.collections4.iterators.EmptyMapIterator,CONSTANT
+BloatedClass,org.apache.commons.collections4.iterators.AbstractEmptyIterator,CLASS
+BloatedClass,org.apache.commons.collections4.iterators.EnumerationIterator,CLASS
+BloatedClass,org.apache.commons.collections4.iterators.ListIteratorWrapper,CLASS
+BloatedClass,org.apache.commons.collections4.iterators.SkippingIterator,CLASS
+BloatedClass,org.apache.commons.collections4.iterators.SingletonIterator,CLASS
+BloatedClass,org.apache.commons.collections4.iterators.EntrySetMapIterator,CLASS
+UsedClass,org.apache.commons.collections4.KeyValue,INTERFACE
+UsedClass,org.apache.commons.collections4.MapIterator,INTERFACE
+BloatedClass,org.apache.commons.collections4.multimap.AbstractSetValuedMap,CLASS
+BloatedClass,org.apache.commons.collections4.multimap.AbstractMultiValuedMap,CLASS
+BloatedClass,org.apache.commons.collections4.multimap.AbstractSetValuedMap$WrappedSet,CLASS
+BloatedClass,org.apache.commons.collections4.multimap.AbstractMultiValuedMapDecorator,CLASS
+BloatedClass,org.apache.commons.collections4.multimap.AbstractMultiValuedMap$EntryValues,CLASS
+BloatedClass,org.apache.commons.collections4.multimap.AbstractMultiValuedMap$WrappedCollection,CLASS
+BloatedClass,org.apache.commons.collections4.multimap.AbstractMultiValuedMap$1,CLASS
+BloatedClass,org.apache.commons.collections4.multimap.AbstractMultiValuedMap$Values,CLASS
+BloatedClass,org.apache.commons.collections4.multimap.AbstractMultiValuedMap$AsMap$AsMapEntrySet,CLASS
+BloatedClass,org.apache.commons.collections4.multimap.AbstractMultiValuedMap$AsMap$AsMapEntrySetIterator,UNKNOWN
+BloatedClass,org.apache.commons.collections4.multimap.HashSetValuedHashMap,CLASS
+BloatedClass,org.apache.commons.collections4.multimap.AbstractMultiValuedMap$KeysMultiSet$MapEntryTransformer$1,CLASS
+BloatedClass,org.apache.commons.collections4.multimap.AbstractMultiValuedMap$ValuesIterator,CLASS
+UsedClass,org.apache.commons.collections4.multimap.AbstractMultiValuedMap$KeysMultiSet$MapEntryTransformer,CONSTANT
+UsedClass,org.apache.commons.collections4.multimap.UnmodifiableMultiValuedMap,CONSTANT
+BloatedClass,org.apache.commons.collections4.multimap.AbstractMultiValuedMap$EntryValues$1$1,CLASS
+BloatedClass,org.apache.commons.collections4.multimap.ArrayListValuedHashMap,CLASS
+BloatedClass,org.apache.commons.collections4.multimap.AbstractListValuedMap,CLASS
+BloatedClass,org.apache.commons.collections4.multimap.AbstractMultiValuedMap$KeysMultiSet,CLASS
+BloatedClass,org.apache.commons.collections4.multimap.TransformedMultiValuedMap,CLASS
+BloatedClass,org.apache.commons.collections4.multimap.AbstractMultiValuedMap$MultiValuedMapEntry,CLASS
+BloatedClass,org.apache.commons.collections4.multimap.AbstractListValuedMap$WrappedList,CLASS
+BloatedClass,org.apache.commons.collections4.multimap.AbstractMultiValuedMap$AsMap,CLASS
+BloatedClass,org.apache.commons.collections4.multimap.AbstractMultiValuedMap$MultiValuedMapIterator,CLASS
+BloatedClass,org.apache.commons.collections4.multimap.AbstractListValuedMap$ValuesListIterator,CLASS
+BloatedClass,org.apache.commons.collections4.multimap.AbstractMultiValuedMap$EntryValues$1,UNKNOWN
+BloatedClass,org.apache.commons.collections4.trie.KeyAnalyzer,CLASS
+BloatedClass,org.apache.commons.collections4.trie.AbstractPatriciaTrie$RangeEntryMap,CLASS
+BloatedClass,org.apache.commons.collections4.trie.AbstractPatriciaTrie$Values,CLASS
+BloatedClass,org.apache.commons.collections4.trie.AbstractPatriciaTrie$TrieMapIterator,CLASS
+BloatedClass,org.apache.commons.collections4.trie.AbstractPatriciaTrie$EntrySet$EntryIterator,CLASS
+BloatedClass,org.apache.commons.collections4.trie.AbstractPatriciaTrie$RangeMap,CLASS
+BloatedClass,org.apache.commons.collections4.trie.AbstractPatriciaTrie,CLASS
+BloatedClass,org.apache.commons.collections4.trie.AbstractPatriciaTrie$Reference,CLASS
+BloatedClass,org.apache.commons.collections4.trie.PatriciaTrie,CLASS
+BloatedClass,org.apache.commons.collections4.trie.AbstractPatriciaTrie$PrefixRangeMap,CLASS
+BloatedClass,org.apache.commons.collections4.trie.AbstractPatriciaTrie$Values$ValueIterator,CLASS
+BloatedClass,org.apache.commons.collections4.trie.AbstractBitwiseTrie$BasicEntry,CLASS
+BloatedClass,org.apache.commons.collections4.trie.AbstractPatriciaTrie$1,CLASS
+UsedClass,org.apache.commons.collections4.trie.AbstractPatriciaTrie$RangeEntrySet$EntryIterator,CONSTANT
+BloatedClass,org.apache.commons.collections4.trie.UnmodifiableTrie,CLASS
+UsedClass,org.apache.commons.collections4.trie.AbstractPatriciaTrie$PrefixRangeEntrySet$SingletonIterator,CONSTANT
+BloatedClass,org.apache.commons.collections4.trie.AbstractPatriciaTrie$EntrySet,CLASS
+BloatedClass,org.apache.commons.collections4.trie.AbstractBitwiseTrie,CLASS
+BloatedClass,org.apache.commons.collections4.trie.AbstractPatriciaTrie$KeySet$KeyIterator,CLASS
+BloatedClass,org.apache.commons.collections4.trie.analyzer.StringKeyAnalyzer,UNKNOWN
+BloatedClass,org.apache.commons.collections4.trie.AbstractPatriciaTrie$TrieIterator,CLASS
+BloatedClass,org.apache.commons.collections4.trie.AbstractPatriciaTrie$RangeEntrySet,CLASS
+UsedClass,org.apache.commons.collections4.trie.AbstractPatriciaTrie$PrefixRangeEntrySet$EntryIterator,CONSTANT
+BloatedClass,org.apache.commons.collections4.trie.AbstractPatriciaTrie$KeySet,CLASS
+BloatedClass,org.apache.commons.collections4.trie.AbstractPatriciaTrie$TrieEntry,CLASS
+UsedClass,org.apache.commons.collections4.trie.AbstractPatriciaTrie$PrefixRangeEntrySet,CONSTANT
+UsedClass,org.apache.commons.collections4.MultiSet,INTERFACE
+BloatedClass,org.apache.commons.collections4.SetUtils$2,CLASS
+BloatedClass,org.apache.commons.collections4.ListUtils$1,CLASS
+BloatedClass,org.apache.commons.collections4.set.ListOrderedSet$OrderedSetIterator,UNKNOWN
+UsedClass,org.apache.commons.collections4.set.CompositeSet$SetMutator,INTERFACE
+BloatedClass,org.apache.commons.collections4.set.AbstractNavigableSetDecorator,CLASS
+UsedClass,org.apache.commons.collections4.set.AbstractSetDecorator,CLASS
+BloatedClass,org.apache.commons.collections4.set.PredicatedNavigableSet,UNKNOWN
+BloatedClass,org.apache.commons.collections4.set.ListOrderedSet,CLASS
+BloatedClass,org.apache.commons.collections4.set.PredicatedSortedSet,UNKNOWN
+UsedClass,org.apache.commons.collections4.set.MapBackedSet,CONSTANT
+UsedClass,org.apache.commons.collections4.set.AbstractSerializableSetDecorator,CLASS
+BloatedClass,org.apache.commons.collections4.set.TransformedSortedSet,UNKNOWN
+BloatedClass,org.apache.commons.collections4.set.AbstractSortedSetDecorator,CLASS
+BloatedClass,org.apache.commons.collections4.set.PredicatedSet,UNKNOWN
+UsedClass,org.apache.commons.collections4.set.UnmodifiableSet,CONSTANT
+BloatedClass,org.apache.commons.collections4.set.ListOrderedSet$1,CLASS
+BloatedClass,org.apache.commons.collections4.set.TransformedNavigableSet,UNKNOWN
+BloatedClass,org.apache.commons.collections4.set.CompositeSet,CLASS
+UsedClass,org.apache.commons.collections4.set.UnmodifiableSortedSet,CONSTANT
+UsedClass,org.apache.commons.collections4.set.UnmodifiableNavigableSet,CONSTANT
+BloatedClass,org.apache.commons.collections4.set.TransformedSet,UNKNOWN
+UsedClass,org.apache.commons.collections4.IterableSortedMap,INTERFACE
+BloatedClass,org.apache.commons.collections4.BagUtils,CLASS
+BloatedClass,org.apache.commons.collections4.SetUtils$5,CLASS
+UsedClass,org.apache.commons.collections4.BoundedCollection,INTERFACE
+BloatedClass,org.apache.commons.collections4.IterableUtils$5,CLASS
+BloatedClass,org.apache.commons.collections4.TransformerUtils,CLASS
+UsedClass,org.apache.commons.collections4.Factory,INTERFACE
+BloatedClass,org.apache.commons.collections4.SplitMapUtils,CLASS
+BloatedClass,org.apache.commons.collections4.IterableUtils$6,CLASS
+BloatedClass,org.apache.commons.collections4.sequence.SequencesComparator$Snake,CLASS
+UsedClass,org.apache.commons.collections4.sequence.ReplacementsHandler,INTERFACE
+BloatedClass,org.apache.commons.collections4.sequence.KeepCommand,CLASS
+BloatedClass,org.apache.commons.collections4.sequence.DeleteCommand,CLASS
+BloatedClass,org.apache.commons.collections4.sequence.EditScript,CLASS
+BloatedClass,org.apache.commons.collections4.sequence.EditCommand,CLASS
+UsedClass,org.apache.commons.collections4.sequence.CommandVisitor,INTERFACE
+BloatedClass,org.apache.commons.collections4.sequence.ReplacementsFinder,CLASS
+BloatedClass,org.apache.commons.collections4.sequence.InsertCommand,CLASS
+BloatedClass,org.apache.commons.collections4.sequence.SequencesComparator,CLASS
+BloatedClass,org.apache.commons.collections4.IterableUtils$9,CLASS
+UsedClass,org.apache.commons.collections4.MultiValuedMap,INTERFACE
+BloatedClass,org.apache.commons.collections4.list.FixedSizeList,CLASS
+BloatedClass,org.apache.commons.collections4.list.AbstractLinkedList$LinkedSubList,CLASS
+BloatedClass,org.apache.commons.collections4.list.GrowthList,CLASS
+BloatedClass,org.apache.commons.collections4.list.FixedSizeList$FixedSizeListIterator,UNKNOWN
+BloatedClass,org.apache.commons.collections4.list.SetUniqueList,CLASS
+BloatedClass,org.apache.commons.collections4.list.AbstractListDecorator,CLASS
+BloatedClass,org.apache.commons.collections4.list.PredicatedList,UNKNOWN
+BloatedClass,org.apache.commons.collections4.list.CursorableLinkedList$Cursor,CLASS
+BloatedClass,org.apache.commons.collections4.list.SetUniqueList$SetListListIterator,UNKNOWN
+BloatedClass,org.apache.commons.collections4.list.TreeList$TreeListIterator,CLASS
+BloatedClass,org.apache.commons.collections4.list.AbstractLinkedList$LinkedListIterator,CLASS
+BloatedClass,org.apache.commons.collections4.list.TransformedList,UNKNOWN
+BloatedClass,org.apache.commons.collections4.list.AbstractLinkedList,CLASS
+BloatedClass,org.apache.commons.collections4.list.AbstractSerializableListDecorator,CLASS
+BloatedClass,org.apache.commons.collections4.list.TransformedList$TransformedListIterator,UNKNOWN
+BloatedClass,org.apache.commons.collections4.list.TreeList,CLASS
+BloatedClass,org.apache.commons.collections4.list.NodeCachingLinkedList,CLASS
+BloatedClass,org.apache.commons.collections4.list.LazyList,CLASS
+UsedClass,org.apache.commons.collections4.list.UnmodifiableList,CONSTANT
+BloatedClass,org.apache.commons.collections4.list.TreeList$1,CLASS
+BloatedClass,org.apache.commons.collections4.list.SetUniqueList$SetListIterator,UNKNOWN
+BloatedClass,org.apache.commons.collections4.list.CursorableLinkedList$SubCursor,CLASS
+BloatedClass,org.apache.commons.collections4.list.AbstractLinkedList$Node,CLASS
+BloatedClass,org.apache.commons.collections4.list.AbstractLinkedList$LinkedSubListIterator,CLASS
+BloatedClass,org.apache.commons.collections4.list.PredicatedList$PredicatedListIterator,UNKNOWN
+BloatedClass,org.apache.commons.collections4.list.CursorableLinkedList,CLASS
+BloatedClass,org.apache.commons.collections4.list.TreeList$AVLNode,CLASS
+BloatedClass,org.apache.commons.collections4.CollectionUtils$CardinalityHelper,CLASS
+UsedClass,org.apache.commons.collections4.SortedBag,INTERFACE
+UsedClass,org.apache.commons.collections4.Get,INTERFACE
+BloatedClass,org.apache.commons.collections4.IterableUtils$11,CLASS
+BloatedClass,org.apache.commons.collections4.ArrayUtils,CLASS
+BloatedClass,org.apache.commons.collections4.keyvalue.AbstractKeyValue,CLASS
+BloatedClass,org.apache.commons.collections4.keyvalue.MultiKey,CLASS
+BloatedClass,org.apache.commons.collections4.keyvalue.TiedMapEntry,CLASS
+BloatedClass,org.apache.commons.collections4.keyvalue.AbstractMapEntryDecorator,CLASS
+BloatedClass,org.apache.commons.collections4.keyvalue.AbstractMapEntry,CLASS
+UsedClass,org.apache.commons.collections4.keyvalue.UnmodifiableMapEntry,CONSTANT
+BloatedClass,org.apache.commons.collections4.keyvalue.DefaultKeyValue,CLASS
+UsedClass,org.apache.commons.collections4.keyvalue.DefaultMapEntry,CONSTANT
+BloatedClass,org.apache.commons.collections4.MapUtils,UNKNOWN
+UsedClass,org.apache.commons.collections4.Transformer,INTERFACE
+BloatedClass,org.apache.commons.collections4.MapUtils$1,UNKNOWN
+BloatedClass,org.apache.commons.collections4.ClosureUtils,CLASS
+BloatedClass,org.apache.commons.collections4.TrieUtils,CLASS
+BloatedClass,org.apache.commons.collections4.IterableUtils$13,CLASS
+BloatedClass,org.apache.commons.collections4.queue.CircularFifoQueue$1,CLASS
+BloatedClass,org.apache.commons.collections4.queue.AbstractQueueDecorator,CLASS
+BloatedClass,org.apache.commons.collections4.queue.PredicatedQueue,UNKNOWN
+UsedClass,org.apache.commons.collections4.queue.UnmodifiableQueue,CONSTANT
+BloatedClass,org.apache.commons.collections4.queue.CircularFifoQueue,CLASS
+BloatedClass,org.apache.commons.collections4.queue.TransformedQueue,UNKNOWN
+BloatedClass,org.apache.commons.collections4.queue.SynchronizedQueue,UNKNOWN
+BloatedClass,org.apache.commons.collections4.ListUtils,CLASS
+UsedClass,org.apache.commons.collections4.FunctorException,CLASS
+BloatedClass,org.apache.commons.collections4.CollectionUtils$1,CLASS
+BloatedClass,org.apache.commons.collections4.MapUtils$2,UNKNOWN
+BloatedClass,org.apache.commons.collections4.SetUtils$4,CLASS
+BloatedClass,org.apache.commons.collections4.IterableUtils$3,CLASS
+UsedClass,org.apache.commons.collections4.Unmodifiable,INTERFACE
+UsedClass,org.apache.commons.collections4.ResettableListIterator,INTERFACE
+BloatedClass,org.apache.commons.collections4.properties.SortedProperties,CLASS
+BloatedClass,org.apache.commons.collections4.SetUtils$3,CLASS
+BloatedClass,org.apache.commons.collections4.IterableUtils$7$1,CLASS
+BloatedClass,org.apache.commons.collections4.ComparatorUtils,CLASS
+UsedClass,org.apache.commons.collections4.Equator,INTERFACE
+BloatedClass,org.apache.commons.collections4.PredicateUtils,CLASS
+BloatedClass,org.apache.commons.collections4.IterableUtils$10,CLASS
+UsedClass,org.apache.commons.collections4.Bag,INTERFACE
+UsedClass,org.apache.commons.collections4.ListUtils$LcsVisitor,CONSTANT
+BloatedClass,org.apache.commons.collections4.IterableUtils$4,CLASS
+BloatedClass,org.apache.commons.collections4.SetUtils,CLASS
+BloatedClass,org.apache.commons.collections4.CollectionUtils$EquatorWrapper,CLASS
+BloatedClass,org.apache.commons.collections4.multiset.AbstractMapMultiSet,CLASS
+BloatedClass,org.apache.commons.collections4.multiset.AbstractMultiSet$AbstractEntry,CLASS
+BloatedClass,org.apache.commons.collections4.multiset.AbstractMultiSetDecorator,CLASS
+BloatedClass,org.apache.commons.collections4.multiset.AbstractMapMultiSet$MutableInteger,CLASS
+BloatedClass,org.apache.commons.collections4.multiset.SynchronizedMultiSet,UNKNOWN
+BloatedClass,org.apache.commons.collections4.multiset.AbstractMapMultiSet$UniqueSetIterator,UNKNOWN
+BloatedClass,org.apache.commons.collections4.multiset.SynchronizedMultiSet$SynchronizedSet,UNKNOWN
+BloatedClass,org.apache.commons.collections4.multiset.AbstractMultiSet$UniqueSet,CLASS
+BloatedClass,org.apache.commons.collections4.multiset.AbstractMapMultiSet$MapBasedMultiSetIterator,CLASS
+BloatedClass,org.apache.commons.collections4.multiset.AbstractMultiSet$MultiSetIterator,CLASS
+UsedClass,org.apache.commons.collections4.multiset.UnmodifiableMultiSet,CONSTANT
+BloatedClass,org.apache.commons.collections4.multiset.AbstractMultiSet$1,CLASS
+BloatedClass,org.apache.commons.collections4.multiset.HashMultiSet,CLASS
+BloatedClass,org.apache.commons.collections4.multiset.AbstractMultiSet$EntrySet,CLASS
+BloatedClass,org.apache.commons.collections4.multiset.AbstractMapMultiSet$EntrySetIterator,CLASS
+BloatedClass,org.apache.commons.collections4.multiset.PredicatedMultiSet,UNKNOWN
+BloatedClass,org.apache.commons.collections4.multiset.AbstractMapMultiSet$MultiSetEntry,CLASS
+BloatedClass,org.apache.commons.collections4.multiset.AbstractMultiSet,CLASS
+UsedClass,enums.CropState,ENUM
+UsedMethod, enums/CropState:values()[Lenums/CropState;
+UsedMethod, enums/CropState:valueOf(Ljava/lang/String;)Lenums/CropState;
+UsedMethod, enums/CropState:<init>(Ljava/lang/String;II)V
+UsedMethod, enums/CropState:getData()B
+UsedMethod, enums/CropState:getByData(B)Lenums/CropState;
+UsedMethod, enums/CropState:<clinit>()V
 UsedMethod, bag/BagClass:<init>()V
 UsedMethod, bag/BagClass:main()V
-BloatedMethod, annotations/Person:<init>(Ljava/lang/String;Ljava/lang/String;)V
-UsedMethod, annotations/Person:<init>(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
-UsedMethod, annotations/Person:initNames()V
-BloatedMethod, annotations/Person:getFirstName()Ljava/lang/String;
-BloatedMethod, annotations/Person:setFirstName(Ljava/lang/String;)V
-BloatedMethod, annotations/Person:getLastName()Ljava/lang/String;
-BloatedMethod, annotations/Person:setLastName(Ljava/lang/String;)V
-BloatedMethod, annotations/Person:getAge()Ljava/lang/String;
-BloatedMethod, annotations/Person:setAge(Ljava/lang/String;)V
-BloatedMethod, annotations/Person:getAddress()Ljava/lang/String;
-BloatedMethod, annotations/Person:setAddress(Ljava/lang/String;)V
+UsedMethod, org/apache/commons/collections4/set/UnmodifiableSet:unmodifiableSet(Ljava/util/Set;)Ljava/util/Set;
+UsedMethod, org/apache/commons/collections4/set/UnmodifiableSet:<init>(Ljava/util/Set;)V
+UsedMethod, org/apache/commons/collections4/set/UnmodifiableSet:iterator()Ljava/util/Iterator;
+UsedMethod, org/apache/commons/collections4/set/UnmodifiableSet:add(Ljava/lang/Object;)Z
+UsedMethod, org/apache/commons/collections4/set/UnmodifiableSet:addAll(Ljava/util/Collection;)Z
+UsedMethod, org/apache/commons/collections4/set/UnmodifiableSet:clear()V
+UsedMethod, org/apache/commons/collections4/set/UnmodifiableSet:remove(Ljava/lang/Object;)Z
+UsedMethod, org/apache/commons/collections4/set/UnmodifiableSet:removeAll(Ljava/util/Collection;)Z
+UsedMethod, org/apache/commons/collections4/set/UnmodifiableSet:retainAll(Ljava/util/Collection;)Z
+UsedMethod, org/apache/commons/collections4/collection/AbstractCollectionDecorator:<init>()V
+UsedMethod, org/apache/commons/collections4/collection/AbstractCollectionDecorator:<init>(Ljava/util/Collection;)V
+UsedMethod, org/apache/commons/collections4/collection/AbstractCollectionDecorator:decorated()Ljava/util/Collection;
+BloatedMethod, org/apache/commons/collections4/collection/AbstractCollectionDecorator:setCollection(Ljava/util/Collection;)V
+UsedMethod, org/apache/commons/collections4/collection/AbstractCollectionDecorator:add(Ljava/lang/Object;)Z
+UsedMethod, org/apache/commons/collections4/collection/AbstractCollectionDecorator:addAll(Ljava/util/Collection;)Z
+BloatedMethod, org/apache/commons/collections4/collection/AbstractCollectionDecorator:clear()V
+UsedMethod, org/apache/commons/collections4/collection/AbstractCollectionDecorator:contains(Ljava/lang/Object;)Z
+UsedMethod, org/apache/commons/collections4/collection/AbstractCollectionDecorator:isEmpty()Z
+UsedMethod, org/apache/commons/collections4/collection/AbstractCollectionDecorator:iterator()Ljava/util/Iterator;
+UsedMethod, org/apache/commons/collections4/collection/AbstractCollectionDecorator:remove(Ljava/lang/Object;)Z
+UsedMethod, org/apache/commons/collections4/collection/AbstractCollectionDecorator:size()I
+UsedMethod, org/apache/commons/collections4/collection/AbstractCollectionDecorator:toArray()[Ljava/lang/Object;
+UsedMethod, org/apache/commons/collections4/collection/AbstractCollectionDecorator:toArray([Ljava/lang/Object;)[Ljava/lang/Object;
+UsedMethod, org/apache/commons/collections4/collection/AbstractCollectionDecorator:containsAll(Ljava/util/Collection;)Z
+UsedMethod, org/apache/commons/collections4/collection/AbstractCollectionDecorator:removeAll(Ljava/util/Collection;)Z
+UsedMethod, org/apache/commons/collections4/collection/AbstractCollectionDecorator:retainAll(Ljava/util/Collection;)Z
+UsedMethod, org/apache/commons/collections4/collection/AbstractCollectionDecorator:toString()Ljava/lang/String;
+UsedMethod, interfaces/Motorbike:<init>(Ljava/lang/String;)V
+UsedMethod, interfaces/Motorbike:getBrand()Ljava/lang/String;
+UsedMethod, interfaces/Motorbike:speedUp()Ljava/lang/String;
+UsedMethod, interfaces/Motorbike:slowDown()Ljava/lang/String;
+UsedMethod, org/apache/commons/collections4/bag/AbstractMapBag:<init>()V
+UsedMethod, org/apache/commons/collections4/bag/AbstractMapBag:<init>(Ljava/util/Map;)V
+UsedMethod, org/apache/commons/collections4/bag/AbstractMapBag:getMap()Ljava/util/Map;
+UsedMethod, org/apache/commons/collections4/bag/AbstractMapBag:size()I
+UsedMethod, org/apache/commons/collections4/bag/AbstractMapBag:isEmpty()Z
+BloatedMethod, org/apache/commons/collections4/bag/AbstractMapBag:getCount(Ljava/lang/Object;)I
+UsedMethod, org/apache/commons/collections4/bag/AbstractMapBag:contains(Ljava/lang/Object;)Z
+BloatedMethod, org/apache/commons/collections4/bag/AbstractMapBag:containsAll(Ljava/util/Collection;)Z
+BloatedMethod, org/apache/commons/collections4/bag/AbstractMapBag:containsAll(Lorg/apache/commons/collections4/Bag;)Z
+UsedMethod, org/apache/commons/collections4/bag/AbstractMapBag:iterator()Ljava/util/Iterator;
+UsedMethod, org/apache/commons/collections4/bag/AbstractMapBag:add(Ljava/lang/Object;)Z
+UsedMethod, org/apache/commons/collections4/bag/AbstractMapBag:add(Ljava/lang/Object;I)Z
+BloatedMethod, org/apache/commons/collections4/bag/AbstractMapBag:addAll(Ljava/util/Collection;)Z
+BloatedMethod, org/apache/commons/collections4/bag/AbstractMapBag:clear()V
+BloatedMethod, org/apache/commons/collections4/bag/AbstractMapBag:remove(Ljava/lang/Object;)Z
+BloatedMethod, org/apache/commons/collections4/bag/AbstractMapBag:remove(Ljava/lang/Object;I)Z
+BloatedMethod, org/apache/commons/collections4/bag/AbstractMapBag:removeAll(Ljava/util/Collection;)Z
+BloatedMethod, org/apache/commons/collections4/bag/AbstractMapBag:retainAll(Ljava/util/Collection;)Z
+BloatedMethod, org/apache/commons/collections4/bag/AbstractMapBag:retainAll(Lorg/apache/commons/collections4/Bag;)Z
+BloatedMethod, org/apache/commons/collections4/bag/AbstractMapBag:toArray()[Ljava/lang/Object;
+BloatedMethod, org/apache/commons/collections4/bag/AbstractMapBag:toArray([Ljava/lang/Object;)[Ljava/lang/Object;
+UsedMethod, org/apache/commons/collections4/bag/AbstractMapBag:uniqueSet()Ljava/util/Set;
+BloatedMethod, org/apache/commons/collections4/bag/AbstractMapBag:doWriteObject(Ljava/io/ObjectOutputStream;)V
+BloatedMethod, org/apache/commons/collections4/bag/AbstractMapBag:doReadObject(Ljava/util/Map;Ljava/io/ObjectInputStream;)V
+BloatedMethod, org/apache/commons/collections4/bag/AbstractMapBag:equals(Ljava/lang/Object;)Z
+BloatedMethod, org/apache/commons/collections4/bag/AbstractMapBag:hashCode()I
+BloatedMethod, org/apache/commons/collections4/bag/AbstractMapBag:toString()Ljava/lang/String;
+UsedMethod, org/apache/commons/collections4/bag/AbstractMapBag:access$000(Lorg/apache/commons/collections4/bag/AbstractMapBag;)Ljava/util/Map;
+UsedMethod, org/apache/commons/collections4/bag/AbstractMapBag:access$100(Lorg/apache/commons/collections4/bag/AbstractMapBag;)I
+UsedMethod, org/apache/commons/collections4/bag/AbstractMapBag:access$210(Lorg/apache/commons/collections4/bag/AbstractMapBag;)I
+UsedMethod, org/apache/commons/collections4/bag/AbstractMapBag$MutableInteger:<init>(I)V
+BloatedMethod, org/apache/commons/collections4/bag/AbstractMapBag$MutableInteger:equals(Ljava/lang/Object;)Z
+UsedMethod, org/apache/commons/collections4/bag/AbstractMapBag$MutableInteger:hashCode()I
+UsedMethod, defaultmethods/MyTradingApi:<init>()V
+BloatedMethod, defaultmethods/MyTradingApi:addOrder(Lcommon/Order;)Z
+BloatedMethod, defaultmethods/MyTradingApi:cancelOrder(Ljava/util/UUID;)Z
+UsedMethod, defaultmethods/MyTradingApi:getOpenOrders(I)Ljava/util/List;
+UsedMethod, interfaces/Car:<init>(Ljava/lang/String;)V
+UsedMethod, interfaces/Car:getBrand()Ljava/lang/String;
+UsedMethod, interfaces/Car:speedUp()Ljava/lang/String;
+UsedMethod, interfaces/Car:slowDown()Ljava/lang/String;
+UsedMethod, lambda/OrderBookAnalyser:<init>()V
+UsedMethod, lambda/OrderBookAnalyser:getNumberOfMatchedOrders(Ljava/util/List;Llambda/OrderMatcher;)I
+UsedMethod, lambda/OrderBookAnalyser:getNumberOfMatchedOrders(Ljava/util/List;Llambda/OrderMatcherWithFees;)I
+UsedMethod, lambda/OrderBookAnalyser:getNumberOfMatchedOrdersUsingJdkPredicateFunctionalInterface(Ljava/util/List;Ljava/util/function/Predicate;)I
+UsedMethod, lambda/OrderBookAnalyser:getAuditDetailsForMatchingOrders(Ljava/util/List;Ljava/util/function/Predicate;Ljava/util/function/Function;)Ljava/util/List;
+UsedMethod, lambda/OrderBookAnalyser:getAuditDetailsForMatchingOrdersUsingGenericArgs(Ljava/lang/Iterable;Ljava/util/function/Predicate;Ljava/util/function/Function;)Ljava/util/List;
+UsedMethod, annotations/JsonSerializationException:<init>(Ljava/lang/String;)V
+UsedMethod, common/Order$Type:values()[Lcommon/Order$Type;
+UsedMethod, common/Order$Type:valueOf(Ljava/lang/String;)Lcommon/Order$Type;
+UsedMethod, common/Order$Type:<init>(Ljava/lang/String;I)V
+UsedMethod, common/Order$Type:<clinit>()V
 UsedMethod, calc/Calculator:<init>(II)V
 UsedMethod, calc/Calculator:sum()I
-BloatedMethod, calc/Calculator:sub()I
-BloatedMethod, calc/Calculator:mul()I
+UsedMethod, calc/Calculator:sub()I
+UsedMethod, calc/Calculator:mul()I
 UsedMethod, calc/Calculator:other()I
+UsedMethod, common/Order$Market:values()[Lcommon/Order$Market;
+UsedMethod, common/Order$Market:valueOf(Ljava/lang/String;)Lcommon/Order$Market;
+UsedMethod, common/Order$Market:<init>(Ljava/lang/String;I)V
+UsedMethod, common/Order$Market:<clinit>()V
+UsedMethod, org/apache/commons/collections4/bag/HashBag:<init>()V
+UsedMethod, org/apache/commons/collections4/bag/HashBag:<init>(Ljava/util/Collection;)V
+BloatedMethod, org/apache/commons/collections4/bag/HashBag:writeObject(Ljava/io/ObjectOutputStream;)V
+BloatedMethod, org/apache/commons/collections4/bag/HashBag:readObject(Ljava/io/ObjectInputStream;)V
+UsedMethod, interfaces/Vehicle:getBrand()Ljava/lang/String;
+UsedMethod, interfaces/Vehicle:speedUp()Ljava/lang/String;
+UsedMethod, interfaces/Vehicle:slowDown()Ljava/lang/String;
+UsedMethod, interfaces/Vehicle:turnAlarmOn()Ljava/lang/String;
+UsedMethod, interfaces/Vehicle:turnAlarmOff()Ljava/lang/String;
+UsedMethod, interfaces/Vehicle:getHorsePower(II)I
+UsedMethod, annotations/Person:<init>(Ljava/lang/String;Ljava/lang/String;)V
+UsedMethod, annotations/Person:<init>(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+UsedMethod, annotations/Person:initNames()V
+UsedMethod, annotations/Person:getFirstName()Ljava/lang/String;
+BloatedMethod, annotations/Person:setFirstName(Ljava/lang/String;)V
+UsedMethod, annotations/Person:getLastName()Ljava/lang/String;
+BloatedMethod, annotations/Person:setLastName(Ljava/lang/String;)V
+UsedMethod, annotations/Person:getAge()Ljava/lang/String;
+BloatedMethod, annotations/Person:setAge(Ljava/lang/String;)V
+UsedMethod, annotations/Person:getAddress()Ljava/lang/String;
+BloatedMethod, annotations/Person:setAddress(Ljava/lang/String;)V
+UsedMethod, annotations/ObjectToJsonConverter:<init>()V
+UsedMethod, annotations/ObjectToJsonConverter:convertToJson(Ljava/lang/Object;)Ljava/lang/String;
+UsedMethod, annotations/ObjectToJsonConverter:checkIfSerializable(Ljava/lang/Object;)V
+UsedMethod, annotations/ObjectToJsonConverter:initializeObject(Ljava/lang/Object;)V
+UsedMethod, annotations/ObjectToJsonConverter:getJsonString(Ljava/lang/Object;)Ljava/lang/String;
+UsedMethod, annotations/ObjectToJsonConverter:getKey(Ljava/lang/reflect/Field;)Ljava/lang/String;
+UsedMethod, annotations/ObjectToJsonConverter:lambda$getJsonString$0(Ljava/util/Map$Entry;)Ljava/lang/String;
+UsedMethod, org/apache/commons/collections4/set/AbstractSerializableSetDecorator:<init>(Ljava/util/Set;)V
+BloatedMethod, org/apache/commons/collections4/set/AbstractSerializableSetDecorator:writeObject(Ljava/io/ObjectOutputStream;)V
+BloatedMethod, org/apache/commons/collections4/set/AbstractSerializableSetDecorator:readObject(Ljava/io/ObjectInputStream;)V
+UsedMethod, defaultmethods/TradingApi:addOrder(Lcommon/Order;)Z
+UsedMethod, defaultmethods/TradingApi:cancelOrder(Ljava/util/UUID;)Z
+UsedMethod, defaultmethods/TradingApi:getOpenOrders(I)Ljava/util/List;
+UsedMethod, defaultmethods/TradingApi:getImplName()Ljava/lang/String;
+UsedMethod, defaultmethods/TradingApi:getCurrentExchangeTime()Ljava/util/Date;
+UsedMethod, common/Order:<init>(Lcommon/Order$Market;Lcommon/Order$Type;Ljava/math/BigDecimal;Ljava/math/BigDecimal;Ljava/math/BigDecimal;)V
+UsedMethod, common/Order:getId()Ljava/util/UUID;
+UsedMethod, common/Order:getMarketId()Lcommon/Order$Market;
+UsedMethod, common/Order:getType()Lcommon/Order$Type;
+UsedMethod, common/Order:getAmount()Ljava/math/BigDecimal;
+UsedMethod, common/Order:getPrice()Ljava/math/BigDecimal;
+UsedMethod, common/Order:getFee()Ljava/math/BigDecimal;
+UsedMethod, common/Order:provideAuditDetails()Ljava/lang/String;
+UsedMethod, common/Order:getTradeCountToFill()I
+BloatedMethod, common/Order:setTradeCountToFill(I)V
+UsedMethod, org/apache/commons/collections4/set/AbstractSetDecorator:<init>()V
+UsedMethod, org/apache/commons/collections4/set/AbstractSetDecorator:<init>(Ljava/util/Set;)V
+UsedMethod, org/apache/commons/collections4/set/AbstractSetDecorator:decorated()Ljava/util/Set;
+UsedMethod, org/apache/commons/collections4/set/AbstractSetDecorator:equals(Ljava/lang/Object;)Z
+UsedMethod, org/apache/commons/collections4/set/AbstractSetDecorator:hashCode()I
+UsedMethod, org/apache/commons/collections4/set/AbstractSetDecorator:decorated()Ljava/util/Collection;
 UsedMethod, calc/CalculatorB:<init>()V

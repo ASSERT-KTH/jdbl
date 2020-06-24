@@ -60,7 +60,7 @@ public class JarUtils
         }
         for (File f : Objects.requireNonNull(files.listFiles())) {
             if (f.getName().endsWith(".jar")) {
-               decompressJars(outputDirectory);
+                decompressJars(outputDirectory);
             }
         }
 
