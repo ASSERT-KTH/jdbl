@@ -20,7 +20,7 @@ public class TestRunner
     public static void runTests(MavenProject mavenProject) throws IOException
     {
         Runtime rt = Runtime.getRuntime();
-        Process p = rt.exec("mvn test -Dmaven.main.skip=true");
+        Process p = rt.exec("mvn test -Dmaven.main.skip=true -Drat.skip=true -Danimal.sniffer.skip=true -Dmaven.javadoc.skip=true -Dlicense.skip=true -Dsource.skip=true");
 
         printProcessToStandardOutput(p);
 
