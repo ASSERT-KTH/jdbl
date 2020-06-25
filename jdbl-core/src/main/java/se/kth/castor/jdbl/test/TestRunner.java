@@ -1,17 +1,15 @@
 package se.kth.castor.jdbl.test;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.maven.project.MavenProject;
 
 import se.kth.castor.jdbl.coverage.YajtaCoverage;
+import se.kth.castor.jdbl.util.MyFileWriter;
 
 public class TestRunner
 {
@@ -32,23 +30,12 @@ public class TestRunner
         }
         TestResultReader testResultReader = new TestResultReader(".");
         TestResult testResult = testResultReader.getResults();
-        writeTSResultsToFile(testResult, mavenProject);
+
+        MyFileWriter myFileWriter = new MyFileWriter(mavenProject.getBasedir().getAbsolutePath());
+        myFileWriter.writeTestResultsToFile(testResult);
+
         if (testResult.errorTests() != 0 || testResult.failedTests() != 0) {
             LOGGER.error("JDBL: THERE ARE TESTS FAILURES");
-        }
-    }
-
-    private static void writeTSResultsToFile(final TestResult testResult, MavenProject mavenProject)
-    {
-        LOGGER.info(testResult.getResults());
-        LOGGER.info("Writing ts-results.log to " +
-            new File(mavenProject.getBasedir().getAbsolutePath() + "/" + "ts-results.log"));
-        try {
-            final String reportTSResultsFileName = "ts-results.log";
-            FileUtils.writeStringToFile(new File(mavenProject.getBasedir().getAbsolutePath() + "/" +
-                reportTSResultsFileName), testResult.getResults(), StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            LOGGER.error("Error creating tests results report file.");
         }
     }
 

@@ -61,7 +61,7 @@ public class ConservativeDebloatMojo extends AbstractDebloatMojo
       MyFileUtils MyFileUtils = new MyFileUtils(outputDirectory,
          new HashSet<>(),
          classesUsed,
-         new File(getProject().getBasedir().getAbsolutePath() + "/" + getReportFileName()), null);
+         getProject().getBasedir().getAbsolutePath(), null);
       try {
          MyFileUtils.deleteUnusedClasses(outputDirectory);
       } catch (IOException e) {
@@ -71,7 +71,7 @@ public class ConservativeDebloatMojo extends AbstractDebloatMojo
       // delete unused methods
       AbstractMethodDebloat conservativeMethodDebloat = new ConservativeMethodDebloat(outputDirectory,
          usageAnalysis,
-         new File(getProject().getBasedir().getAbsolutePath() + "/" + getReportFileName()));
+         getProject().getBasedir().getAbsolutePath() + "/" + getReportFileName());
       try {
          conservativeMethodDebloat.removeUnusedMethods();
       } catch (IOException e) {

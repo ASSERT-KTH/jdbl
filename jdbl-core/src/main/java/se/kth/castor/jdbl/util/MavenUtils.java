@@ -59,7 +59,7 @@ public class MavenUtils
 
     public void dependencyTree(String outputDirectory)
     {
-        LOGGER.info("Copying dependency tree to " + outputDirectory + "/dependency-tree.txt");
+        LOGGER.info("Writing dependency tree to " + outputDirectory + "/dependency-tree.txt");
         Properties copyProperties = new Properties();
         copyProperties.setProperty("outputFile", outputDirectory);
         copyProperties.setProperty("outputType", "text");

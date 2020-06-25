@@ -9,7 +9,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -22,6 +21,7 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import se.kth.castor.jdbl.adapter.CustomClassReader;
+import se.kth.castor.jdbl.coverage.UsageStatusEnum;
 
 public class MyFileUtils
 {
@@ -48,7 +48,7 @@ public class MyFileUtils
     /**
      * Report path
      */
-    private File reportFile;
+    private String projectBaseDir;
 
     /**
      * Class logger.
@@ -60,7 +60,7 @@ public class MyFileUtils
      */
     private List<String> classpath;
 
-    public MyFileUtils(String outputDirectory, Set<String> exclusionSet, Set<String> classesUsed, File reportFile,
+    public MyFileUtils(String outputDirectory, Set<String> exclusionSet, Set<String> classesUsed, String projectBaseDir,
         List<String> classpath)
     {
         this.classpath = classpath;
@@ -68,7 +68,7 @@ public class MyFileUtils
         this.outputDirectory = outputDirectory;
         this.exclusionSet = exclusionSet;
         this.classesUsed = classesUsed;
-        this.reportFile = reportFile;
+        this.projectBaseDir = projectBaseDir;
     }
 
     /**
@@ -94,6 +94,7 @@ public class MyFileUtils
     public void deleteUnusedClasses(String currentPath) throws IOException
     {
         URLClassLoader urlClassLoader = null;
+        MyFileWriter myFileWriter = new MyFileWriter(projectBaseDir);
         if (this.classpath != null) {
             URL[] urls = new URL[this.classpath.size()];
             for (int i = 0; i < this.classpath.size(); i++) {
@@ -178,10 +179,7 @@ public class MyFileUtils
                     // remove the file
                     LOGGER.info("Removed class: " + currentClassName);
                     // write report
-                    org.apache.commons.io.FileUtils.writeStringToFile(this.reportFile, "BloatedClass," +
-                        currentClassName + "," +
-                        fileType.toString() +
-                        "\n", StandardCharsets.UTF_8, true);
+                    myFileWriter.writeDebloatReport(UsageStatusEnum.BLOATED_CLASS.getName(), currentClassName, fileType);
                     Files.delete(classFile.toPath());
                     nbClassesRemoved++;
                     // remove the parent folder if is empty
@@ -191,10 +189,7 @@ public class MyFileUtils
                     }
                 } else {
                     // write report
-                    org.apache.commons.io.FileUtils.writeStringToFile(this.reportFile, "UsedClass," +
-                        currentClassName + "," +
-                        fileType.toString() +
-                        "\n", StandardCharsets.UTF_8, true);
+                    myFileWriter.writeDebloatReport(UsageStatusEnum.USED_CLASS.getName(), currentClassName, fileType);
                 }
             }
         }

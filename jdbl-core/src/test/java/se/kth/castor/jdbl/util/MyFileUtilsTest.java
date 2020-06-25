@@ -18,7 +18,7 @@ public class MyFileUtilsTest
 {
     Set<String> exclusionSet;
     Set<String> classesUsed;
-    File reportFile;
+    String projectBaseDir;
     File inputDir;
     File outputDir;
 
@@ -27,7 +27,7 @@ public class MyFileUtilsTest
     {
         exclusionSet = new HashSet<>();
         classesUsed = new HashSet<>(Arrays.asList("calc.MainCalculator", "calc.Calculator"));
-        reportFile = new File("src/test/resources/classes/output/report.csv");
+        projectBaseDir = "src/test/resources/classes/output/";
         inputDir = new File("src/test/resources/classes");
         outputDir = new File("src/test/resources/classes/output");
     }
@@ -36,8 +36,9 @@ public class MyFileUtilsTest
     public void deleteUnusedClasses() throws IOException
     {
         org.apache.commons.io.FileUtils.copyDirectory(inputDir, outputDir);
-        MyFileUtils myFileUtils = new MyFileUtils(outputDir.getAbsolutePath(), exclusionSet, classesUsed, reportFile, null);
+        MyFileUtils myFileUtils = new MyFileUtils(outputDir.getAbsolutePath(), exclusionSet, classesUsed, projectBaseDir, null);
         myFileUtils.deleteUnusedClasses(outputDir.getAbsolutePath());
+        File reportFile = new File(projectBaseDir + "debloat-report.csv");
         assertTrue(reportFile.exists());
         assertEquals(5, new File(outputDir.getAbsolutePath() + "/calc").listFiles().length);
     }

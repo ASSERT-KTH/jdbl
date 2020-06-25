@@ -11,12 +11,12 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
 import se.kth.castor.jdbl.coverage.AbstractCoverage;
+import se.kth.castor.jdbl.coverage.JVMClassesCoveredSingleton;
 import se.kth.castor.jdbl.coverage.JacocoCoverage;
 import se.kth.castor.jdbl.coverage.UsageAnalysis;
 import se.kth.castor.jdbl.debloat.AbstractMethodDebloat;
 import se.kth.castor.jdbl.debloat.DebloatTypeEnum;
 import se.kth.castor.jdbl.debloat.EntryPointMethodDebloat;
-import se.kth.castor.jdbl.coverage.JVMClassesCoveredSingleton;
 import se.kth.castor.jdbl.util.JarUtils;
 import se.kth.castor.jdbl.util.MavenUtils;
 import se.kth.castor.jdbl.util.MyFileUtils;
@@ -79,7 +79,7 @@ public class EntryPointDebloatMojo extends AbstractDebloatMojo
         // remove unused classes
         MyFileUtils myFileUtils = new MyFileUtils(outputDirectory, new HashSet<>(),
             JVMClassesCoveredSingleton.INSTANCE.getClassesLoaded(),
-            new File(getProject().getBasedir().getAbsolutePath() + "/" + getReportFileName()), null);
+            getProject().getBasedir().getAbsolutePath(), null);
         try {
             myFileUtils.deleteUnusedClasses(outputDirectory);
         } catch (IOException e) {
@@ -89,7 +89,7 @@ public class EntryPointDebloatMojo extends AbstractDebloatMojo
         // remove unused methods
         AbstractMethodDebloat entryPointMethodDebloat = new EntryPointMethodDebloat(outputDirectory,
             usageAnalysis,
-            new File(getProject().getBasedir().getAbsolutePath() + "/" + getReportFileName()));
+            getProject().getBasedir().getAbsolutePath() + "/" + getReportFileName());
         try {
             entryPointMethodDebloat.removeUnusedMethods();
         } catch (IOException e) {

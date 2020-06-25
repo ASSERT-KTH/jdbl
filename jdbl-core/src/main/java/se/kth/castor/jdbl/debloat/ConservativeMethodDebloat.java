@@ -17,9 +17,9 @@ import se.kth.castor.jdbl.coverage.UsageAnalysis;
 
 public class ConservativeMethodDebloat extends AbstractMethodDebloat
 {
-    public ConservativeMethodDebloat(String outputDirectory, UsageAnalysis usageAnalysis, File fileReport)
+    public ConservativeMethodDebloat(String outputDirectory, UsageAnalysis usageAnalysis, String projectBaseDir)
     {
-        super(outputDirectory, usageAnalysis, fileReport);
+        super(outputDirectory, usageAnalysis, projectBaseDir);
     }
 
     @Override

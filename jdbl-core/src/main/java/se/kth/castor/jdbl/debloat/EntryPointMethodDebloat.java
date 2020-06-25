@@ -18,14 +18,16 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
 import se.kth.castor.jdbl.coverage.UsageAnalysis;
+import se.kth.castor.jdbl.coverage.UsageStatusEnum;
+import se.kth.castor.jdbl.util.FileType;
 
 public class EntryPointMethodDebloat extends AbstractMethodDebloat
 {
     protected static final Logger LOGGER = LogManager.getLogger(EntryPointMethodDebloat.class);
 
-    public EntryPointMethodDebloat(String outputDirectory, UsageAnalysis usageAnalysis, File reportFile)
+    public EntryPointMethodDebloat(String outputDirectory, UsageAnalysis usageAnalysis, String projectBaseDir)
     {
-        super(outputDirectory, usageAnalysis, reportFile);
+        super(outputDirectory, usageAnalysis, projectBaseDir);
     }
 
     @Override
@@ -44,12 +46,14 @@ public class EntryPointMethodDebloat extends AbstractMethodDebloat
                 if (usedMethods.contains(name + desc)) {
                     System.out.println("Removed unused method: " + name + desc + " in class ==> " + clazz);
                     // write report to file
-                    writeReportToFile(name, desc, "BloatedMethod,", clazz);
+                    myFileWriter.writeDebloatReport(UsageStatusEnum.BLOATED_METHOD.getName(),
+                        clazz + ":" + name + desc, FileType.UNKNOWN);
                     return new MethodExceptionThrower(mv);
                     // return null;
                 } else {
                     // write report to file
-                    writeReportToFile(name, desc, "UsedMethod,", clazz);
+                    myFileWriter.writeDebloatReport(UsageStatusEnum.USED_METHOD.getName(),
+                        clazz + ":" + name + desc, FileType.UNKNOWN);
                 }
                 return mv;
                 // return super.visitMethod(access, name, desc, signature, exceptions);
@@ -60,15 +64,6 @@ public class EntryPointMethodDebloat extends AbstractMethodDebloat
         byte[] code = cw.toByteArray();
         try (OutputStream fos = new FileOutputStream(outputDirectory + "/" + clazz.replace(".", "/") + ".class")) {
             fos.write(code);
-        }
-    }
-
-    private void writeReportToFile(final String name, final String desc, final String usageType, String clazz)
-    {
-        try {
-            FileUtils.writeStringToFile(reportFile, usageType + clazz + ":" + name + desc + "\n", StandardCharsets.UTF_8, true);
-        } catch (IOException e) {
-            LOGGER.error("Error writing the methods report.");
         }
     }
 }

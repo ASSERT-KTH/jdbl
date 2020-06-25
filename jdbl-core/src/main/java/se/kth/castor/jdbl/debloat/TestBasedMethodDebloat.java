@@ -5,12 +5,10 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.ListIterator;
 import java.util.Set;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.objectweb.asm.ClassReader;
@@ -24,7 +22,9 @@ import org.objectweb.asm.tree.LineNumberNode;
 import org.objectweb.asm.tree.MethodNode;
 
 import se.kth.castor.jdbl.coverage.UsageAnalysis;
+import se.kth.castor.jdbl.coverage.UsageStatusEnum;
 import se.kth.castor.jdbl.test.StackLine;
+import se.kth.castor.jdbl.util.FileType;
 
 public class TestBasedMethodDebloat extends AbstractMethodDebloat
 {
@@ -32,9 +32,9 @@ public class TestBasedMethodDebloat extends AbstractMethodDebloat
     private final Set<StackLine> failingMethods;
 
     public TestBasedMethodDebloat(String outputDirectory, UsageAnalysis usageAnalysis,
-        File reportFile, Set<StackLine> failingMethods)
+        String projectBaseDir, Set<StackLine> failingMethods)
     {
-        super(outputDirectory, usageAnalysis, reportFile);
+        super(outputDirectory, usageAnalysis, projectBaseDir);
         this.failingMethods = failingMethods;
     }
 
@@ -47,7 +47,6 @@ public class TestBasedMethodDebloat extends AbstractMethodDebloat
         ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_MAXS);
         ClassVisitor cv = new ClassVisitor(Opcodes.ASM8, cw)
         {
-
             boolean isEnum = false;
 
             @Override
@@ -70,29 +69,29 @@ public class TestBasedMethodDebloat extends AbstractMethodDebloat
                 final String valuesOfMethod = "valueOf(Ljava/lang/String;)L" + clazz + ";";
 
                 if (!usedMethods.contains(name + desc) && !(isDefaultConstructor(nameDesc)) && !isEnum) {
-                    return remove(name, desc, mv, nameDesc, clazz);
+                    return remove(name, desc, mv, clazz);
                 } else if (!usedMethods.contains(name + desc) && !(isDefaultConstructor(nameDesc)) &&
                     isEnum &&
                     !nameDesc.equals(valuesMethod) &&
                     !nameDesc.equals(valuesOfMethod)
                 ) {
-                    return remove(name, desc, mv, nameDesc, clazz);
+                    return remove(name, desc, mv, clazz);
                 } else {
-                    writeReportToFile(name, desc, "UsedMethod, ", clazz);
-
+                    myFileWriter.writeDebloatReport(UsageStatusEnum.USED_METHOD.getName(),
+                        clazz.replace("/", ".") + ":" + nameDesc, FileType.UNKNOWN);
                 }
                 return mv;
             }
 
-            private MethodVisitor remove(final String name, final String desc, final MethodVisitor mv, final String nameDesc, final String clazz)
+            private MethodVisitor remove(final String name, final String desc, final MethodVisitor mv, final String clazz)
             {
-                LOGGER.info("Removed method: " + nameDesc + " in " + clazz);
+                LOGGER.info("Removed method: " + name + desc + " in " + clazz.replace("/", "."));
                 // Write report to file
-                writeReportToFile(name, desc, "BloatedMethod, ", clazz);
+                myFileWriter.writeDebloatReport(UsageStatusEnum.BLOATED_METHOD.getName(),
+                    clazz.replace("/", ".") + ":" + name + desc, FileType.UNKNOWN);
                 nbMethodsRemoved++;
                 return new MethodExceptionThrower(mv); // to completely remove the method, just return null
             }
-
         };
         cr.accept(cv, ClassReader.SKIP_DEBUG);
         byte[] code = cw.toByteArray();
@@ -157,15 +156,5 @@ public class TestBasedMethodDebloat extends AbstractMethodDebloat
     private boolean isDefaultConstructor(String name)
     {
         return name.startsWith("<init>(") || name.startsWith("<clinit>(");
-    }
-
-    private void writeReportToFile(final String name, final String desc, final String usageType, String clazz)
-    {
-        try {
-            FileUtils.writeStringToFile(reportFile, usageType + clazz + ":" + name + desc + "\n",
-                StandardCharsets.UTF_8, true);
-        } catch (IOException e) {
-            LOGGER.error("Error writing the methods report.");
-        }
     }
 }

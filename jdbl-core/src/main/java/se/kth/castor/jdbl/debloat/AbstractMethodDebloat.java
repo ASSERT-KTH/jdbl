@@ -1,25 +1,27 @@
 package se.kth.castor.jdbl.debloat;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 
 import se.kth.castor.jdbl.coverage.UsageAnalysis;
+import se.kth.castor.jdbl.util.MyFileWriter;
 
 public abstract class AbstractMethodDebloat
 {
     protected UsageAnalysis usageAnalysis;
     protected String outputDirectory;
-    protected File reportFile;
+    protected String projectBaseDir;
     protected int nbMethodsRemoved;
+    protected MyFileWriter myFileWriter;
 
-    public AbstractMethodDebloat(String outputDirectory, UsageAnalysis usageAnalysis, File reportFile)
+    public AbstractMethodDebloat(String outputDirectory, UsageAnalysis usageAnalysis, String projectBaseDir)
     {
         this.outputDirectory = outputDirectory;
         this.usageAnalysis = usageAnalysis;
-        this.reportFile = reportFile;
+        this.projectBaseDir = projectBaseDir;
         this.nbMethodsRemoved = 0;
+        this.myFileWriter = new MyFileWriter(projectBaseDir);
     }
 
     /**
