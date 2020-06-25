@@ -57,11 +57,10 @@ public class MavenUtils
         runMaven(Collections.singletonList("dependency:copy"), copyProperties);
     }
 
-    public void dependencyTree(String outputDirectory)
+    public void dependencyTree(String outputFile)
     {
-        LOGGER.info("Writing dependency tree to " + outputDirectory + "/dependency-tree.txt");
         Properties copyProperties = new Properties();
-        copyProperties.setProperty("outputFile", outputDirectory);
+        copyProperties.setProperty("outputFile", outputFile);
         copyProperties.setProperty("outputType", "text");
         runMaven(Collections.singletonList("dependency:tree"), copyProperties);
     }

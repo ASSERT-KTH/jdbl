@@ -1,22 +1,46 @@
 package se.kth.castor.jdbl.coverage;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.maven.project.MavenProject;
 
-public class JVMClassCoverage
+import se.kth.castor.jdbl.debloat.DebloatTypeEnum;
+
+public class JVMClassCoverage extends AbstractCoverage
 {
-    private static final Logger LOGGER = LogManager.getLogger(JVMClassCoverage.class.getName());
+    public JVMClassCoverage(MavenProject mavenProject, File mavenHome, DebloatTypeEnum debloatTypeEnum)
+    {
+        super(mavenProject, mavenHome, debloatTypeEnum);
+        LOGGER = LogManager.getLogger(JVMClassCoverage.class.getName());
+    }
 
-    public void runTestsInVerboseMode() throws IOException
+    protected UsageAnalysis executeTestBasedAnalysis()
+    {
+        try {
+            writeCoverage();
+        } catch (IOException e) {
+            LOGGER.info("Error writing JVM usage analysis.");
+        }
+        UsageAnalysis usageAnalysis = new UsageAnalysis();
+        Set<String> classesLoaded = JVMClassesCoveredSingleton.INSTANCE.getClassesLoaded();
+        for (String classLoaded : classesLoaded) {
+            usageAnalysis.addEntry(classLoaded, new HashSet<>(Arrays.asList("UNKNOWN")));
+        }
+
+        return usageAnalysis;
+    }
+
+    public void writeCoverage() throws IOException
     {
         LOGGER.info("Starting executing tests in verbose mode to get JVM class loader report.");
         Set<String> classesLoadedTestDebloat = new HashSet<>();
@@ -60,5 +84,21 @@ public class JVMClassCoverage
 
         // print info about the number of classes loaded
         JVMClassesCoveredSingleton.INSTANCE.setClassesLoaded(classesLoadedTestDebloat);
+    }
+
+    protected UsageAnalysis executeConservativeAnalysis()
+    {
+        // TODO implement the conservative approach
+        return null;
+    }
+
+    protected UsageAnalysis executeEntryPointAnalysis()
+    {
+        // TODO implement the entry point approach
+        LOGGER.info("Output directory: " + mavenProject.getBuild().getOutputDirectory());
+        LOGGER.info("entryClass: " + entryClass);
+        LOGGER.info("entryMethod: " + entryMethod);
+        LOGGER.info("entryParameters: " + entryParameters);
+        return null;
     }
 }

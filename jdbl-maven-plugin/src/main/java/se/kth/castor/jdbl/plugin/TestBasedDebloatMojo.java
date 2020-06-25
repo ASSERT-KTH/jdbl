@@ -11,6 +11,7 @@ import java.util.Set;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 
+import se.kth.castor.jdbl.coverage.CoverageToolEnum;
 import se.kth.castor.jdbl.coverage.JVMClassCoverage;
 import se.kth.castor.jdbl.coverage.JVMClassesCoveredSingleton;
 import se.kth.castor.jdbl.coverage.JacocoCoverage;
@@ -41,6 +42,8 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
         Instant start = Instant.now();
         cleanReportFile();
         String outputDirectory = getProject().getBuild().getOutputDirectory();
+        String projectBaseDir = getProject().getBasedir().getAbsolutePath();
+        MyFileWriter myFileWriter = new MyFileWriter(projectBaseDir);
 
         // Run yajta usage analysis
         YajtaCoverage yajtaCoverage = new YajtaCoverage(getProject(), mavenHome, DebloatTypeEnum.TEST_DEBLOAT);
@@ -51,20 +54,26 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
         UsageAnalysis jacocoUsageAnalysis = jacocoCoverage.analyzeUsages();
 
         // Run JVM class usage analysis
-        JVMClassCoverage jvmClassCoverage = new JVMClassCoverage();
-        try {
-            jvmClassCoverage.runTestsInVerboseMode();
-        } catch (IOException e) {
-            getLog().error("Error executing the JVM class coverage.");
-        }
+        JVMClassCoverage jvmClassCoverage = new JVMClassCoverage(getProject(), mavenHome, DebloatTypeEnum.TEST_DEBLOAT);
+        UsageAnalysis jvmUsageAnalysis = jvmClassCoverage.analyzeUsages();
 
-        // Print out Yajta and JaCoCo coverage outputs
+        // Print out Yajta coverage output
         System.out.println("Yajta:");
         System.out.print(yajtaUsageAnalysis.toString());
+        myFileWriter.writeCoverageAnalysisToFile(CoverageToolEnum.YAJTA, yajtaUsageAnalysis);
         printCoverageAnalysisResults(yajtaUsageAnalysis);
+
+        // Print out JaCoCo coverage output
         System.out.println("JaCoCo");
         System.out.print(jacocoUsageAnalysis.toString());
+        myFileWriter.writeCoverageAnalysisToFile(CoverageToolEnum.JACOCO, jacocoUsageAnalysis);
         printCoverageAnalysisResults(jacocoUsageAnalysis);
+
+        // Print out JVM coverage output
+        System.out.println("JVM");
+        System.out.print(jvmUsageAnalysis.toString());
+        myFileWriter.writeCoverageAnalysisToFile(CoverageToolEnum.JVM_CLASS_LOADER, jvmUsageAnalysis);
+        printCoverageAnalysisResults(jvmUsageAnalysis);
 
         // Merge the coverage analysis
         UsageAnalysis mergedUsageAnalysis = yajtaUsageAnalysis.mergeWith(jacocoUsageAnalysis);
@@ -88,8 +97,6 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
         }
 
         // Write to a file with the status of classes (Used or Bloated) in each dependency
-        MyFileWriter myFileWriter = new MyFileWriter(getProject().getBasedir().getAbsolutePath());
-
         try {
             myFileWriter.writeClassStatusPerDependency(usedClasses);
         } catch (RuntimeException e) {

@@ -3,6 +3,7 @@ package se.kth.castor.jdbl.deptree;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -18,6 +19,7 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.shared.utils.io.FileUtils;
 
 import se.kth.castor.jdbl.util.MavenUtils;
+import se.kth.castor.jdbl.util.MyFileWriter;
 
 public class OptionalDependencyIgnorer
 {
@@ -52,8 +54,11 @@ public class OptionalDependencyIgnorer
 
     public void removeOptionalDependencies(final MavenUtils mavenUtils)
     {
-        String dependencyTreeAbsolutePath = mavenProject.getBasedir().getAbsolutePath() + "/dependency-tree.txt";
-        mavenUtils.dependencyTree(dependencyTreeAbsolutePath);
+        final String projectBaseDir = mavenProject.getBasedir().getAbsolutePath();
+        String dependencyTreeAbsolutePath = projectBaseDir + "/dependency-tree.txt";
+        MyFileWriter fileWriter = new MyFileWriter(projectBaseDir);
+        fileWriter.writeDependencyTreeToFile();
+
         InputType type = InputType.TEXT;
         try (Reader r = new BufferedReader(new InputStreamReader(new FileInputStream(new File(dependencyTreeAbsolutePath)),
             StandardCharsets.UTF_8))) {

@@ -11,6 +11,8 @@ import org.apache.commons.io.FileUtils;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import se.kth.castor.jdbl.coverage.CoverageToolEnum;
+import se.kth.castor.jdbl.coverage.UsageAnalysis;
 import se.kth.castor.jdbl.coverage.UsageStatusEnum;
 import se.kth.castor.jdbl.test.TestResult;
 
@@ -21,9 +23,11 @@ public class MyFileWriter
     public static final String DEBLOAT_EXECUTION_TIME_FILE_NAME = "debloat-execution-time.log";
     public static final String DEBLOAT_DEPENDENCIES_REPORT_FILE_NAME = "debloat-dependencies-report.csv";
     public static final String DEBLOAT_REPORT_FILE_NAME = "debloat-report.csv";
-    public static final String TS_RESULTS_LOG = "ts-results.log";
+    public static final String TS_RESULTS_LOG_FILE_NAME = "ts-results.log";
+    public static final String COVERAGE_RESULTS_FILE_NAME = "coverage-results.csv";
+    public static final String DEPENDENCY_TREE_FILE_NAME = "dependency-tree.txt";
 
-    private String projectBaseDir;
+    private final String projectBaseDir;
 
     public MyFileWriter(final String projectBaseDir)
     {
@@ -31,12 +35,50 @@ public class MyFileWriter
     }
 
     /**
-     * Write the status of each class per dependency. We need to exclude Jacoco and yajta, since they were included as
+     * Write the coverage results, i.e., classes and methods covered, of a coverage tool.
+     */
+    public void writeCoverageAnalysisToFile(CoverageToolEnum coverageTool, UsageAnalysis usageAnalysis)
+    {
+        LOGGER.info("Writing coverage results of " + coverageTool.getName() + " to file " + COVERAGE_RESULTS_FILE_NAME +
+            " in " + projectBaseDir);
+        StringBuilder sb = new StringBuilder();
+        Set<String> classes = usageAnalysis.classes();
+        for (String clazz : classes) {
+            Set<String> methods = usageAnalysis.methods(clazz);
+            for (String method : methods) {
+                sb.append(coverageTool.getName())
+                    .append(",")
+                    .append(clazz.replace("/", "."))
+                    .append(",")
+                    .append(method)
+                    .append("\n");
+            }
+        }
+        try {
+            FileUtils.writeStringToFile(new File(projectBaseDir + "/" + COVERAGE_RESULTS_FILE_NAME),
+                sb.toString(), StandardCharsets.UTF_8, true);
+        } catch (IOException e) {
+            LOGGER.error("Error creating the coverage results report file.");
+        }
+    }
+
+    /**
+     * Writhe the dependency tree of the project to file in the root of the project.
+     */
+    public void writeDependencyTreeToFile()
+    {
+        LOGGER.info("Writing " + DEPENDENCY_TREE_FILE_NAME + " in " + projectBaseDir);
+        MavenUtils mavenUtils = new MavenUtils(new File(System.getenv().get("M2_HOME")), new File(projectBaseDir));
+        mavenUtils.dependencyTree(projectBaseDir + "/" + DEPENDENCY_TREE_FILE_NAME);
+    }
+
+    /**
+     * Write the status of each class per dependency. We need to exclude JaCoCo and Yajta, since they were included as
      * dependencies by JDBL, and are not part of the dependencies of the project.
      */
     public void writeClassStatusPerDependency(final Set<String> classes)
     {
-        LOGGER.info("Writing " + DEBLOAT_DEPENDENCIES_REPORT_FILE_NAME + " to " + new File(projectBaseDir + "/"));
+        LOGGER.info("Writing " + DEBLOAT_DEPENDENCIES_REPORT_FILE_NAME + " in " + projectBaseDir);
         StringBuilder s = new StringBuilder();
         Set<JarUtils.DependencyFileMapper> dependencyFileMappers = JarUtils.getDependencyFileMappers();
         for (JarUtils.DependencyFileMapper fileMapper : dependencyFileMappers) {
@@ -84,8 +126,7 @@ public class MyFileWriter
      */
     public void writeTimeElapsedReportFile(final Instant start)
     {
-        LOGGER.info("Writing " + DEBLOAT_EXECUTION_TIME_FILE_NAME + " to " +
-            new File(projectBaseDir + "/"));
+        LOGGER.info("Writing " + DEBLOAT_EXECUTION_TIME_FILE_NAME + " in " + projectBaseDir);
         Instant finish = Instant.now();
         double timeElapsed = Duration.between(start, finish).toMillis();
         final String timeElapsedInSeconds = "Total debloat time: " + timeElapsed / 1000 + " s";
@@ -121,9 +162,9 @@ public class MyFileWriter
     public void writeTestResultsToFile(final TestResult testResult)
     {
         LOGGER.info(testResult.getResults());
-        LOGGER.info("Writing ts-results.log to " + new File(projectBaseDir + "/" + TS_RESULTS_LOG));
+        LOGGER.info("Writing ts-results.log to " + new File(projectBaseDir + "/" + TS_RESULTS_LOG_FILE_NAME));
         try {
-            FileUtils.writeStringToFile(new File(projectBaseDir + "/" + TS_RESULTS_LOG),
+            FileUtils.writeStringToFile(new File(projectBaseDir + "/" + TS_RESULTS_LOG_FILE_NAME),
                 testResult.getResults(), StandardCharsets.UTF_8);
         } catch (IOException e) {
             LOGGER.error("Error creating tests results report file.");
