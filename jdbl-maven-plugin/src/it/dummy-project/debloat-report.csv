@@ -565,156 +565,156 @@ BloatedClass,org.apache.commons.collections4.multiset.PredicatedMultiSet,UNKNOWN
 BloatedClass,org.apache.commons.collections4.multiset.AbstractMapMultiSet$MultiSetEntry,CLASS
 BloatedClass,org.apache.commons.collections4.multiset.AbstractMultiSet,CLASS
 UsedClass,enums.CropState,ENUM
-UsedMethod, enums/CropState:values()[Lenums/CropState;
-UsedMethod, enums/CropState:valueOf(Ljava/lang/String;)Lenums/CropState;
-UsedMethod, enums/CropState:<init>(Ljava/lang/String;II)V
-UsedMethod, enums/CropState:getData()B
-UsedMethod, enums/CropState:getByData(B)Lenums/CropState;
-UsedMethod, enums/CropState:<clinit>()V
-UsedMethod, bag/BagClass:<init>()V
-UsedMethod, bag/BagClass:main()V
-UsedMethod, org/apache/commons/collections4/set/UnmodifiableSet:unmodifiableSet(Ljava/util/Set;)Ljava/util/Set;
-UsedMethod, org/apache/commons/collections4/set/UnmodifiableSet:<init>(Ljava/util/Set;)V
-UsedMethod, org/apache/commons/collections4/set/UnmodifiableSet:iterator()Ljava/util/Iterator;
-UsedMethod, org/apache/commons/collections4/set/UnmodifiableSet:add(Ljava/lang/Object;)Z
-UsedMethod, org/apache/commons/collections4/set/UnmodifiableSet:addAll(Ljava/util/Collection;)Z
-UsedMethod, org/apache/commons/collections4/set/UnmodifiableSet:clear()V
-UsedMethod, org/apache/commons/collections4/set/UnmodifiableSet:remove(Ljava/lang/Object;)Z
-UsedMethod, org/apache/commons/collections4/set/UnmodifiableSet:removeAll(Ljava/util/Collection;)Z
-UsedMethod, org/apache/commons/collections4/set/UnmodifiableSet:retainAll(Ljava/util/Collection;)Z
-UsedMethod, org/apache/commons/collections4/collection/AbstractCollectionDecorator:<init>()V
-UsedMethod, org/apache/commons/collections4/collection/AbstractCollectionDecorator:<init>(Ljava/util/Collection;)V
-UsedMethod, org/apache/commons/collections4/collection/AbstractCollectionDecorator:decorated()Ljava/util/Collection;
-BloatedMethod, org/apache/commons/collections4/collection/AbstractCollectionDecorator:setCollection(Ljava/util/Collection;)V
-UsedMethod, org/apache/commons/collections4/collection/AbstractCollectionDecorator:add(Ljava/lang/Object;)Z
-UsedMethod, org/apache/commons/collections4/collection/AbstractCollectionDecorator:addAll(Ljava/util/Collection;)Z
-BloatedMethod, org/apache/commons/collections4/collection/AbstractCollectionDecorator:clear()V
-UsedMethod, org/apache/commons/collections4/collection/AbstractCollectionDecorator:contains(Ljava/lang/Object;)Z
-UsedMethod, org/apache/commons/collections4/collection/AbstractCollectionDecorator:isEmpty()Z
-UsedMethod, org/apache/commons/collections4/collection/AbstractCollectionDecorator:iterator()Ljava/util/Iterator;
-UsedMethod, org/apache/commons/collections4/collection/AbstractCollectionDecorator:remove(Ljava/lang/Object;)Z
-UsedMethod, org/apache/commons/collections4/collection/AbstractCollectionDecorator:size()I
-UsedMethod, org/apache/commons/collections4/collection/AbstractCollectionDecorator:toArray()[Ljava/lang/Object;
-UsedMethod, org/apache/commons/collections4/collection/AbstractCollectionDecorator:toArray([Ljava/lang/Object;)[Ljava/lang/Object;
-UsedMethod, org/apache/commons/collections4/collection/AbstractCollectionDecorator:containsAll(Ljava/util/Collection;)Z
-UsedMethod, org/apache/commons/collections4/collection/AbstractCollectionDecorator:removeAll(Ljava/util/Collection;)Z
-UsedMethod, org/apache/commons/collections4/collection/AbstractCollectionDecorator:retainAll(Ljava/util/Collection;)Z
-UsedMethod, org/apache/commons/collections4/collection/AbstractCollectionDecorator:toString()Ljava/lang/String;
-UsedMethod, interfaces/Motorbike:<init>(Ljava/lang/String;)V
-UsedMethod, interfaces/Motorbike:getBrand()Ljava/lang/String;
-UsedMethod, interfaces/Motorbike:speedUp()Ljava/lang/String;
-UsedMethod, interfaces/Motorbike:slowDown()Ljava/lang/String;
-UsedMethod, org/apache/commons/collections4/bag/AbstractMapBag:<init>()V
-UsedMethod, org/apache/commons/collections4/bag/AbstractMapBag:<init>(Ljava/util/Map;)V
-UsedMethod, org/apache/commons/collections4/bag/AbstractMapBag:getMap()Ljava/util/Map;
-UsedMethod, org/apache/commons/collections4/bag/AbstractMapBag:size()I
-UsedMethod, org/apache/commons/collections4/bag/AbstractMapBag:isEmpty()Z
-BloatedMethod, org/apache/commons/collections4/bag/AbstractMapBag:getCount(Ljava/lang/Object;)I
-UsedMethod, org/apache/commons/collections4/bag/AbstractMapBag:contains(Ljava/lang/Object;)Z
-BloatedMethod, org/apache/commons/collections4/bag/AbstractMapBag:containsAll(Ljava/util/Collection;)Z
-BloatedMethod, org/apache/commons/collections4/bag/AbstractMapBag:containsAll(Lorg/apache/commons/collections4/Bag;)Z
-UsedMethod, org/apache/commons/collections4/bag/AbstractMapBag:iterator()Ljava/util/Iterator;
-UsedMethod, org/apache/commons/collections4/bag/AbstractMapBag:add(Ljava/lang/Object;)Z
-UsedMethod, org/apache/commons/collections4/bag/AbstractMapBag:add(Ljava/lang/Object;I)Z
-BloatedMethod, org/apache/commons/collections4/bag/AbstractMapBag:addAll(Ljava/util/Collection;)Z
-BloatedMethod, org/apache/commons/collections4/bag/AbstractMapBag:clear()V
-BloatedMethod, org/apache/commons/collections4/bag/AbstractMapBag:remove(Ljava/lang/Object;)Z
-BloatedMethod, org/apache/commons/collections4/bag/AbstractMapBag:remove(Ljava/lang/Object;I)Z
-BloatedMethod, org/apache/commons/collections4/bag/AbstractMapBag:removeAll(Ljava/util/Collection;)Z
-BloatedMethod, org/apache/commons/collections4/bag/AbstractMapBag:retainAll(Ljava/util/Collection;)Z
-BloatedMethod, org/apache/commons/collections4/bag/AbstractMapBag:retainAll(Lorg/apache/commons/collections4/Bag;)Z
-BloatedMethod, org/apache/commons/collections4/bag/AbstractMapBag:toArray()[Ljava/lang/Object;
-BloatedMethod, org/apache/commons/collections4/bag/AbstractMapBag:toArray([Ljava/lang/Object;)[Ljava/lang/Object;
-UsedMethod, org/apache/commons/collections4/bag/AbstractMapBag:uniqueSet()Ljava/util/Set;
-BloatedMethod, org/apache/commons/collections4/bag/AbstractMapBag:doWriteObject(Ljava/io/ObjectOutputStream;)V
-BloatedMethod, org/apache/commons/collections4/bag/AbstractMapBag:doReadObject(Ljava/util/Map;Ljava/io/ObjectInputStream;)V
-BloatedMethod, org/apache/commons/collections4/bag/AbstractMapBag:equals(Ljava/lang/Object;)Z
-BloatedMethod, org/apache/commons/collections4/bag/AbstractMapBag:hashCode()I
-BloatedMethod, org/apache/commons/collections4/bag/AbstractMapBag:toString()Ljava/lang/String;
-UsedMethod, org/apache/commons/collections4/bag/AbstractMapBag:access$000(Lorg/apache/commons/collections4/bag/AbstractMapBag;)Ljava/util/Map;
-UsedMethod, org/apache/commons/collections4/bag/AbstractMapBag:access$100(Lorg/apache/commons/collections4/bag/AbstractMapBag;)I
-UsedMethod, org/apache/commons/collections4/bag/AbstractMapBag:access$210(Lorg/apache/commons/collections4/bag/AbstractMapBag;)I
-UsedMethod, org/apache/commons/collections4/bag/AbstractMapBag$MutableInteger:<init>(I)V
-BloatedMethod, org/apache/commons/collections4/bag/AbstractMapBag$MutableInteger:equals(Ljava/lang/Object;)Z
-UsedMethod, org/apache/commons/collections4/bag/AbstractMapBag$MutableInteger:hashCode()I
-UsedMethod, defaultmethods/MyTradingApi:<init>()V
-BloatedMethod, defaultmethods/MyTradingApi:addOrder(Lcommon/Order;)Z
-BloatedMethod, defaultmethods/MyTradingApi:cancelOrder(Ljava/util/UUID;)Z
-UsedMethod, defaultmethods/MyTradingApi:getOpenOrders(I)Ljava/util/List;
-UsedMethod, interfaces/Car:<init>(Ljava/lang/String;)V
-UsedMethod, interfaces/Car:getBrand()Ljava/lang/String;
-UsedMethod, interfaces/Car:speedUp()Ljava/lang/String;
-UsedMethod, interfaces/Car:slowDown()Ljava/lang/String;
-UsedMethod, lambda/OrderBookAnalyser:<init>()V
-UsedMethod, lambda/OrderBookAnalyser:getNumberOfMatchedOrders(Ljava/util/List;Llambda/OrderMatcher;)I
-UsedMethod, lambda/OrderBookAnalyser:getNumberOfMatchedOrders(Ljava/util/List;Llambda/OrderMatcherWithFees;)I
-UsedMethod, lambda/OrderBookAnalyser:getNumberOfMatchedOrdersUsingJdkPredicateFunctionalInterface(Ljava/util/List;Ljava/util/function/Predicate;)I
-UsedMethod, lambda/OrderBookAnalyser:getAuditDetailsForMatchingOrders(Ljava/util/List;Ljava/util/function/Predicate;Ljava/util/function/Function;)Ljava/util/List;
-UsedMethod, lambda/OrderBookAnalyser:getAuditDetailsForMatchingOrdersUsingGenericArgs(Ljava/lang/Iterable;Ljava/util/function/Predicate;Ljava/util/function/Function;)Ljava/util/List;
-UsedMethod, annotations/JsonSerializationException:<init>(Ljava/lang/String;)V
-UsedMethod, common/Order$Type:values()[Lcommon/Order$Type;
-UsedMethod, common/Order$Type:valueOf(Ljava/lang/String;)Lcommon/Order$Type;
-UsedMethod, common/Order$Type:<init>(Ljava/lang/String;I)V
-UsedMethod, common/Order$Type:<clinit>()V
-UsedMethod, calc/Calculator:<init>(II)V
-UsedMethod, calc/Calculator:sum()I
-UsedMethod, calc/Calculator:sub()I
-UsedMethod, calc/Calculator:mul()I
-UsedMethod, calc/Calculator:other()I
-UsedMethod, common/Order$Market:values()[Lcommon/Order$Market;
-UsedMethod, common/Order$Market:valueOf(Ljava/lang/String;)Lcommon/Order$Market;
-UsedMethod, common/Order$Market:<init>(Ljava/lang/String;I)V
-UsedMethod, common/Order$Market:<clinit>()V
-UsedMethod, org/apache/commons/collections4/bag/HashBag:<init>()V
-UsedMethod, org/apache/commons/collections4/bag/HashBag:<init>(Ljava/util/Collection;)V
-BloatedMethod, org/apache/commons/collections4/bag/HashBag:writeObject(Ljava/io/ObjectOutputStream;)V
-BloatedMethod, org/apache/commons/collections4/bag/HashBag:readObject(Ljava/io/ObjectInputStream;)V
-UsedMethod, interfaces/Vehicle:getBrand()Ljava/lang/String;
-UsedMethod, interfaces/Vehicle:speedUp()Ljava/lang/String;
-UsedMethod, interfaces/Vehicle:slowDown()Ljava/lang/String;
-UsedMethod, interfaces/Vehicle:turnAlarmOn()Ljava/lang/String;
-UsedMethod, interfaces/Vehicle:turnAlarmOff()Ljava/lang/String;
-UsedMethod, interfaces/Vehicle:getHorsePower(II)I
-UsedMethod, annotations/Person:<init>(Ljava/lang/String;Ljava/lang/String;)V
-UsedMethod, annotations/Person:<init>(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
-UsedMethod, annotations/Person:initNames()V
-UsedMethod, annotations/Person:getFirstName()Ljava/lang/String;
-BloatedMethod, annotations/Person:setFirstName(Ljava/lang/String;)V
-UsedMethod, annotations/Person:getLastName()Ljava/lang/String;
-BloatedMethod, annotations/Person:setLastName(Ljava/lang/String;)V
-UsedMethod, annotations/Person:getAge()Ljava/lang/String;
-BloatedMethod, annotations/Person:setAge(Ljava/lang/String;)V
-UsedMethod, annotations/Person:getAddress()Ljava/lang/String;
-BloatedMethod, annotations/Person:setAddress(Ljava/lang/String;)V
-UsedMethod, annotations/ObjectToJsonConverter:<init>()V
-UsedMethod, annotations/ObjectToJsonConverter:convertToJson(Ljava/lang/Object;)Ljava/lang/String;
-UsedMethod, annotations/ObjectToJsonConverter:checkIfSerializable(Ljava/lang/Object;)V
-UsedMethod, annotations/ObjectToJsonConverter:initializeObject(Ljava/lang/Object;)V
-UsedMethod, annotations/ObjectToJsonConverter:getJsonString(Ljava/lang/Object;)Ljava/lang/String;
-UsedMethod, annotations/ObjectToJsonConverter:getKey(Ljava/lang/reflect/Field;)Ljava/lang/String;
-UsedMethod, annotations/ObjectToJsonConverter:lambda$getJsonString$0(Ljava/util/Map$Entry;)Ljava/lang/String;
-UsedMethod, org/apache/commons/collections4/set/AbstractSerializableSetDecorator:<init>(Ljava/util/Set;)V
-BloatedMethod, org/apache/commons/collections4/set/AbstractSerializableSetDecorator:writeObject(Ljava/io/ObjectOutputStream;)V
-BloatedMethod, org/apache/commons/collections4/set/AbstractSerializableSetDecorator:readObject(Ljava/io/ObjectInputStream;)V
-UsedMethod, defaultmethods/TradingApi:addOrder(Lcommon/Order;)Z
-UsedMethod, defaultmethods/TradingApi:cancelOrder(Ljava/util/UUID;)Z
-UsedMethod, defaultmethods/TradingApi:getOpenOrders(I)Ljava/util/List;
-UsedMethod, defaultmethods/TradingApi:getImplName()Ljava/lang/String;
-UsedMethod, defaultmethods/TradingApi:getCurrentExchangeTime()Ljava/util/Date;
-UsedMethod, common/Order:<init>(Lcommon/Order$Market;Lcommon/Order$Type;Ljava/math/BigDecimal;Ljava/math/BigDecimal;Ljava/math/BigDecimal;)V
-UsedMethod, common/Order:getId()Ljava/util/UUID;
-UsedMethod, common/Order:getMarketId()Lcommon/Order$Market;
-UsedMethod, common/Order:getType()Lcommon/Order$Type;
-UsedMethod, common/Order:getAmount()Ljava/math/BigDecimal;
-UsedMethod, common/Order:getPrice()Ljava/math/BigDecimal;
-UsedMethod, common/Order:getFee()Ljava/math/BigDecimal;
-UsedMethod, common/Order:provideAuditDetails()Ljava/lang/String;
-UsedMethod, common/Order:getTradeCountToFill()I
-BloatedMethod, common/Order:setTradeCountToFill(I)V
-UsedMethod, org/apache/commons/collections4/set/AbstractSetDecorator:<init>()V
-UsedMethod, org/apache/commons/collections4/set/AbstractSetDecorator:<init>(Ljava/util/Set;)V
-UsedMethod, org/apache/commons/collections4/set/AbstractSetDecorator:decorated()Ljava/util/Set;
-UsedMethod, org/apache/commons/collections4/set/AbstractSetDecorator:equals(Ljava/lang/Object;)Z
-UsedMethod, org/apache/commons/collections4/set/AbstractSetDecorator:hashCode()I
-UsedMethod, org/apache/commons/collections4/set/AbstractSetDecorator:decorated()Ljava/util/Collection;
-UsedMethod, calc/CalculatorB:<init>()V
+UsedMethod,enums.CropState:values()[Lenums/CropState;,UNKNOWN
+UsedMethod,enums.CropState:valueOf(Ljava/lang/String;)Lenums/CropState;,UNKNOWN
+UsedMethod,enums.CropState:<init>(Ljava/lang/String;II)V,UNKNOWN
+UsedMethod,enums.CropState:getData()B,UNKNOWN
+UsedMethod,enums.CropState:getByData(B)Lenums/CropState;,UNKNOWN
+UsedMethod,enums.CropState:<clinit>()V,UNKNOWN
+UsedMethod,bag.BagClass:<init>()V,UNKNOWN
+UsedMethod,bag.BagClass:main()V,UNKNOWN
+UsedMethod,org.apache.commons.collections4.set.UnmodifiableSet:unmodifiableSet(Ljava/util/Set;)Ljava/util/Set;,UNKNOWN
+UsedMethod,org.apache.commons.collections4.set.UnmodifiableSet:<init>(Ljava/util/Set;)V,UNKNOWN
+UsedMethod,org.apache.commons.collections4.set.UnmodifiableSet:iterator()Ljava/util/Iterator;,UNKNOWN
+UsedMethod,org.apache.commons.collections4.set.UnmodifiableSet:add(Ljava/lang/Object;)Z,UNKNOWN
+UsedMethod,org.apache.commons.collections4.set.UnmodifiableSet:addAll(Ljava/util/Collection;)Z,UNKNOWN
+UsedMethod,org.apache.commons.collections4.set.UnmodifiableSet:clear()V,UNKNOWN
+UsedMethod,org.apache.commons.collections4.set.UnmodifiableSet:remove(Ljava/lang/Object;)Z,UNKNOWN
+UsedMethod,org.apache.commons.collections4.set.UnmodifiableSet:removeAll(Ljava/util/Collection;)Z,UNKNOWN
+UsedMethod,org.apache.commons.collections4.set.UnmodifiableSet:retainAll(Ljava/util/Collection;)Z,UNKNOWN
+UsedMethod,org.apache.commons.collections4.collection.AbstractCollectionDecorator:<init>()V,UNKNOWN
+UsedMethod,org.apache.commons.collections4.collection.AbstractCollectionDecorator:<init>(Ljava/util/Collection;)V,UNKNOWN
+UsedMethod,org.apache.commons.collections4.collection.AbstractCollectionDecorator:decorated()Ljava/util/Collection;,UNKNOWN
+BloatedMethod,org.apache.commons.collections4.collection.AbstractCollectionDecorator:setCollection(Ljava/util/Collection;)V,UNKNOWN
+UsedMethod,org.apache.commons.collections4.collection.AbstractCollectionDecorator:add(Ljava/lang/Object;)Z,UNKNOWN
+UsedMethod,org.apache.commons.collections4.collection.AbstractCollectionDecorator:addAll(Ljava/util/Collection;)Z,UNKNOWN
+BloatedMethod,org.apache.commons.collections4.collection.AbstractCollectionDecorator:clear()V,UNKNOWN
+UsedMethod,org.apache.commons.collections4.collection.AbstractCollectionDecorator:contains(Ljava/lang/Object;)Z,UNKNOWN
+UsedMethod,org.apache.commons.collections4.collection.AbstractCollectionDecorator:isEmpty()Z,UNKNOWN
+UsedMethod,org.apache.commons.collections4.collection.AbstractCollectionDecorator:iterator()Ljava/util/Iterator;,UNKNOWN
+UsedMethod,org.apache.commons.collections4.collection.AbstractCollectionDecorator:remove(Ljava/lang/Object;)Z,UNKNOWN
+UsedMethod,org.apache.commons.collections4.collection.AbstractCollectionDecorator:size()I,UNKNOWN
+UsedMethod,org.apache.commons.collections4.collection.AbstractCollectionDecorator:toArray()[Ljava/lang/Object;,UNKNOWN
+UsedMethod,org.apache.commons.collections4.collection.AbstractCollectionDecorator:toArray([Ljava/lang/Object;)[Ljava/lang/Object;,UNKNOWN
+UsedMethod,org.apache.commons.collections4.collection.AbstractCollectionDecorator:containsAll(Ljava/util/Collection;)Z,UNKNOWN
+UsedMethod,org.apache.commons.collections4.collection.AbstractCollectionDecorator:removeAll(Ljava/util/Collection;)Z,UNKNOWN
+UsedMethod,org.apache.commons.collections4.collection.AbstractCollectionDecorator:retainAll(Ljava/util/Collection;)Z,UNKNOWN
+UsedMethod,org.apache.commons.collections4.collection.AbstractCollectionDecorator:toString()Ljava/lang/String;,UNKNOWN
+UsedMethod,interfaces.Motorbike:<init>(Ljava/lang/String;)V,UNKNOWN
+UsedMethod,interfaces.Motorbike:getBrand()Ljava/lang/String;,UNKNOWN
+UsedMethod,interfaces.Motorbike:speedUp()Ljava/lang/String;,UNKNOWN
+UsedMethod,interfaces.Motorbike:slowDown()Ljava/lang/String;,UNKNOWN
+UsedMethod,org.apache.commons.collections4.bag.AbstractMapBag:<init>()V,UNKNOWN
+UsedMethod,org.apache.commons.collections4.bag.AbstractMapBag:<init>(Ljava/util/Map;)V,UNKNOWN
+UsedMethod,org.apache.commons.collections4.bag.AbstractMapBag:getMap()Ljava/util/Map;,UNKNOWN
+UsedMethod,org.apache.commons.collections4.bag.AbstractMapBag:size()I,UNKNOWN
+UsedMethod,org.apache.commons.collections4.bag.AbstractMapBag:isEmpty()Z,UNKNOWN
+BloatedMethod,org.apache.commons.collections4.bag.AbstractMapBag:getCount(Ljava/lang/Object;)I,UNKNOWN
+UsedMethod,org.apache.commons.collections4.bag.AbstractMapBag:contains(Ljava/lang/Object;)Z,UNKNOWN
+BloatedMethod,org.apache.commons.collections4.bag.AbstractMapBag:containsAll(Ljava/util/Collection;)Z,UNKNOWN
+BloatedMethod,org.apache.commons.collections4.bag.AbstractMapBag:containsAll(Lorg/apache/commons/collections4/Bag;)Z,UNKNOWN
+UsedMethod,org.apache.commons.collections4.bag.AbstractMapBag:iterator()Ljava/util/Iterator;,UNKNOWN
+UsedMethod,org.apache.commons.collections4.bag.AbstractMapBag:add(Ljava/lang/Object;)Z,UNKNOWN
+UsedMethod,org.apache.commons.collections4.bag.AbstractMapBag:add(Ljava/lang/Object;I)Z,UNKNOWN
+BloatedMethod,org.apache.commons.collections4.bag.AbstractMapBag:addAll(Ljava/util/Collection;)Z,UNKNOWN
+BloatedMethod,org.apache.commons.collections4.bag.AbstractMapBag:clear()V,UNKNOWN
+BloatedMethod,org.apache.commons.collections4.bag.AbstractMapBag:remove(Ljava/lang/Object;)Z,UNKNOWN
+BloatedMethod,org.apache.commons.collections4.bag.AbstractMapBag:remove(Ljava/lang/Object;I)Z,UNKNOWN
+BloatedMethod,org.apache.commons.collections4.bag.AbstractMapBag:removeAll(Ljava/util/Collection;)Z,UNKNOWN
+BloatedMethod,org.apache.commons.collections4.bag.AbstractMapBag:retainAll(Ljava/util/Collection;)Z,UNKNOWN
+BloatedMethod,org.apache.commons.collections4.bag.AbstractMapBag:retainAll(Lorg/apache/commons/collections4/Bag;)Z,UNKNOWN
+BloatedMethod,org.apache.commons.collections4.bag.AbstractMapBag:toArray()[Ljava/lang/Object;,UNKNOWN
+BloatedMethod,org.apache.commons.collections4.bag.AbstractMapBag:toArray([Ljava/lang/Object;)[Ljava/lang/Object;,UNKNOWN
+UsedMethod,org.apache.commons.collections4.bag.AbstractMapBag:uniqueSet()Ljava/util/Set;,UNKNOWN
+BloatedMethod,org.apache.commons.collections4.bag.AbstractMapBag:doWriteObject(Ljava/io/ObjectOutputStream;)V,UNKNOWN
+BloatedMethod,org.apache.commons.collections4.bag.AbstractMapBag:doReadObject(Ljava/util/Map;Ljava/io/ObjectInputStream;)V,UNKNOWN
+BloatedMethod,org.apache.commons.collections4.bag.AbstractMapBag:equals(Ljava/lang/Object;)Z,UNKNOWN
+BloatedMethod,org.apache.commons.collections4.bag.AbstractMapBag:hashCode()I,UNKNOWN
+BloatedMethod,org.apache.commons.collections4.bag.AbstractMapBag:toString()Ljava/lang/String;,UNKNOWN
+UsedMethod,org.apache.commons.collections4.bag.AbstractMapBag:access$000(Lorg/apache/commons/collections4/bag/AbstractMapBag;)Ljava/util/Map;,UNKNOWN
+UsedMethod,org.apache.commons.collections4.bag.AbstractMapBag:access$100(Lorg/apache/commons/collections4/bag/AbstractMapBag;)I,UNKNOWN
+UsedMethod,org.apache.commons.collections4.bag.AbstractMapBag:access$210(Lorg/apache/commons/collections4/bag/AbstractMapBag;)I,UNKNOWN
+UsedMethod,org.apache.commons.collections4.bag.AbstractMapBag$MutableInteger:<init>(I)V,UNKNOWN
+BloatedMethod,org.apache.commons.collections4.bag.AbstractMapBag$MutableInteger:equals(Ljava/lang/Object;)Z,UNKNOWN
+UsedMethod,org.apache.commons.collections4.bag.AbstractMapBag$MutableInteger:hashCode()I,UNKNOWN
+UsedMethod,defaultmethods.MyTradingApi:<init>()V,UNKNOWN
+BloatedMethod,defaultmethods.MyTradingApi:addOrder(Lcommon/Order;)Z,UNKNOWN
+BloatedMethod,defaultmethods.MyTradingApi:cancelOrder(Ljava/util/UUID;)Z,UNKNOWN
+UsedMethod,defaultmethods.MyTradingApi:getOpenOrders(I)Ljava/util/List;,UNKNOWN
+UsedMethod,interfaces.Car:<init>(Ljava/lang/String;)V,UNKNOWN
+UsedMethod,interfaces.Car:getBrand()Ljava/lang/String;,UNKNOWN
+UsedMethod,interfaces.Car:speedUp()Ljava/lang/String;,UNKNOWN
+UsedMethod,interfaces.Car:slowDown()Ljava/lang/String;,UNKNOWN
+UsedMethod,lambda.OrderBookAnalyser:<init>()V,UNKNOWN
+UsedMethod,lambda.OrderBookAnalyser:getNumberOfMatchedOrders(Ljava/util/List;Llambda/OrderMatcher;)I,UNKNOWN
+UsedMethod,lambda.OrderBookAnalyser:getNumberOfMatchedOrders(Ljava/util/List;Llambda/OrderMatcherWithFees;)I,UNKNOWN
+UsedMethod,lambda.OrderBookAnalyser:getNumberOfMatchedOrdersUsingJdkPredicateFunctionalInterface(Ljava/util/List;Ljava/util/function/Predicate;)I,UNKNOWN
+UsedMethod,lambda.OrderBookAnalyser:getAuditDetailsForMatchingOrders(Ljava/util/List;Ljava/util/function/Predicate;Ljava/util/function/Function;)Ljava/util/List;,UNKNOWN
+UsedMethod,lambda.OrderBookAnalyser:getAuditDetailsForMatchingOrdersUsingGenericArgs(Ljava/lang/Iterable;Ljava/util/function/Predicate;Ljava/util/function/Function;)Ljava/util/List;,UNKNOWN
+UsedMethod,annotations.JsonSerializationException:<init>(Ljava/lang/String;)V,UNKNOWN
+UsedMethod,common.Order$Type:values()[Lcommon/Order$Type;,UNKNOWN
+UsedMethod,common.Order$Type:valueOf(Ljava/lang/String;)Lcommon/Order$Type;,UNKNOWN
+UsedMethod,common.Order$Type:<init>(Ljava/lang/String;I)V,UNKNOWN
+UsedMethod,common.Order$Type:<clinit>()V,UNKNOWN
+UsedMethod,calc.Calculator:<init>(II)V,UNKNOWN
+UsedMethod,calc.Calculator:sum()I,UNKNOWN
+UsedMethod,calc.Calculator:sub()I,UNKNOWN
+UsedMethod,calc.Calculator:mul()I,UNKNOWN
+UsedMethod,calc.Calculator:other()I,UNKNOWN
+UsedMethod,common.Order$Market:values()[Lcommon/Order$Market;,UNKNOWN
+UsedMethod,common.Order$Market:valueOf(Ljava/lang/String;)Lcommon/Order$Market;,UNKNOWN
+UsedMethod,common.Order$Market:<init>(Ljava/lang/String;I)V,UNKNOWN
+UsedMethod,common.Order$Market:<clinit>()V,UNKNOWN
+UsedMethod,org.apache.commons.collections4.bag.HashBag:<init>()V,UNKNOWN
+UsedMethod,org.apache.commons.collections4.bag.HashBag:<init>(Ljava/util/Collection;)V,UNKNOWN
+BloatedMethod,org.apache.commons.collections4.bag.HashBag:writeObject(Ljava/io/ObjectOutputStream;)V,UNKNOWN
+BloatedMethod,org.apache.commons.collections4.bag.HashBag:readObject(Ljava/io/ObjectInputStream;)V,UNKNOWN
+UsedMethod,interfaces.Vehicle:getBrand()Ljava/lang/String;,UNKNOWN
+UsedMethod,interfaces.Vehicle:speedUp()Ljava/lang/String;,UNKNOWN
+UsedMethod,interfaces.Vehicle:slowDown()Ljava/lang/String;,UNKNOWN
+UsedMethod,interfaces.Vehicle:turnAlarmOn()Ljava/lang/String;,UNKNOWN
+UsedMethod,interfaces.Vehicle:turnAlarmOff()Ljava/lang/String;,UNKNOWN
+UsedMethod,interfaces.Vehicle:getHorsePower(II)I,UNKNOWN
+UsedMethod,annotations.Person:<init>(Ljava/lang/String;Ljava/lang/String;)V,UNKNOWN
+UsedMethod,annotations.Person:<init>(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V,UNKNOWN
+UsedMethod,annotations.Person:initNames()V,UNKNOWN
+UsedMethod,annotations.Person:getFirstName()Ljava/lang/String;,UNKNOWN
+BloatedMethod,annotations.Person:setFirstName(Ljava/lang/String;)V,UNKNOWN
+UsedMethod,annotations.Person:getLastName()Ljava/lang/String;,UNKNOWN
+BloatedMethod,annotations.Person:setLastName(Ljava/lang/String;)V,UNKNOWN
+UsedMethod,annotations.Person:getAge()Ljava/lang/String;,UNKNOWN
+BloatedMethod,annotations.Person:setAge(Ljava/lang/String;)V,UNKNOWN
+UsedMethod,annotations.Person:getAddress()Ljava/lang/String;,UNKNOWN
+BloatedMethod,annotations.Person:setAddress(Ljava/lang/String;)V,UNKNOWN
+UsedMethod,annotations.ObjectToJsonConverter:<init>()V,UNKNOWN
+UsedMethod,annotations.ObjectToJsonConverter:convertToJson(Ljava/lang/Object;)Ljava/lang/String;,UNKNOWN
+UsedMethod,annotations.ObjectToJsonConverter:checkIfSerializable(Ljava/lang/Object;)V,UNKNOWN
+UsedMethod,annotations.ObjectToJsonConverter:initializeObject(Ljava/lang/Object;)V,UNKNOWN
+UsedMethod,annotations.ObjectToJsonConverter:getJsonString(Ljava/lang/Object;)Ljava/lang/String;,UNKNOWN
+UsedMethod,annotations.ObjectToJsonConverter:getKey(Ljava/lang/reflect/Field;)Ljava/lang/String;,UNKNOWN
+UsedMethod,annotations.ObjectToJsonConverter:lambda$getJsonString$0(Ljava/util/Map$Entry;)Ljava/lang/String;,UNKNOWN
+UsedMethod,org.apache.commons.collections4.set.AbstractSerializableSetDecorator:<init>(Ljava/util/Set;)V,UNKNOWN
+BloatedMethod,org.apache.commons.collections4.set.AbstractSerializableSetDecorator:writeObject(Ljava/io/ObjectOutputStream;)V,UNKNOWN
+BloatedMethod,org.apache.commons.collections4.set.AbstractSerializableSetDecorator:readObject(Ljava/io/ObjectInputStream;)V,UNKNOWN
+UsedMethod,defaultmethods.TradingApi:addOrder(Lcommon/Order;)Z,UNKNOWN
+UsedMethod,defaultmethods.TradingApi:cancelOrder(Ljava/util/UUID;)Z,UNKNOWN
+UsedMethod,defaultmethods.TradingApi:getOpenOrders(I)Ljava/util/List;,UNKNOWN
+UsedMethod,defaultmethods.TradingApi:getImplName()Ljava/lang/String;,UNKNOWN
+UsedMethod,defaultmethods.TradingApi:getCurrentExchangeTime()Ljava/util/Date;,UNKNOWN
+UsedMethod,common.Order:<init>(Lcommon/Order$Market;Lcommon/Order$Type;Ljava/math/BigDecimal;Ljava/math/BigDecimal;Ljava/math/BigDecimal;)V,UNKNOWN
+UsedMethod,common.Order:getId()Ljava/util/UUID;,UNKNOWN
+UsedMethod,common.Order:getMarketId()Lcommon/Order$Market;,UNKNOWN
+UsedMethod,common.Order:getType()Lcommon/Order$Type;,UNKNOWN
+UsedMethod,common.Order:getAmount()Ljava/math/BigDecimal;,UNKNOWN
+UsedMethod,common.Order:getPrice()Ljava/math/BigDecimal;,UNKNOWN
+UsedMethod,common.Order:getFee()Ljava/math/BigDecimal;,UNKNOWN
+UsedMethod,common.Order:provideAuditDetails()Ljava/lang/String;,UNKNOWN
+UsedMethod,common.Order:getTradeCountToFill()I,UNKNOWN
+BloatedMethod,common.Order:setTradeCountToFill(I)V,UNKNOWN
+UsedMethod,org.apache.commons.collections4.set.AbstractSetDecorator:<init>()V,UNKNOWN
+UsedMethod,org.apache.commons.collections4.set.AbstractSetDecorator:<init>(Ljava/util/Set;)V,UNKNOWN
+UsedMethod,org.apache.commons.collections4.set.AbstractSetDecorator:decorated()Ljava/util/Set;,UNKNOWN
+UsedMethod,org.apache.commons.collections4.set.AbstractSetDecorator:equals(Ljava/lang/Object;)Z,UNKNOWN
+UsedMethod,org.apache.commons.collections4.set.AbstractSetDecorator:hashCode()I,UNKNOWN
+UsedMethod,org.apache.commons.collections4.set.AbstractSetDecorator:decorated()Ljava/util/Collection;,UNKNOWN
+UsedMethod,calc.CalculatorB:<init>()V,UNKNOWN
