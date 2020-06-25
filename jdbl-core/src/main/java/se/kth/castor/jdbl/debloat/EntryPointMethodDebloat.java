@@ -5,10 +5,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.Set;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.objectweb.asm.ClassReader;
@@ -19,7 +17,7 @@ import org.objectweb.asm.Opcodes;
 
 import se.kth.castor.jdbl.coverage.UsageAnalysis;
 import se.kth.castor.jdbl.coverage.UsageStatusEnum;
-import se.kth.castor.jdbl.util.FileType;
+import se.kth.castor.jdbl.util.ClassFileType;
 
 public class EntryPointMethodDebloat extends AbstractMethodDebloat
 {
@@ -47,13 +45,13 @@ public class EntryPointMethodDebloat extends AbstractMethodDebloat
                     System.out.println("Removed unused method: " + name + desc + " in class ==> " + clazz);
                     // write report to file
                     myFileWriter.writeDebloatReport(UsageStatusEnum.BLOATED_METHOD.getName(),
-                        clazz + ":" + name + desc, FileType.UNKNOWN);
+                        clazz + ":" + name + desc, ClassFileType.UNKNOWN);
                     return new MethodExceptionThrower(mv);
                     // return null;
                 } else {
                     // write report to file
                     myFileWriter.writeDebloatReport(UsageStatusEnum.USED_METHOD.getName(),
-                        clazz + ":" + name + desc, FileType.UNKNOWN);
+                        clazz + ":" + name + desc, ClassFileType.UNKNOWN);
                 }
                 return mv;
                 // return super.visitMethod(access, name, desc, signature, exceptions);

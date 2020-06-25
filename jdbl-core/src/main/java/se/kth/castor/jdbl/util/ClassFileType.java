@@ -3,7 +3,7 @@ package se.kth.castor.jdbl.util;
 /**
  * The debloat strategies supported by this plugin.
  */
-public enum FileType
+public enum ClassFileType
 {
     ANNOTATION,
     ENUM,
@@ -11,6 +11,8 @@ public enum FileType
     CONSTANT,
     CLASS,
     EXCEPTION,
+    SINGLETON,
+    CLASS_ABSTRACT,
     UNKNOWN;
 
     @Override

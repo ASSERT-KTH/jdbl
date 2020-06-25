@@ -44,6 +44,7 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
         String outputDirectory = getProject().getBuild().getOutputDirectory();
         String projectBaseDir = getProject().getBasedir().getAbsolutePath();
         MyFileWriter myFileWriter = new MyFileWriter(projectBaseDir);
+        myFileWriter.resetJDBLReportsDirectory();
 
         // Run yajta usage analysis
         YajtaCoverage yajtaCoverage = new YajtaCoverage(getProject(), mavenHome, DebloatTypeEnum.TEST_DEBLOAT);

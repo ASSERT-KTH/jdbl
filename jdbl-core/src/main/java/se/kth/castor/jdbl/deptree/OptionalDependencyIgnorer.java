@@ -55,7 +55,7 @@ public class OptionalDependencyIgnorer
     public void removeOptionalDependencies(final MavenUtils mavenUtils)
     {
         final String projectBaseDir = mavenProject.getBasedir().getAbsolutePath();
-        String dependencyTreeAbsolutePath = projectBaseDir + "/dependency-tree.txt";
+        String dependencyTreeAbsolutePath = projectBaseDir + "/.jdbl/dependency-tree.txt";
         MyFileWriter fileWriter = new MyFileWriter(projectBaseDir);
         fileWriter.writeDependencyTreeToFile();
 

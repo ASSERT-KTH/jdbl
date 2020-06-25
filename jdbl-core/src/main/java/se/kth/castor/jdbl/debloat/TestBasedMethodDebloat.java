@@ -24,7 +24,7 @@ import org.objectweb.asm.tree.MethodNode;
 import se.kth.castor.jdbl.coverage.UsageAnalysis;
 import se.kth.castor.jdbl.coverage.UsageStatusEnum;
 import se.kth.castor.jdbl.test.StackLine;
-import se.kth.castor.jdbl.util.FileType;
+import se.kth.castor.jdbl.util.ClassFileType;
 
 public class TestBasedMethodDebloat extends AbstractMethodDebloat
 {
@@ -78,7 +78,7 @@ public class TestBasedMethodDebloat extends AbstractMethodDebloat
                     return remove(name, desc, mv, clazz);
                 } else {
                     myFileWriter.writeDebloatReport(UsageStatusEnum.USED_METHOD.getName(),
-                        clazz.replace("/", ".") + ":" + nameDesc, FileType.UNKNOWN);
+                        clazz.replace("/", ".") + ":" + nameDesc, ClassFileType.UNKNOWN);
                 }
                 return mv;
             }
@@ -88,7 +88,7 @@ public class TestBasedMethodDebloat extends AbstractMethodDebloat
                 LOGGER.info("Removed method: " + name + desc + " in " + clazz.replace("/", "."));
                 // Write report to file
                 myFileWriter.writeDebloatReport(UsageStatusEnum.BLOATED_METHOD.getName(),
-                    clazz.replace("/", ".") + ":" + name + desc, FileType.UNKNOWN);
+                    clazz.replace("/", ".") + ":" + name + desc, ClassFileType.UNKNOWN);
                 nbMethodsRemoved++;
                 return new MethodExceptionThrower(mv); // to completely remove the method, just return null
             }

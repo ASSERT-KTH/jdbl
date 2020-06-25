@@ -38,9 +38,9 @@ public class MyFileUtilsTest
         org.apache.commons.io.FileUtils.copyDirectory(inputDir, outputDir);
         MyFileUtils myFileUtils = new MyFileUtils(outputDir.getAbsolutePath(), exclusionSet, classesUsed, projectBaseDir, null);
         myFileUtils.deleteUnusedClasses(outputDir.getAbsolutePath());
-        File reportFile = new File(projectBaseDir + "debloat-report.csv");
+        File reportFile = new File(projectBaseDir + ".jdbl/debloat-report.csv");
         assertTrue(reportFile.exists());
-        assertEquals(5, new File(outputDir.getAbsolutePath() + "/calc").listFiles().length);
+        assertEquals(2, new File(outputDir.getAbsolutePath() + "/calc").listFiles().length);
     }
 
     @After

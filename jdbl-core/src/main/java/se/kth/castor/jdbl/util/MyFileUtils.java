@@ -107,92 +107,96 @@ public class MyFileUtils
         assert list != null;
         for (File classFile : list) {
             if (classFile.isDirectory()) {
-                // recursive call for directories
+                // Recursive call for directories
                 deleteUnusedClasses(classFile.getAbsolutePath());
             } else if (classFile.getName().endsWith(".class")) {
                 String classFilePath = classFile.getAbsolutePath();
                 String currentClassName = getBinaryNameOfTestFile(classFilePath);
-                FileType fileType = FileType.CLASS;
-                try {
-                    if (urlClassLoader != null) {
-                        Class<?> aClass = urlClassLoader.loadClass(currentClassName);
-                        if (aClass.isAnnotation()) {
-                            fileType = FileType.ANNOTATION;
-                            exclusionSet.add(currentClassName);
-                        } else if (aClass.isInterface()) {
-                            fileType = FileType.INTERFACE;
-                            exclusionSet.add(currentClassName);
-                        } else if (aClass.isEnum()) {
-                            fileType = FileType.ENUM;
-                            exclusionSet.add(currentClassName);
-                        } else if (Modifier.isFinal(aClass.getModifiers())) {
-                            fileType = FileType.CONSTANT;
-                            exclusionSet.add(currentClassName);
-                        } else {
-                            try {
-                                if (Modifier.isPrivate(aClass.getConstructor().getModifiers())) {
-                                    fileType = FileType.CONSTANT;
-                                    exclusionSet.add(currentClassName);
-                                }
-                            } catch (Exception e) {
-                                // ignore
-                            }
-                            try {
-                                boolean allStatic = true;
-                                for (Field field : aClass.getFields()) {
-                                    allStatic = allStatic && Modifier.isStatic(field.getModifiers());
-                                }
-                                for (Method method : aClass.getMethods()) {
-                                    allStatic = allStatic && Modifier.isStatic(method.getModifiers());
-                                }
-                                if (allStatic) {
-                                    fileType = FileType.CONSTANT;
-                                    exclusionSet.add(currentClassName);
-                                }
-                            } catch (Exception e) {
-                                // ignore
-                            }
-                            try {
-                                if (Modifier.isStatic(aClass.getField("INSTANCE").getModifiers())) {
-                                    fileType = FileType.CONSTANT;
-                                    exclusionSet.add(currentClassName);
-                                }
-                            } catch (Exception e) {
-                                // ignore
-                            }
+                ClassFileType classFileType = getClassFileType(urlClassLoader, currentClassName, classFilePath);
+
+                if (!classesUsed.contains(currentClassName)) {
+                    // Do not remove the classes that is preserved based on our static analysis criteria
+                    if (classFileType.equals(ClassFileType.ENUM) ||
+                        classFileType.equals(ClassFileType.ANNOTATION) ||
+                        classFileType.equals(ClassFileType.CONSTANT) ||
+                        classFileType.equals(ClassFileType.INTERFACE) ||
+                        classFileType.equals(ClassFileType.EXCEPTION)) {
+                        myFileWriter.writeDebloatReport(UsageStatusEnum.PRESERVED_CLASS.getName(),
+                            currentClassName, classFileType);
+                        myFileWriter.writePreservedClass(currentClassName, classFileType);
+                    } else {
+                        // Remove the class
+                        LOGGER.info("Removed class: " + currentClassName);
+                        // Get the current directory
+                        File parent = new File(classFile.getParent());
+                        // Write report
+                        myFileWriter.writeDebloatReport(UsageStatusEnum.BLOATED_CLASS.getName(),
+                            currentClassName, classFileType);
+                        Files.delete(classFile.toPath());
+                        nbClassesRemoved++;
+                        // Remove the parent folder if is empty
+                        while (parent.isDirectory() && Objects.requireNonNull(parent.listFiles()).length == 0) {
+                            deleteDirectory(parent);
+                            parent = parent.getParentFile();
                         }
                     }
-                } catch (Throwable e) {
-                    // ignore
-                    fileType = FileType.UNKNOWN;
-                }
-                // do not remove interfaces
-                CustomClassReader ccr = new CustomClassReader(new FileInputStream(classFilePath));
-
-                if (!classesUsed.contains(currentClassName) &&
-                    isRemovable(currentClassName.replace("/", ".")) &&
-                    !exclusionSet.contains(currentClassName) &&
-                    !ccr.isInterface() &&
-                    !ccr.isException()) {
-                    // get the current directory
-                    File parent = new File(classFile.getParent());
-                    // remove the file
-                    LOGGER.info("Removed class: " + currentClassName);
-                    // write report
-                    myFileWriter.writeDebloatReport(UsageStatusEnum.BLOATED_CLASS.getName(), currentClassName, fileType);
-                    Files.delete(classFile.toPath());
-                    nbClassesRemoved++;
-                    // remove the parent folder if is empty
-                    while (parent.isDirectory() && Objects.requireNonNull(parent.listFiles()).length == 0) {
-                        deleteDirectory(parent);
-                        parent = parent.getParentFile();
-                    }
                 } else {
-                    // write report
-                    myFileWriter.writeDebloatReport(UsageStatusEnum.USED_CLASS.getName(), currentClassName, fileType);
+                    myFileWriter.writeDebloatReport(UsageStatusEnum.USED_CLASS.getName(), currentClassName, classFileType);
                 }
             }
         }
+    }
+
+    private ClassFileType getClassFileType(URLClassLoader urlClassLoader, String currentClassName, String classFilePath)
+        throws FileNotFoundException
+    {
+        CustomClassReader ccr = new CustomClassReader(new FileInputStream(classFilePath));
+        ClassFileType classFileType = ClassFileType.CLASS;
+        try {
+            if (urlClassLoader != null) {
+                Class<?> clazz = urlClassLoader.loadClass(currentClassName);
+                if (clazz.isAnnotation()) {
+                    classFileType = ClassFileType.ANNOTATION;
+                } else if (clazz.isInterface() || ccr.isInterface()) {
+                    classFileType = ClassFileType.INTERFACE;
+                } else if (clazz.isEnum()) {
+                    classFileType = ClassFileType.ENUM;
+                } else if (Modifier.isFinal(clazz.getModifiers())) {
+                    classFileType = ClassFileType.CONSTANT;
+                } else if (ccr.isException()) {
+                    classFileType = ClassFileType.EXCEPTION;
+                } else if (Modifier.isAbstract(clazz.getModifiers())) {
+                    classFileType = ClassFileType.CLASS_ABSTRACT;
+                } else {
+                    try {
+                        boolean allPrivate = true;
+                        for (int i = 0; i < clazz.getConstructors().length; ++i) {
+                            allPrivate = allPrivate && Modifier.isPrivate(clazz.getConstructors()[i].getModifiers());
+                        }
+                        if (allPrivate) {
+                            classFileType = ClassFileType.SINGLETON;
+                        } else {
+                            boolean allStatic = true;
+                            for (Field field : clazz.getFields()) {
+                                allStatic = allStatic && Modifier.isStatic(field.getModifiers());
+                            }
+                            for (Method method : clazz.getMethods()) {
+                                allStatic = allStatic && Modifier.isStatic(method.getModifiers());
+                            }
+                            if (allStatic) {
+                                classFileType = ClassFileType.CONSTANT;
+                            }
+                        }
+                    } catch (Exception e) {
+                        LOGGER.error("Error preserving constant class: " + currentClassName);
+                    }
+                }
+            }
+        } catch (Throwable e) {
+            // ignore
+            classFileType = ClassFileType.UNKNOWN;
+        }
+        return classFileType;
     }
 
     private String getBinaryNameOfTestFile(final String classFilePath)
@@ -205,39 +209,6 @@ public class MyFileUtils
     public int nbClassesRemoved()
     {
         return nbClassesRemoved;
-    }
-
-    private boolean isRemovable(String className) throws IOException
-    {
-        //
-        //        System.out.println("The classname: " + className);
-        //
-        //        boolean result;
-        //
-        //        BufferedReader reader;
-        //        try {
-        //            reader = new BufferedReader(new FileReader(
-        //  "/home/cesarsv/Documents/papers/2019_papers/royal-debloat/jicocowrapper/experiments/clitools/loaded-classes"));
-        //            String line = reader.readLine();
-        //            while (line != null) {
-        //                if (line.equals(className)) {
-        //                    return false;
-        //                }
-        //                line = reader.readLine();
-        //            }
-        //            reader.close();
-        //        } catch (IOException e) {
-        //            e.printStackTrace();
-        //        }
-
-        return true;
-
-        //        ClassReader cr = new ClassReader(new FileInputStream(new File(pathToClass)));
-        //        ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
-        //        ClassAdapter cv = new ClassAdapter(cw, outputDirectory);
-        //        cr.accept(cv, 0);
-        //
-        //        return cv.isRemovable;
     }
 
     private void deleteDirectory(final File directory) throws IOException
