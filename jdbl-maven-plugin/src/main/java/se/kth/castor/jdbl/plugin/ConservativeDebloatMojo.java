@@ -71,7 +71,7 @@ public class ConservativeDebloatMojo extends AbstractDebloatMojo
       // delete unused methods
       AbstractMethodDebloat conservativeMethodDebloat = new ConservativeMethodDebloat(outputDirectory,
          usageAnalysis,
-         getProject().getBasedir().getAbsolutePath() + "/" + getReportFileName());
+         getProject().getBasedir().getAbsolutePath() + "/.jdbl/debloat-report.csv");
       try {
          conservativeMethodDebloat.removeUnusedMethods();
       } catch (IOException e) {

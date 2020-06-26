@@ -115,7 +115,7 @@ public class MyFileUtils
                 ClassFileType classFileType = getClassFileType(urlClassLoader, currentClassName, classFilePath);
 
                 if (!classesUsed.contains(currentClassName)) {
-                    // Do not remove the classes that is preserved based on our static analysis criteria
+                    // Do not remove the classes that are preserved based on our static analysis criteria
                     if (classFileType.equals(ClassFileType.ENUM) ||
                         classFileType.equals(ClassFileType.ANNOTATION) ||
                         classFileType.equals(ClassFileType.CONSTANT) ||

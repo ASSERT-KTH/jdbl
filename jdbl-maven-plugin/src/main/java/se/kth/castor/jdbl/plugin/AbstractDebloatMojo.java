@@ -35,10 +35,6 @@ public abstract class AbstractDebloatMojo extends AbstractMojo
 
    private static final String LINE_SEPARATOR = "------------------------------------------------------------------------";
 
-   /**
-    * The name of the file to be written in the root of the project with a report about the debloat results.
-    */
-   private String reportFileName = "debloat-report.csv";
 
    @Parameter(defaultValue = "${project}", readonly = true)
    private MavenProject project;
@@ -88,10 +84,5 @@ public abstract class AbstractDebloatMojo extends AbstractMojo
    public static String getLineSeparator()
    {
       return LINE_SEPARATOR;
-   }
-
-   public String getReportFileName()
-   {
-      return reportFileName;
    }
 }

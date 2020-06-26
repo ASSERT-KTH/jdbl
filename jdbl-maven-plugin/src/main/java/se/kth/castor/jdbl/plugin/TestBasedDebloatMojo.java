@@ -40,7 +40,6 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
     {
         printCustomStringToConsole("JDBL: STARTING TEST BASED DEBLOAT");
         Instant start = Instant.now();
-        cleanReportFile();
         String outputDirectory = getProject().getBuild().getOutputDirectory();
         String projectBaseDir = getProject().getBasedir().getAbsolutePath();
         MyFileWriter myFileWriter = new MyFileWriter(projectBaseDir);
@@ -123,16 +122,6 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
         // ----------------------------------------------------
         myFileWriter.writeTimeElapsedReportFile(start);
         printCustomStringToConsole("JDBL: TEST BASED DEBLOAT FINISHED");
-    }
-
-    private void cleanReportFile()
-    {
-        try {
-            org.apache.commons.io.FileUtils.writeStringToFile(new File(getProject().getBasedir().getAbsolutePath() + "/" +
-                getReportFileName()), "", StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            this.getLog().error("Error cleaning report file.");
-        }
     }
 
     private void printClassesLoaded()

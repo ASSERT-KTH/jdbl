@@ -89,7 +89,7 @@ public class EntryPointDebloatMojo extends AbstractDebloatMojo
         // remove unused methods
         AbstractMethodDebloat entryPointMethodDebloat = new EntryPointMethodDebloat(outputDirectory,
             usageAnalysis,
-            getProject().getBasedir().getAbsolutePath() + "/" + getReportFileName());
+            getProject().getBasedir().getAbsolutePath() + "/.jdbl/debloat-report.csv");
         try {
             entryPointMethodDebloat.removeUnusedMethods();
         } catch (IOException e) {
