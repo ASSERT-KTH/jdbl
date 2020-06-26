@@ -80,7 +80,7 @@ public abstract class AbstractCoverage implements UsageAnalyzer
     protected void runTests()
     {
         try {
-            TestRunner.runTests(mavenProject);
+            TestRunner.runTests(mavenProject, true);
         } catch (IOException e) {
             LOGGER.error("Error running the tests.");
         }

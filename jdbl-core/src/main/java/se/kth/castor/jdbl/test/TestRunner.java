@@ -15,19 +15,27 @@ public class TestRunner
 {
     private static final Logger LOGGER = LogManager.getLogger(YajtaCoverage.class.getName());
 
-    public static void runTests(MavenProject mavenProject) throws IOException
+    public static void runTests(MavenProject mavenProject, boolean isTestRunForCoverage) throws IOException
     {
         Runtime rt = Runtime.getRuntime();
-        Process p = rt.exec("mvn test -Dmaven.main.skip=true -Drat.skip=true -Danimal.sniffer.skip=true -Dmaven.javadoc.skip=true -Dlicense.skip=true -Dsource.skip=true");
+        Process p;
+
+        if (isTestRunForCoverage) {
+            p = rt.exec("mvn surefire:test");
+        } else {
+            p = rt.exec("mvn test -Dmaven.main.skip=true -Drat.skip=true -Danimal.sniffer.skip=true -Dmaven.javadoc.skip=true -Dlicense.skip=true -Dsource.skip=true");
+        }
 
         printProcessToStandardOutput(p);
 
         try {
             p.waitFor();
-        } catch (InterruptedException e) {
+        } catch (
+            InterruptedException e) {
             LOGGER.error("Re-testing process terminated unexpectedly.");
             Thread.currentThread().interrupt();
         }
+
         TestResultReader testResultReader = new TestResultReader(".");
         TestResult testResult = testResultReader.getResults();
 
@@ -37,6 +45,7 @@ public class TestRunner
         if (testResult.errorTests() != 0 || testResult.failedTests() != 0) {
             LOGGER.error("JDBL: THERE ARE TESTS FAILURES");
         }
+
     }
 
     private static void printProcessToStandardOutput(final Process p) throws IOException

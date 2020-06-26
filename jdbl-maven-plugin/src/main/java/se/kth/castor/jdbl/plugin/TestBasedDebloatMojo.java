@@ -114,7 +114,7 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
         // ----------------------------------------------------
         try {
             this.getLog().info("Starting running the test suite on the debloated version...");
-            TestRunner.runTests(getProject());
+            TestRunner.runTests(getProject(), false);
         } catch (IOException e) {
             this.getLog().error("IOException when rerunning the tests");
         }
