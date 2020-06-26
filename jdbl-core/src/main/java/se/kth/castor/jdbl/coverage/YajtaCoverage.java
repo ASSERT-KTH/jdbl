@@ -103,7 +103,7 @@ public class YajtaCoverage extends AbstractCoverage
         final String testDir = mavenProject.getBasedir().getAbsolutePath() + "/target/test-classes";
         final String instrumentedDir = mavenProject.getBasedir().getAbsolutePath() + "/target/instrumented";
         final String classesOriginalDir = mavenProject.getBasedir().getAbsolutePath() + "/target/classes-original";
-        MavenUtils mavenUtils = copyDependencies(classesDir);
+        MavenUtils mavenUtils = copyDependencies(classesDir, testDir);
         deleteNonClassFiles(classesDir);
         instrument(classesDir, instrumentedDir);
         replaceInstrumentedClasses(classesDir, instrumentedDir, classesOriginalDir);

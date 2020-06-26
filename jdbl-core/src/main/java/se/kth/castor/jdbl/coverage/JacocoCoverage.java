@@ -142,7 +142,7 @@ public class JacocoCoverage extends AbstractCoverage
         sourceFiles = mavenProject.getCompileSourceRoots().stream().map(File::new).collect(Collectors.toList());
         xml = new File(baseDir + "/target/report.xml");
 
-        MavenUtils mavenUtils = copyDependencies(classesDir);
+        MavenUtils mavenUtils = copyDependencies(classesDir, testDir);
         deleteNonClassFiles(classesDir);
         try {
             executeInstrumentation();

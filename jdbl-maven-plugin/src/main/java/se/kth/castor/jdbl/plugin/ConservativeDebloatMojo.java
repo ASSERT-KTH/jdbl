@@ -34,7 +34,7 @@ public class ConservativeDebloatMojo extends AbstractDebloatMojo
       MavenUtils mavenUtils = new MavenUtils(getMavenHome(), baseDir);
 
       // copy the dependencies
-      mavenUtils.copyDependencies(outputDirectory);
+      mavenUtils.copyRuntimeDependencies(outputDirectory);
 
       // copy the resources
       mavenUtils.copyResources(outputDirectory);

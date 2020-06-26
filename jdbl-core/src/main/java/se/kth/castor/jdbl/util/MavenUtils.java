@@ -32,14 +32,35 @@ public class MavenUtils
     /**
      * Execute the maven plugin dependency:copy-dependencies.
      * This plugin resolves direct and transitive dependencies.
+     * @see <a https://maven.apache.org/plugins/maven-dependency-plugin/copy-dependencies-mojo.html />
+     *
+     * Runtime scope gives runtime and compile dependencies,
      *
      * @param outputDirectory The directory to put the dependencies in.
      */
-    public void copyDependencies(String outputDirectory)
+    public void copyRuntimeDependencies(String outputDirectory)
     {
         Properties copyDependenciesProperties = new Properties();
         copyDependenciesProperties.setProperty("outputDirectory", outputDirectory);
-        copyDependenciesProperties.setProperty("includeScope", "compile");
+        copyDependenciesProperties.setProperty("includeScope", "runtime");
+        copyDependenciesProperties.setProperty("prependGroupId", "true");
+        runMaven(Collections.singletonList("dependency:copy-dependencies"), copyDependenciesProperties);
+    }
+
+    public void copyProvidedDependencies(String outputDirectory)
+    {
+        Properties copyDependenciesProperties = new Properties();
+        copyDependenciesProperties.setProperty("outputDirectory", outputDirectory);
+        copyDependenciesProperties.setProperty("includeScope", "provided");
+        copyDependenciesProperties.setProperty("prependGroupId", "true");
+        runMaven(Collections.singletonList("dependency:copy-dependencies"), copyDependenciesProperties);
+    }
+
+    public void copySystemDependencies(String outputDirectory)
+    {
+        Properties copyDependenciesProperties = new Properties();
+        copyDependenciesProperties.setProperty("outputDirectory", outputDirectory);
+        copyDependenciesProperties.setProperty("includeScope", "system");
         copyDependenciesProperties.setProperty("prependGroupId", "true");
         runMaven(Collections.singletonList("dependency:copy-dependencies"), copyDependenciesProperties);
     }
@@ -50,7 +71,6 @@ public class MavenUtils
         Properties copyProperties = new Properties();
         copyProperties.setProperty("artifact", artifact);
         runMaven(Collections.singletonList("dependency:get"), copyProperties);
-
         copyProperties = new Properties();
         copyProperties.setProperty("artifact", artifact);
         copyProperties.setProperty("outputDirectory", outputDirectory);

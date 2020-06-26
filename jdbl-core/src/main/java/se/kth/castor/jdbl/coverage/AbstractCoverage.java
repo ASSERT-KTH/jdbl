@@ -89,12 +89,15 @@ public abstract class AbstractCoverage implements UsageAnalyzer
     /**
      * Copy all the dependencies (direct and transitive) to a directory to be instrumented.
      */
-    protected MavenUtils copyDependencies(String classesDir)
+    protected MavenUtils copyDependencies(String classesDir, String testDir)
     {
         MavenUtils mavenUtils = new MavenUtils(mavenHome, mavenProject.getBasedir());
-        mavenUtils.copyDependencies(classesDir);
+        mavenUtils.copyRuntimeDependencies(classesDir);
+        mavenUtils.copyProvidedDependencies(testDir);
+        mavenUtils.copySystemDependencies(testDir);
         excludeOptionalDependencies(mavenUtils);
         JarUtils.decompressJars(classesDir);
+        JarUtils.decompressJars(testDir);
         // applyBytecodeTransformations(classesDir);
         return mavenUtils;
     }
