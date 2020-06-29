@@ -12,6 +12,7 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 
 import se.kth.castor.jdbl.coverage.CoverageToolEnum;
+import se.kth.castor.jdbl.coverage.JCovCoverage;
 import se.kth.castor.jdbl.coverage.JVMClassCoverage;
 import se.kth.castor.jdbl.coverage.JVMClassesCoveredSingleton;
 import se.kth.castor.jdbl.coverage.JacocoCoverage;
@@ -44,6 +45,12 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
         String projectBaseDir = getProject().getBasedir().getAbsolutePath();
         MyFileWriter myFileWriter = new MyFileWriter(projectBaseDir);
         myFileWriter.resetJDBLReportsDirectory();
+
+
+        // Run JCov usage analysis
+        JCovCoverage jcovCoverage = new JCovCoverage(getProject(), mavenHome, DebloatTypeEnum.TEST_DEBLOAT);
+        UsageAnalysis jcovUsageAnalysis = jcovCoverage.analyzeUsages();
+        System.exit(1);
 
         // Run yajta usage analysis
         YajtaCoverage yajtaCoverage = new YajtaCoverage(getProject(), mavenHome, DebloatTypeEnum.TEST_DEBLOAT);
