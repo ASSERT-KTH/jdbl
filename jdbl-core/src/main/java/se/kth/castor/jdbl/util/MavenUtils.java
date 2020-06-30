@@ -44,7 +44,7 @@ public class MavenUtils
         copyDependenciesProperties.setProperty("outputDirectory", outputDirectory);
         copyDependenciesProperties.setProperty("includeScope", "runtime");
         copyDependenciesProperties.setProperty("prependGroupId", "true");
-        runMaven(Collections.singletonList("dependency:copy-dependencies"), copyDependenciesProperties);
+        runMaven(Collections.singletonList("org.apache.maven.plugins:maven-dependency-plugin:3.1.2:copy-dependencies"), copyDependenciesProperties);
     }
 
     public void copyProvidedDependencies(String outputDirectory)
@@ -53,7 +53,7 @@ public class MavenUtils
         copyDependenciesProperties.setProperty("outputDirectory", outputDirectory);
         copyDependenciesProperties.setProperty("includeScope", "provided");
         copyDependenciesProperties.setProperty("prependGroupId", "true");
-        runMaven(Collections.singletonList("dependency:copy-dependencies"), copyDependenciesProperties);
+        runMaven(Collections.singletonList("org.apache.maven.plugins:maven-dependency-plugin:3.1.2:copy-dependencies"), copyDependenciesProperties);
     }
 
     public void copySystemDependencies(String outputDirectory)
@@ -62,7 +62,7 @@ public class MavenUtils
         copyDependenciesProperties.setProperty("outputDirectory", outputDirectory);
         copyDependenciesProperties.setProperty("includeScope", "system");
         copyDependenciesProperties.setProperty("prependGroupId", "true");
-        runMaven(Collections.singletonList("dependency:copy-dependencies"), copyDependenciesProperties);
+        runMaven(Collections.singletonList("org.apache.maven.plugins:maven-dependency-plugin:3.1.2:copy-dependencies"), copyDependenciesProperties);
     }
 
     public void copyDependency(String artifact, String outputDirectory)
@@ -70,11 +70,12 @@ public class MavenUtils
         LOGGER.info("Copying dependency " + artifact + " to " + outputDirectory);
         Properties copyProperties = new Properties();
         copyProperties.setProperty("artifact", artifact);
-        runMaven(Collections.singletonList("dependency:get"), copyProperties);
+        copyProperties.setProperty("remoteRepositories", "central::default::https://repo.maven.apache.org/maven2");
+        runMaven(Collections.singletonList("org.apache.maven.plugins:maven-dependency-plugin:3.1.2:get"), copyProperties);
         copyProperties = new Properties();
         copyProperties.setProperty("artifact", artifact);
         copyProperties.setProperty("outputDirectory", outputDirectory);
-        runMaven(Collections.singletonList("dependency:copy"), copyProperties);
+        runMaven(Collections.singletonList("org.apache.maven.plugins:maven-dependency-plugin:3.1.2:copy"), copyProperties);
     }
 
     public void dependencyTree(String outputFile)
@@ -82,7 +83,7 @@ public class MavenUtils
         Properties copyProperties = new Properties();
         copyProperties.setProperty("outputFile", outputFile);
         copyProperties.setProperty("outputType", "text");
-        runMaven(Collections.singletonList("dependency:tree"), copyProperties);
+        runMaven(Collections.singletonList("org.apache.maven.plugins:maven-dependency-plugin:3.1.2:tree"), copyProperties);
     }
 
     /**
