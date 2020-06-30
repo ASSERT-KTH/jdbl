@@ -1,8 +1,6 @@
 package se.kth.castor.jdbl.plugin;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Objects;
@@ -46,10 +44,11 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
         MyFileWriter myFileWriter = new MyFileWriter(projectBaseDir);
         myFileWriter.resetJDBLReportsDirectory();
 
-
         // Run JCov usage analysis
         JCovCoverage jcovCoverage = new JCovCoverage(getProject(), mavenHome, DebloatTypeEnum.TEST_DEBLOAT);
         UsageAnalysis jcovUsageAnalysis = jcovCoverage.analyzeUsages();
+        System.out.println(jcovUsageAnalysis.toString());
+
         System.exit(1);
 
         // Run yajta usage analysis
@@ -66,19 +65,25 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
 
         // Print out Yajta coverage output
         System.out.println("Yajta:");
-        System.out.print(yajtaUsageAnalysis.toString());
+        if (!yajtaUsageAnalysis.classes().isEmpty() && yajtaUsageAnalysis != null) {
+            System.out.print(yajtaUsageAnalysis.toString());
+        }
         myFileWriter.writeCoverageAnalysisToFile(CoverageToolEnum.YAJTA, yajtaUsageAnalysis);
         printCoverageAnalysisResults(yajtaUsageAnalysis);
 
         // Print out JaCoCo coverage output
         System.out.println("JaCoCo");
-        System.out.print(jacocoUsageAnalysis.toString());
+        if (!jacocoUsageAnalysis.classes().isEmpty() && jacocoUsageAnalysis != null) {
+            System.out.print(jacocoUsageAnalysis.toString());
+        }
         myFileWriter.writeCoverageAnalysisToFile(CoverageToolEnum.JACOCO, jacocoUsageAnalysis);
         printCoverageAnalysisResults(jacocoUsageAnalysis);
 
         // Print out JVM coverage output
         System.out.println("JVM");
-        System.out.print(jvmUsageAnalysis.toString());
+        if (!jvmUsageAnalysis.classes().isEmpty() && jvmUsageAnalysis != null) {
+            System.out.print(jvmUsageAnalysis.toString());
+        }
         myFileWriter.writeCoverageAnalysisToFile(CoverageToolEnum.JVM_CLASS_LOADER, jvmUsageAnalysis);
         printCoverageAnalysisResults(jvmUsageAnalysis);
 

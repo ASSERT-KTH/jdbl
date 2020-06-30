@@ -16,7 +16,7 @@ public class JacocoReportReaderTest
     {
         JacocoReportReader r = null;
         r = new JacocoReportReader();
-        final File xmlJacocoReport = new File("src/test/resources/coverage/report.xml");
+        final File xmlJacocoReport = new File("src/test/resources/coverage/report_jacoco.xml");
         UsageAnalysis observed = null;
         observed = r.getUsedClassesAndMethods(xmlJacocoReport);
         assertEquals(2, observed.getAnalysis().size());

@@ -39,10 +39,10 @@ public class JCovCoverageTest
     @Test
     /**
      * java -jar jcov.jar tmplgen -t template.xml $path_to_classes
-     * java -jar jcov.jar grabber -t template.xml -o result.xml
+     * java -jar jcov.jar grabber -t template.xml -o result_jcov.xml
      * run the tests adding javaagent option: "-javaagent:jcov.jar=grabber"
      * java -jar jcov.jar grabbermanager -kill
-     * java -jar jcov.jar repgen -o report result.xml
+     * java -jar jcov.jar repgen -o report result_jcov.xml
      *
      */
     public void instrument() throws IOException
@@ -51,7 +51,7 @@ public class JCovCoverageTest
         // JCov.main(new String[]{"tmplgen", "t", "template.xml", classesDir.getAbsolutePath()});
         // JCov.printHelp();
         // jCov.run(new String[]{"tmplgen", "t", "template.xml", classesDir.getAbsolutePath()});
-        // jCov.run(new String[]{"grabber", "-t", "template.xml", "-o", "result.xml"});
+        // jCov.run(new String[]{"grabber", "-t", "template.xml", "-o", "result_jcov.xml"});
 
         Grabber grabber = new Grabber();
         grabber.createServer();
