@@ -7,12 +7,11 @@ import org.apache.log4j.LogManager;
 import org.apache.maven.project.MavenProject;
 
 import com.sun.tdk.jcov.Instr;
-import com.sun.tdk.jcov.JCov;
 import com.sun.tdk.jcov.Merger;
 import com.sun.tdk.jcov.RepGen;
 import com.sun.tdk.jcov.data.Result;
-import com.sun.tdk.jcov.report.ReportGenerator;
 import se.kth.castor.jdbl.debloat.DebloatTypeEnum;
+import se.kth.castor.jdbl.test.TestRunner;
 import se.kth.castor.jdbl.util.JarUtils;
 import se.kth.castor.jdbl.util.MavenUtils;
 
@@ -23,15 +22,7 @@ public class JCovCoverage extends AbstractCoverage
 {
     private final Instr instr;
     private final RepGen repgen;
-
-    /**
-     * The XML coverage report file
-     */
     private File template;
-
-    /**
-     * JCov report merger.
-     */
     private Merger merger;
 
     public JCovCoverage(MavenProject mavenProject, File mavenHome, DebloatTypeEnum debloatTypeEnum)
@@ -40,7 +31,7 @@ public class JCovCoverage extends AbstractCoverage
         instr = new Instr();
         repgen = new RepGen();
         merger = new Merger();
-        template = new File(mavenProject.getBasedir().getAbsolutePath() + "/target/jcov-template.xml");
+        template = new File(mavenProject.getBasedir().getAbsolutePath() + "/target/instrumented/template.xml");
         LOGGER = LogManager.getLogger(JCovCoverage.class.getName());
     }
 
@@ -79,19 +70,25 @@ public class JCovCoverage extends AbstractCoverage
         final String testDir = baseDir + "/target/test-classes";
         final String instrumentedDir = baseDir + "/target/instrumented";
         final String classesOriginalDir = baseDir + "/target/classes-original";
+
         MavenUtils mavenUtils = copyDependencies(classesDir, testDir);
         instrument(classesDir, instrumentedDir);
         replaceInstrumentedClasses(classesDir, instrumentedDir, classesOriginalDir);
         addJCovAsTestDependency(testDir, mavenUtils);
 
-        runTests();
-        restoreOriginalClasses(classesDir, classesOriginalDir);
+
+        try {
+            TestRunner.runTests2(mavenProject, classesDir + "/template.xml");
+        } catch (IOException e) {
+        }
+
         writeReports(baseDir);
+        restoreOriginalClasses(classesDir, classesOriginalDir);
     }
 
     private void writeReports(String basedir)
     {
-        final Result result = new Result(template.getPath());
+        final Result result = new Result(basedir + "/result.xml");
         try {
             LOGGER.info("Generating JCov report");
             repgen.generateReport(basedir + "/target/jcov-reports", result);
@@ -105,7 +102,7 @@ public class JCovCoverage extends AbstractCoverage
      */
     private void addJCovAsTestDependency(final String testDir, MavenUtils mavenUtils)
     {
-        mavenUtils.copyDependency("com.sun.tdk:jcov:1.0", testDir);
+        mavenUtils.copyDependency("com.sun.tdk:jcov-file-saver:1.0", testDir);
         JarUtils.decompressJars(testDir);
     }
 
