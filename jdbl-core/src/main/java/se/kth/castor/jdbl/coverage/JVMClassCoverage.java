@@ -46,8 +46,9 @@ public class JVMClassCoverage extends AbstractCoverage
         Set<String> classesLoadedTestDebloat = new HashSet<>();
         List<String> args = new ArrayList<>();
         args.add("mvn");
-        args.add("test");
+        args.add("surefire:test");
         args.add("-X");
+        args.add("-DargLine=@{argLine}");
         args.add("-DargLine=-verbose:class");
         ProcessBuilder processBuilder = new ProcessBuilder(args);
         Map<String, String> environment = processBuilder.environment();
