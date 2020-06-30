@@ -13,7 +13,7 @@ import se.kth.castor.jdbl.util.MyFileWriter;
 
 public class TestRunner
 {
-    private static final Logger LOGGER = LogManager.getLogger(YajtaCoverage.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger(TestRunner.class.getName());
 
     public static void runTests(MavenProject mavenProject, boolean isTestRunForCoverage) throws IOException
     {
