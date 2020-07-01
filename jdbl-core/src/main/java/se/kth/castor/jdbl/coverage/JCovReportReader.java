@@ -108,18 +108,26 @@ public class JCovReportReader
         // we look for a child node like <counter type="entity" ... covered="?"> if ? equals "0" it is not covered,
         // otherwise it is
         NodeList counters = c.getChildNodes();
+
         for (int i = 0; i < counters.getLength(); i++) {
             Node n = counters.item(i);
-            if (!n.getNodeName().equals("count")) {
+            if (!n.getNodeName().equals("bl")) {
                 continue;
             }
-            Node type = n.getAttributes().getNamedItem("type");
-            if (type == null) {
-                continue;
-            } else if (!type.getNodeValue().equals(entity)) {
+
+            NodeList blList = n.getChildNodes();
+            Node nodeCounter = null;
+            for (int j = 0; j < blList.getLength(); ++j) {
+                Node node = blList.item(j);
+                if (node.getNodeName().equals(entity)) {
+                    nodeCounter = node.getAttributes().getNamedItem("count");
+                    break;
+                }
+            }
+            if (nodeCounter == null) {
                 continue;
             } else {
-                return !n.getAttributes().getNamedItem("covered").getNodeValue().equals("0");
+                return !nodeCounter.getNodeValue().equals("0");
             }
         }
         return true;

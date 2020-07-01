@@ -13,17 +13,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class JCovReportReaderTest
 {
-
-    @Before
-    public void setUp() throws Exception
-    {
-    }
-
-    @After
-    public void tearDown() throws Exception
-    {
-    }
-
     @Test
     public void getUsedClassesAndMethods() throws ParserConfigurationException, IOException, SAXException
     {
@@ -32,7 +21,7 @@ public class JCovReportReaderTest
         UsageAnalysis observed = r.getUsedClassesAndMethods(xmlJacocoReport);
         System.out.println(observed.toString());
         assertEquals(2, observed.getAnalysis().size());
-        assertEquals(3, observed.getAnalysis().get("calc/Calc").size());
+        assertEquals(2, observed.getAnalysis().get("calc/Calc").size());
         assertEquals(true, observed.getAnalysis().containsKey("calc/Main"));
     }
 }

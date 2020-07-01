@@ -47,9 +47,6 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
         // Run JCov usage analysis
         JCovCoverage jcovCoverage = new JCovCoverage(getProject(), mavenHome, DebloatTypeEnum.TEST_DEBLOAT);
         UsageAnalysis jcovUsageAnalysis = jcovCoverage.analyzeUsages();
-        System.out.println(jcovUsageAnalysis.toString());
-
-        System.exit(1);
 
         // Run yajta usage analysis
         YajtaCoverage yajtaCoverage = new YajtaCoverage(getProject(), mavenHome, DebloatTypeEnum.TEST_DEBLOAT);
@@ -62,6 +59,15 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
         // Run JVM class usage analysis
         JVMClassCoverage jvmClassCoverage = new JVMClassCoverage(getProject(), mavenHome, DebloatTypeEnum.TEST_DEBLOAT);
         UsageAnalysis jvmUsageAnalysis = jvmClassCoverage.analyzeUsages();
+
+
+        // Print out JCov coverage output
+        System.out.println("JCov:");
+        if (!jcovUsageAnalysis.classes().isEmpty() && yajtaUsageAnalysis != null) {
+            System.out.print(jcovUsageAnalysis.toString());
+        }
+        myFileWriter.writeCoverageAnalysisToFile(CoverageToolEnum.JCOV, jcovUsageAnalysis);
+        printCoverageAnalysisResults(jcovUsageAnalysis);
 
         // Print out Yajta coverage output
         System.out.println("Yajta:");
@@ -88,7 +94,7 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
         printCoverageAnalysisResults(jvmUsageAnalysis);
 
         // Merge the coverage analysis
-        UsageAnalysis mergedUsageAnalysis = yajtaUsageAnalysis.mergeWith(jacocoUsageAnalysis);
+        UsageAnalysis mergedUsageAnalysis = yajtaUsageAnalysis.mergeWith(jacocoUsageAnalysis).mergeWith(jcovUsageAnalysis);
 
         // Get the classes loaded by the JVM
         Set<String> usedClasses = null;

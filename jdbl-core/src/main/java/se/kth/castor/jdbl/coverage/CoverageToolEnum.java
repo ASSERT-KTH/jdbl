@@ -2,6 +2,7 @@ package se.kth.castor.jdbl.coverage;
 
 public enum CoverageToolEnum
 {
+    JCOV("JCov"),
     YAJTA("Yajta"),
     JACOCO("JaCoCo"),
     JVM_CLASS_LOADER("JVM");
