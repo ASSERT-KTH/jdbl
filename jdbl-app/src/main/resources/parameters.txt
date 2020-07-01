@@ -1,2 +1,0 @@
--input I -output O -class C -method M -parameters P
-
