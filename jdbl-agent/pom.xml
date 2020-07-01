@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+   <modelVersion>4.0.0</modelVersion>
+   <artifactId>jdbl-agent</artifactId>
+   <version>1.0.0</version>
+
+   <parent>
+      <groupId>se.kth.castor</groupId>
+      <artifactId>jdbl-parent-pom</artifactId>
+      <version>1.0.0</version>
+      <relativePath>../</relativePath>
+   </parent>
+
+   <properties>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+   </properties>
+
+   <build>
+      <plugins>
+         <plugin>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.1</version>
+            <configuration>
+               <source>1.8</source>
+               <target>1.8</target>
+            </configuration>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>2.4</version>
+            <configuration>
+               <archive>
+                  <manifest>
+                     <addClasspath>true</addClasspath>
+                     <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                     <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                  </manifest>
+                  <manifestEntries>
+                     <Premain-Class>se.kth.castor.jdbl.agent.Agent</Premain-Class>
+                     <Can-Redefine-Classes>false</Can-Redefine-Classes>
+                     <Can-Retransform-Classes>true</Can-Retransform-Classes>
+                  </manifestEntries>
+               </archive>
+            </configuration>
+         </plugin>
+         <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <executions>
+               <execution>
+                  <phase>package</phase>
+                  <goals>
+                     <goal>single</goal>
+                  </goals>
+               </execution>
+            </executions>
+            <configuration>
+               <descriptorRefs>
+                  <descriptorRef>jar-with-dependencies</descriptorRef>
+               </descriptorRefs>
+               <archive>
+                  <manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
+               </archive>
+            </configuration>
+         </plugin>
+      </plugins>
+   </build>
+
+   <!-- List of dependencies-->
+   <dependencies>
+      <dependency>
+         <groupId>net.bytebuddy</groupId>
+         <artifactId>byte-buddy</artifactId>
+         <version>1.10.9</version>
+      </dependency>
+   </dependencies>
+</project>

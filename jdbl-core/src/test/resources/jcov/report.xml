@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<coverage
+        xmlns='http://java.sun.com/jcov/namespace'
+        xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+        xsi:schemaLocation='http://java.sun.com/jcov/namespace coverage.xsd'>
+
+	<head>
+		<property name='coverage.generator.args' val=''/>
+		<property name='coverage.generator.mode' val='BRANCH'/>
+		<property name='coverage.generator.internal' val='include'/>
+		<property name='coverage.generator.include' val='.*'/>
+		<property name='coverage.generator.exclude' val=''/>
+		<property name='coverage.generator.caller_include' val=''/>
+		<property name='coverage.generator.caller_exclude' val=''/>
+		<property name='coverage.created.date' val='2020-06-29'/>
+		<property name='coverage.created.time' val='08:36:01'/>
+		<property name='coverage.generator.fullversion' val='3.0os.beta-2 built: 24 January 2019'/>
+		<property name='coverage.generator.name' val='jcov'/>
+		<property name='coverage.generator.version' val='3.0'/>
+		<property name='coverage.spec.version' val='1.3'/>
+		<property name='java.runtime.version' val='11.0.7+10-post-Ubuntu-2ubuntu218.04'/>
+		<property name='java.version' val='11.0.7'/>
+		<property name='os.arch' val='amd64'/>
+		<property name='os.name' val='Linux'/>
+		<property name='os.version' val='5.3.0-46-generic'/>
+		<property name='user.name' val='cesarsv'/>
+		<property name='dynamic.collected' val='false'/>
+		<property name='id.count' val='9'/>
+	</head>
+	<package name="calc" moduleName="no_module">
+		<class name="Calculator" supername="calc/CalculatorB" checksum="2129613962" source="Calculator.java" flags=' public'>
+			<meth name="&lt;init&gt;" vmsig="(II)V" flags=' public' access="1" cons="true" length="15">
+				<bl s="0" e="14">
+					<methenter s="0" e="14" id="0" count="0"/>
+					<exit s="14" e="14" opcode="return"/>
+				</bl>
+				<lt>0=8;4=9;9=10;14=11;</lt>
+			</meth>
+			<meth name="sum" vmsig="()I" flags=' public' access="1" length="10">
+				<bl s="0" e="9">
+					<methenter s="0" e="9" id="1" count="0"/>
+					<exit s="9" e="9" opcode="ireturn"/>
+				</bl>
+				<lt>0=15;</lt>
+			</meth>
+			<meth name="sub" vmsig="()I" flags=' public' access="1" length="10">
+				<bl s="0" e="9">
+					<methenter s="0" e="9" id="2" count="0"/>
+					<exit s="9" e="9" opcode="ireturn"/>
+				</bl>
+				<lt>0=20;</lt>
+			</meth>
+			<meth name="mul" vmsig="()I" flags=' public' access="1" length="10">
+				<bl s="0" e="9">
+					<methenter s="0" e="9" id="3" count="0"/>
+					<exit s="9" e="9" opcode="ireturn"/>
+				</bl>
+				<lt>0=25;</lt>
+			</meth>
+			<meth name="other" vmsig="()I" flags=' public' access="1" length="3">
+				<bl s="0" e="2">
+					<methenter s="0" e="2" id="4" count="0"/>
+					<exit s="2" e="2" opcode="ireturn"/>
+				</bl>
+				<lt>0=29;</lt>
+			</meth>
+		</class>
+		<class name="CalculatorB" supername="java/lang/Object" checksum="828128641" source="CalculatorB.java" flags=' public abstract'>
+			<meth name="&lt;init&gt;" vmsig="()V" flags=' public' access="1" cons="true" length="5">
+				<bl s="0" e="4">
+					<methenter s="0" e="4" id="5" count="0"/>
+					<exit s="4" e="4" opcode="return"/>
+				</bl>
+				<lt>0=3;</lt>
+			</meth>
+		</class>
+		<class name="IncorrectFileNameException" supername="java/lang/Exception" checksum="3059768539" source="IncorrectFileNameException.java" flags=' public'>
+			<meth name="&lt;init&gt;" vmsig="(Ljava/lang/String;)V" flags=' public' access="1" cons="true" length="6">
+				<bl s="0" e="5">
+					<methenter s="0" e="5" id="6" count="0"/>
+					<exit s="5" e="5" opcode="return"/>
+				</bl>
+				<lt>0=5;5=6;</lt>
+			</meth>
+		</class>
+		<class name="MainCalculator" supername="java/lang/Object" checksum="135522126" source="MainCalculator.java" flags=' public'>
+			<meth name="&lt;init&gt;" vmsig="()V" flags=' public' access="1" cons="true" length="5">
+				<bl s="0" e="4">
+					<methenter s="0" e="4" id="7" count="0"/>
+					<exit s="4" e="4" opcode="return"/>
+				</bl>
+				<lt>0=3;</lt>
+			</meth>
+			<meth name="main" vmsig="([Ljava/lang/String;)V" flags=' public static' access="9" length="51">
+				<bl s="0" e="50">
+					<methenter s="0" e="50" id="8" count="0"/>
+					<exit s="50" e="50" opcode="return"/>
+				</bl>
+				<lt>0=6;20=7;50=8;</lt>
+			</meth>
+		</class>
+	</package>
+</coverage>

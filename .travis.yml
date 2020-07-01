@@ -1,0 +1,42 @@
+language: java
+
+sudo: true
+
+os: linux
+
+dist: trusty
+
+jdk: openjdk8
+
+env:
+  global:
+    - M2_HOME="/usr/local/maven"
+  matrix:
+    - SCRIPT=jdbl.sh
+
+before_cache: rm -rf $HOME/.m2/se/kth/castor
+
+cache:
+  directories:
+    - $HOME/.m2
+    - $HOME/.sonar/cache
+
+before_install:
+  - sudo apt-get update
+  - jdk_switcher use openjdk8
+  - java -version
+  - chmod +x ./.travis/jdbl.sh
+
+install: true
+
+addons:
+  sonarcloud:
+    organization: "castor-software"
+    token:
+      secure: "BdKfqOO+ETtHLzJL1dP8vBoIVZGodzdQZEqVlVIqaC3t0F9M6HDp9ndJ4jzOFczAxw9TMRcKPCIxlDz+H3DLWCgcnN3I49WbgYpBEQ82mVrlA+EqaeXetfYaFE491BwgJu/z4WXjvAeud+LLor28Vm0LvdxlomSZErKbLW2El5pyO9DpofQ40QhwlyP0TW9OneHEkHHpLdK2VxVBUkI9WsnMcIDtFWz0ANpOoGxu7/x6w3bLlh6eprZvCCf7MtK13kFtAoOas/8BLA71lgsZa3uONEFePwiG5dODY0ylgrTev4AdguJ3KYITUIpqK9EWJotH4i/X5aRnIZa5Blje3ICn8QPf/LbLkkCJqLK/W7SQYXXDJ8fjb1mdmJMrI/MaAK++i8t2gM28IVTEk2EEe0CSBEXKap5EKCxo1rI9S7Q5Ia1PSUI/XIueACooRtdpkN5fQ3QjLqbh8KOM1mt0oIeQZXXiXItXLKfHbWqV3jZbap8pFfgnSw2mw5agaXZubW3ls6nk4vrX3BdC+TNU9Tun/EvxVu4WUSTY6Dupsjs1syS/v9VhiGzLaiITH19mWfnIpbm8alZ3n7IucoRQRGG4WFVzgQqF50PwX2B8i/anuw+rTF6HEzG/O7RfFXkKPT9EO2APbtZDuoFxEcDlau4w4Vz7PXiW/7qlMMvdpUI="
+
+script: ./.travis/$SCRIPT
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+  - mvn clean test jacoco:report coveralls:report

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+
+   <groupId>se.kth.castor</groupId>
+   <artifactId>jdbl-core</artifactId>
+   <version>1.0.0</version>
+
+   <parent>
+      <groupId>se.kth.castor</groupId>
+      <artifactId>jdbl-parent-pom</artifactId>
+      <version>1.0.0</version>
+      <relativePath>../</relativePath>
+   </parent>
+
+   <name>jdbl-core</name>
+   <url>https://github.com/castor-software/royal-debloat/jdbl/jdbl-maven-plugin</url>
+
+   <properties>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+      <maven.compiler.source>1.8</maven.compiler.source>
+      <maven.compiler.target>1.8</maven.compiler.target>
+   </properties>
+
+   <dependencies>
+      <!-- Maven dependencies -->
+      <dependency>
+         <groupId>org.apache.maven</groupId>
+         <artifactId>maven-core</artifactId>
+         <version>3.6.0</version>
+      </dependency>
+      <dependency>
+         <groupId>org.apache.maven</groupId>
+         <artifactId>maven-plugin-api</artifactId>
+         <version>3.6.0</version>
+      </dependency>
+      <dependency>
+         <groupId>org.apache.maven.shared</groupId>
+         <artifactId>maven-invoker</artifactId>
+         <version>3.0.1</version>
+      </dependency>
+
+      <!-- Bytecode manipulation -->
+      <dependency>
+         <groupId>org.ow2.asm</groupId>
+         <artifactId>asm</artifactId>
+         <version>8.0.1</version>
+      </dependency>
+      <dependency>
+         <groupId>org.ow2.asm</groupId>
+         <artifactId>asm-util</artifactId>
+         <version>8.0.1</version>
+      </dependency>
+      <dependency>
+         <groupId>org.apache.bcel</groupId>
+         <artifactId>bcel</artifactId>
+         <version>6.3.1</version>
+         <scope>compile</scope>
+      </dependency>
+
+      <!-- Logging -->
+      <dependency>
+         <groupId>org.apache.logging.log4j</groupId>
+         <artifactId>log4j-api</artifactId>
+         <version>2.13.1</version>
+      </dependency>
+      <dependency>
+         <groupId>org.apache.logging.log4j</groupId>
+         <artifactId>log4j-core</artifactId>
+         <version>2.13.1</version>
+      </dependency>
+      <dependency>
+         <groupId>log4j</groupId>
+         <artifactId>log4j</artifactId>
+         <version>1.2.17</version>
+      </dependency>
+
+      <!-- Utils -->
+      <dependency>
+         <groupId>com.fasterxml.jackson.core</groupId>
+         <artifactId>jackson-databind</artifactId>
+         <version>2.10.0.pr1</version>
+      </dependency>
+      <dependency>
+         <groupId>se.kth.castor</groupId>
+         <artifactId>yajta-lean</artifactId>
+         <version>2.0.2</version>
+      </dependency>
+
+      <!-- JaCoCo -->
+      <dependency>
+         <groupId>org.jacoco</groupId>
+         <artifactId>org.jacoco.core</artifactId>
+         <version>0.8.5</version>
+      </dependency>
+      <dependency>
+         <groupId>org.jacoco</groupId>
+         <artifactId>org.jacoco.report</artifactId>
+         <version>0.8.5</version>
+      </dependency>
+
+      <!-- JCov -->
+      <dependency>
+         <groupId>com.sun.tdk</groupId>
+         <artifactId>jcov</artifactId>
+         <version>1.0</version>
+<!--         <scope>system</scope>-->
+<!--         <systemPath>${basedir}/lib/jcov.jar</systemPath>-->
+      </dependency>
+
+      <!-- Testing -->
+      <dependency>
+         <groupId>org.junit.jupiter</groupId>
+         <artifactId>junit-jupiter-engine</artifactId>
+         <version>5.6.1</version>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.junit.platform</groupId>
+         <artifactId>junit-platform-runner</artifactId>
+         <version>1.6.1</version>
+         <scope>test</scope>
+      </dependency>
+   </dependencies>
+</project>
