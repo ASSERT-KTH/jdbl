@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<coverage
+        xmlns='http://java.sun.com/jcov/namespace'
+        xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+        xsi:schemaLocation='http://java.sun.com/jcov/namespace coverage.xsd'>
+
+	<head>
+		<property name='coverage.generator.args' val=''/>
+		<property name='coverage.generator.mode' val='BRANCH'/>
+		<property name='coverage.generator.internal' val='include'/>
+		<property name='coverage.generator.include' val=''/>
+		<property name='coverage.generator.exclude' val=''/>
+		<property name='coverage.generator.caller_include' val='.*'/>
+		<property name='coverage.generator.caller_exclude' val=''/>
+		<property name='coverage.created.date' val='2020-06-29'/>
+		<property name='coverage.created.time' val='22:52:25'/>
+		<property name='coverage.generator.fullversion' val='3.0os.beta-2 built: 24 January 2019'/>
+		<property name='coverage.generator.name' val='jcov'/>
+		<property name='coverage.generator.version' val='3.0'/>
+		<property name='coverage.spec.version' val='1.3'/>
+		<property name='java.runtime.version' val='1.8.0_252-8u252-b09-1~18.04-b09'/>
+		<property name='java.version' val='1.8.0_252'/>
+		<property name='os.arch' val='amd64'/>
+		<property name='os.name' val='Linux'/>
+		<property name='os.version' val='5.3.0-46-generic'/>
+		<property name='user.name' val='cesarsv'/>
+		<property name='dynamic.collected' val='false'/>
+		<property name='id.count' val='6'/>
+	</head>
+	<package name="" moduleName="no_module">
+		<class name="Calc" supername="java/lang/Object" checksum="3537058653" source="Calc.java" flags=' public'>
+			<meth name="&lt;init&gt;" vmsig="(II)V" flags=' public' access="1" cons="true" length="15">
+				<bl s="0" e="14">
+					<methenter s="0" e="14" id="0" count="1"/>
+					<exit s="14" e="14" opcode="return"/>
+				</bl>
+				<lt>0=8;4=9;9=10;14=11;</lt>
+			</meth>
+			<meth name="sum" vmsig="()I" flags=' public' access="1" length="10">
+				<bl s="0" e="9">
+					<methenter s="0" e="9" id="1" count="1"/>
+					<exit s="9" e="9" opcode="ireturn"/>
+				</bl>
+				<lt>0=14;</lt>
+			</meth>
+			<meth name="rest" vmsig="()I" flags=' public' access="1" length="10">
+				<bl s="0" e="9">
+					<methenter s="0" e="9" id="2" count="0"/>
+					<exit s="9" e="9" opcode="ireturn"/>
+				</bl>
+				<lt>0=18;</lt>
+			</meth>
+		</class>
+		<class name="Main" supername="java/lang/Object" checksum="3869162102" source="Main.java" flags=' public'>
+			<meth name="&lt;init&gt;" vmsig="()V" flags=' public' access="1" cons="true" length="5">
+				<bl s="0" e="4">
+					<methenter s="0" e="4" id="3" count="0"/>
+					<exit s="4" e="4" opcode="return"/>
+				</bl>
+				<lt>0=1;</lt>
+			</meth>
+			<meth name="main" vmsig="([Ljava/lang/String;)V" flags=' public static' access="9" length="41">
+				<bl s="0" e="40">
+					<methenter s="0" e="40" id="4" count="1"/>
+					<exit s="40" e="40" opcode="return"/>
+				</bl>
+				<lt>0=6;10=7;15=8;40=9;</lt>
+			</meth>
+			<meth name="anotherSum" vmsig="(II)I" flags=' private static' access="10" length="4">
+				<bl s="0" e="3">
+					<methenter s="0" e="3" id="5" count="0"/>
+					<exit s="3" e="3" opcode="ireturn"/>
+				</bl>
+				<lt>0=13;</lt>
+			</meth>
+		</class>
+	</package>
+</coverage>

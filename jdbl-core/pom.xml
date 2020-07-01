@@ -101,6 +101,15 @@
          <version>0.8.5</version>
       </dependency>
 
+      <!-- JCov -->
+      <dependency>
+         <groupId>com.sun.tdk</groupId>
+         <artifactId>jcov</artifactId>
+         <version>1.0</version>
+<!--         <scope>system</scope>-->
+<!--         <systemPath>${basedir}/lib/jcov.jar</systemPath>-->
+      </dependency>
+
       <!-- Testing -->
       <dependency>
          <groupId>org.junit.jupiter</groupId>

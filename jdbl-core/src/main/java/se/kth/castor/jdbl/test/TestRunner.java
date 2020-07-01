@@ -45,6 +45,35 @@ public class TestRunner
         if (testResult.errorTests() != 0 || testResult.failedTests() != 0) {
             LOGGER.error("JDBL: THERE ARE TESTS FAILURES");
         }
+    }
+
+    public static void runTests2(MavenProject mavenProject, String template) throws IOException
+    {
+        Runtime rt = Runtime.getRuntime();
+        Process p;
+
+        p = rt.exec("mvn surefire:test " +
+            "-DargLine=\"-Djcov.template=" + template + "\"");
+
+        printProcessToStandardOutput(p);
+
+        try {
+            p.waitFor();
+        } catch (
+            InterruptedException e) {
+            LOGGER.error("Re-testing process terminated unexpectedly.");
+            Thread.currentThread().interrupt();
+        }
+
+        TestResultReader testResultReader = new TestResultReader(".");
+        TestResult testResult = testResultReader.getResults();
+
+        MyFileWriter myFileWriter = new MyFileWriter(mavenProject.getBasedir().getAbsolutePath());
+        myFileWriter.writeTestResultsToFile(testResult);
+
+        if (testResult.errorTests() != 0 || testResult.failedTests() != 0) {
+            LOGGER.error("JDBL: THERE ARE TESTS FAILURES");
+        }
 
     }
 

@@ -64,6 +64,16 @@ public class YajtaCoverage extends AbstractCoverage
         // Yajta could produce more than one coverage file (in case of parallel testing), so we need to read all of them
         for (String fileName : filesInBasedir) {
             if (fileName.startsWith("yajta_coverage")) {
+
+                // Copy the yajta coverage report to .jdbl directory
+                try {
+                    FileUtils.copyFileToDirectory(new File(projectBasedir +
+                        "/" + fileName), new File(mavenProject.getBasedir().getAbsolutePath() + "/.jdbl"));
+                } catch (IOException e) {
+                    LOGGER.error("Error copying yajta report to " + mavenProject.getBasedir().getAbsolutePath() + "/.jdbl");
+                }
+
+
                 String json;
                 try {
                     json = new String(Files.readAllBytes(Paths.get(projectBasedir +

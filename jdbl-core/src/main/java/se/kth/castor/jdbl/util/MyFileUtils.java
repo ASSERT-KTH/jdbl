@@ -116,15 +116,15 @@ public class MyFileUtils
 
                 if (!classesUsed.contains(currentClassName)) {
                     // Do not remove the classes that are preserved based on our static analysis criteria
-                    if (classFileType.equals(ClassFileType.ENUM) ||
-                        classFileType.equals(ClassFileType.ANNOTATION) ||
-                        classFileType.equals(ClassFileType.CONSTANT) ||
-                        classFileType.equals(ClassFileType.INTERFACE) ||
-                        classFileType.equals(ClassFileType.EXCEPTION)) {
-                        myFileWriter.writeDebloatReport(UsageStatusEnum.PRESERVED_CLASS.getName(),
-                            currentClassName, classFileType);
-                        myFileWriter.writePreservedClass(currentClassName, classFileType);
-                    } else {
+                    // if (classFileType.equals(ClassFileType.ENUM) ||
+                    //     classFileType.equals(ClassFileType.ANNOTATION) ||
+                    //     classFileType.equals(ClassFileType.CONSTANT) ||
+                    //     classFileType.equals(ClassFileType.INTERFACE) ||
+                    //     classFileType.equals(ClassFileType.EXCEPTION)) {
+                    //     myFileWriter.writeDebloatReport(UsageStatusEnum.PRESERVED_CLASS.getName(),
+                    //         currentClassName, classFileType);
+                    //     myFileWriter.writePreservedClass(currentClassName, classFileType);
+                    // } else {
                         // Remove the class
                         LOGGER.info("Removed class: " + currentClassName);
                         // Get the current directory
@@ -139,7 +139,7 @@ public class MyFileUtils
                             deleteDirectory(parent);
                             parent = parent.getParentFile();
                         }
-                    }
+                    // }
                 } else {
                     myFileWriter.writeDebloatReport(UsageStatusEnum.USED_CLASS.getName(), currentClassName, classFileType);
                 }

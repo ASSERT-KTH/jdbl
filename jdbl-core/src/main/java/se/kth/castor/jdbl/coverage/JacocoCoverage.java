@@ -90,6 +90,9 @@ public class JacocoCoverage extends AbstractCoverage
 
     protected UsageAnalysis executeTestBasedAnalysis()
     {
+
+        UsageAnalysis usageAnalysis = new UsageAnalysis();
+
         // Write the JaCoCo coverage report to file
         try {
             writeCoverage();
@@ -115,14 +118,20 @@ public class JacocoCoverage extends AbstractCoverage
             LOGGER.error("Error parsing jacoco.xml file.");
         }
 
+        // Copy the JaCoCo report.xml
+        try {
+            FileUtils.copyFileToDirectory(report, new File(mavenProject.getBasedir().getAbsolutePath() + "/.jdbl"));
+        } catch (IOException e) {
+            LOGGER.error("Error copying report to " + mavenProject.getBasedir().getAbsolutePath() + "/.jdbl");
+        }
+
         // Retrieve the usage analysis report
         try {
-            assert reportReader != null;
-            return reportReader.getUsedClassesAndMethods(report);
+            usageAnalysis = reportReader.getUsedClassesAndMethods(report);
         } catch (IOException | SAXException e) {
             LOGGER.error("Error getting unused classes and methods file.");
         }
-        return null;
+        return usageAnalysis;
     }
 
     @Override
