@@ -3,7 +3,9 @@ package se.kth.castor.jdbl.util;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -12,11 +14,16 @@ import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collection;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.stream.Stream;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -91,7 +98,7 @@ public class MyFileUtils
      *
      * @param currentPath the absolute path of the directory to be processed.
      */
-    public void deleteUnusedClasses(String currentPath) throws IOException
+    public void deleteUnusedClasses(String currentPath, String dirPath) throws IOException
     {
         URLClassLoader urlClassLoader = null;
         MyFileWriter myFileWriter = new MyFileWriter(projectBaseDir);
@@ -108,10 +115,10 @@ public class MyFileUtils
         for (File classFile : list) {
             if (classFile.isDirectory()) {
                 // Recursive call for directories
-                deleteUnusedClasses(classFile.getAbsolutePath());
+                deleteUnusedClasses(classFile.getAbsolutePath(), dirPath);
             } else if (classFile.getName().endsWith(".class")) {
                 String classFilePath = classFile.getAbsolutePath();
-                String currentClassName = getBinaryNameOfTestFile(classFilePath);
+                String currentClassName = getBinaryNameOfClassFiles(classFilePath, dirPath);
                 ClassFileType classFileType = getClassFileType(urlClassLoader, currentClassName, classFilePath);
 
                 if (!classesUsed.contains(currentClassName)) {
@@ -146,82 +153,6 @@ public class MyFileUtils
             }
         }
     }
-
-
-
-    /**
-     * Recursively remove unused classes in a JAR file.
-     *
-     * @param projectBaseDir the absolute path of the JAR.
-     */
-    public void deleteUnusedClassesInJarWithDependencies(String projectBaseDir) throws IOException
-    {
-
-        DebloatedJar debloatedJar = new DebloatedJar(projectBaseDir);
-
-        debloatedJar.create(classesUsed);
-
-
-        // URLClassLoader urlClassLoader = null;
-        // MyFileWriter myFileWriter = new MyFileWriter(projectBaseDir);
-        // if (this.classpath != null) {
-        //     URL[] urls = new URL[this.classpath.size()];
-        //     for (int i = 0; i < this.classpath.size(); i++) {
-        //         urls[i] = new File(this.classpath.get(i)).toURL();
-        //     }
-        //     urlClassLoader = new URLClassLoader(urls, null);
-        // }
-        // File file = new File(currentPath);
-        // File[] list = file.listFiles();
-        // assert list != null;
-        // for (File classFile : list) {
-        //     if (classFile.isDirectory()) {
-        //         // Recursive call for directories
-        //         deleteUnusedClasses(classFile.getAbsolutePath());
-        //     } else if (classFile.getName().endsWith(".class")) {
-        //         String classFilePath = classFile.getAbsolutePath();
-        //         String currentClassName = getBinaryNameOfTestFile(classFilePath);
-        //         ClassFileType classFileType = getClassFileType(urlClassLoader, currentClassName, classFilePath);
-        //
-        //         if (!classesUsed.contains(currentClassName)) {
-        //             // Do not remove the classes that are preserved based on our static analysis criteria
-        //             if (classFileType.equals(ClassFileType.ENUM) ||
-        //                 classFileType.equals(ClassFileType.ANNOTATION) ||
-        //                 classFileType.equals(ClassFileType.CONSTANT) ||
-        //                 classFileType.equals(ClassFileType.INTERFACE) ||
-        //                 classFileType.equals(ClassFileType.EXCEPTION)) {
-        //                 myFileWriter.writeDebloatReport(UsageStatusEnum.PRESERVED_CLASS.getName(),
-        //                     currentClassName, classFileType);
-        //                 myFileWriter.writePreservedClass(currentClassName, classFileType);
-        //             } else {
-        //                 // Remove the class
-        //                 LOGGER.info("Removed class: " + currentClassName);
-        //                 // Get the current directory
-        //                 File parent = new File(classFile.getParent());
-        //                 // Write report
-        //                 myFileWriter.writeDebloatReport(UsageStatusEnum.BLOATED_CLASS.getName(),
-        //                     currentClassName, classFileType);
-        //                 Files.delete(classFile.toPath());
-        //                 nbClassesRemoved++;
-        //                 // Remove the parent folder if is empty
-        //                 while (parent.isDirectory() && Objects.requireNonNull(parent.listFiles()).length == 0) {
-        //                     deleteDirectory(parent);
-        //                     parent = parent.getParentFile();
-        //                 }
-        //             }
-        //         } else {
-        //             myFileWriter.writeDebloatReport(UsageStatusEnum.USED_CLASS.getName(), currentClassName, classFileType);
-        //         }
-        //     }
-        // }
-    }
-
-
-
-
-
-
-
 
 
     private ClassFileType getClassFileType(URLClassLoader urlClassLoader, String currentClassName, String classFilePath)
@@ -276,11 +207,11 @@ public class MyFileUtils
         return classFileType;
     }
 
-    private String getBinaryNameOfTestFile(final String classFilePath)
+    private String getBinaryNameOfClassFiles(final String classFilePath, final String dirPath)
     {
         return classFilePath
             .replaceAll("/", ".")
-            .substring(outputDirectory.length() + 1, classFilePath.length() - 6);
+            .substring(dirPath.length() + 1, classFilePath.length() - 6);
     }
 
     public int nbClassesRemoved()

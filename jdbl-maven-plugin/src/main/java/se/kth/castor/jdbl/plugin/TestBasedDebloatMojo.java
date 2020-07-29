@@ -1,11 +1,19 @@
 package se.kth.castor.jdbl.plugin;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.Instant;
+import java.util.Collection;
+import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 
@@ -24,6 +32,7 @@ import se.kth.castor.jdbl.test.TestResultReader;
 import se.kth.castor.jdbl.test.TestRunner;
 import se.kth.castor.jdbl.util.MyFileUtils;
 import se.kth.castor.jdbl.util.MyFileWriter;
+import se.kth.castor.jdbl.util.ZipUtils;
 
 /**
  * This Mojo debloats the project according to the coverage of its test suite.
@@ -59,7 +68,6 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
         // Run JVM class usage analysis
         JVMClassCoverage jvmClassCoverage = new JVMClassCoverage(getProject(), mavenHome, DebloatTypeEnum.TEST_DEBLOAT);
         UsageAnalysis jvmUsageAnalysis = jvmClassCoverage.analyzeUsages();
-
 
         // Print out JCov coverage output
         System.out.println("JCov:");
@@ -153,30 +161,78 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
     private void removeUnusedMethods(final String outputDirectory, final UsageAnalysis usageAnalysis,
         Set<StackLine> failingMethods)
     {
-        AbstractMethodDebloat testBasedMethodDebloat = new TestBasedMethodDebloat(outputDirectory,
-            usageAnalysis,
-            getProject().getBasedir().getAbsolutePath(), failingMethods);
-        try {
-            testBasedMethodDebloat.removeUnusedMethods();
-            this.getLog().info("Total methods in used classes removed: " + testBasedMethodDebloat.nbMethodsRemoved());
-        } catch (IOException e) {
-            this.getLog().error(String.format("Error: %s", e));
+
+        Collection<File> jarFiles = FileUtils.listFiles(new File(getProject().getBasedir().getAbsolutePath() + "/target"),
+            new String[]{"jar"}, false);
+
+        for (File jarFile : jarFiles) {
+            String dirPath = getProject().getBasedir().getAbsolutePath() + "/target/" +
+                jarFile.getName().substring(0, jarFile.getName().length() - 4);
+
+            getLog().info("Removing bloated methods in " + dirPath);
+            AbstractMethodDebloat testBasedMethodDebloat = new TestBasedMethodDebloat(dirPath,
+                usageAnalysis,
+                getProject().getBasedir().getAbsolutePath(), failingMethods);
+            try {
+                testBasedMethodDebloat.removeUnusedMethods();
+                this.getLog().info("Total methods in used classes removed: " + testBasedMethodDebloat.nbMethodsRemoved());
+            } catch (IOException e) {
+                this.getLog().error(String.format("Error: %s", e));
+            }
+
+            try {
+                final String jarZip = getProject().getBasedir().getAbsolutePath() + "/.jdbl/" +
+                    jarFile.getName().substring(0, jarFile.getName().length() - 4) + "-debloated.jar";
+                getLog().info("Moving debloated jar " + jarZip + " to " + dirPath);
+
+                ZipUtils.pack(dirPath, jarZip);
+            } catch (IOException e) {
+                getLog().error("Error packing the debloated JAR.");
+            }
         }
     }
 
     private void removeUnusedClasses(final String outputDirectory, final Set<String> usedClasses)
     {
         try {
+            final String projectBaseDir = getProject().getBasedir().getAbsolutePath();
             MyFileUtils myFileUtils = new MyFileUtils(outputDirectory,
                 new HashSet<>(),
                 usedClasses,
-                getProject().getBasedir().getAbsolutePath(),
+                projectBaseDir,
                 getProject().getTestClasspathElements());
 
-            myFileUtils.deleteUnusedClasses(outputDirectory);
+            // Delete bloated classes in the jars with dependencies
+            Collection<File> jarFiles = FileUtils.listFiles(new File(projectBaseDir + "/target"), new String[]{"jar"}, false);
 
-            // Delete bloated classes in the JAR with dependencies
-            myFileUtils.deleteUnusedClassesInJarWithDependencies(getProject().getBasedir().getAbsolutePath());
+            for (File jarFile : jarFiles) {
+                String dirPath = projectBaseDir + "/target/" + jarFile.getName().substring(0, jarFile.getName().length() - 4);
+                getLog().info("Removing bloated classes in " + dirPath);
+
+                File dir = new File(dirPath);
+                dir.mkdir();
+
+                JarFile jar = new JarFile(jarFile);
+                Enumeration enumEntries = jar.entries();
+                while (enumEntries.hasMoreElements()) {
+                    JarEntry file = (JarEntry) enumEntries.nextElement();
+                    File f = new File(dirPath + "/" + file.getName());
+                    if (file.isDirectory()) { // if its a directory, create it
+                        f.mkdir();
+                        continue;
+                    }
+                    InputStream is = jar.getInputStream(file); // get the input stream
+                    FileOutputStream fos = new FileOutputStream(f);
+                    while (is.available() > 0) {  // write contents of 'is' to 'fos'
+                        fos.write(is.read());
+                    }
+                    fos.close();
+                    is.close();
+                }
+                jar.close();
+
+                myFileUtils.deleteUnusedClasses(dirPath, dirPath);
+            }
 
             this.getLog().info("Total classes removed: " + myFileUtils.nbClassesRemoved());
         } catch (Exception e) {

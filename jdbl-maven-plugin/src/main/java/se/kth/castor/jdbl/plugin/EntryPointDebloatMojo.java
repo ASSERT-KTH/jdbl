@@ -81,7 +81,7 @@ public class EntryPointDebloatMojo extends AbstractDebloatMojo
             JVMClassesCoveredSingleton.INSTANCE.getClassesLoaded(),
             getProject().getBasedir().getAbsolutePath(), null);
         try {
-            myFileUtils.deleteUnusedClasses(outputDirectory);
+            myFileUtils.deleteUnusedClasses(outputDirectory, outputDirectory);
         } catch (IOException e) {
             this.getLog().error(String.format("Error deleting unused classes: %s", e));
         }
