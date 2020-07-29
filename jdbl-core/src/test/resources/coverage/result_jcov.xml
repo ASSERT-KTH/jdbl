@@ -29,6 +29,19 @@
 		<property name='id.count' val='6'/>
 	</head>
 	<package name="calc" moduleName="no_module">
+		<class name="DTDEventListener" supername="java/lang/Object" checksum="4012180794" interface="true" source="DTDEventListener.java" flags=' public interface abstract'>
+			<meth name="dtdReportComments" vmsig="()Z" flags=' public abstract' access="1025" id="1969" count="1"/>
+			<meth name="dtdProcessingInstruction" vmsig="(Ljava/lang/String;Ljava/lang/String;)V" flags=' public abstract' access="1025" id="1970" count="0"/>
+			<meth name="dtdComment" vmsig="([CII)V" flags=' public abstract' access="1025" id="1971" count="0"/>
+			<meth name="dtdSkippedEntity" vmsig="(Ljava/lang/String;)V" flags=' public abstract' access="1025" id="1972" count="0"/>
+			<meth name="dtdNotationDecl" vmsig="(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/net/URL;)V" flags=' public abstract' access="1025" id="1973" count="0"/>
+			<meth name="dtdUnparsedEntityDecl" vmsig="(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/net/URL;)V" flags=' public abstract' access="1025" id="1974" count="0"/>
+			<meth name="attributeDecl" vmsig="(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V" flags=' public abstract' access="1025" id="1975" count="0"/>
+			<meth name="dtdElementDecl" vmsig="(Ljava/lang/String;Ljava/lang/String;)V" flags=' public abstract' access="1025" id="1976" count="0"/>
+			<meth name="dtdExternalEntityDecl" vmsig="(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V" flags=' public abstract' access="1025" id="1977" count="0"/>
+			<meth name="dtdInternalEntityDecl" vmsig="(Ljava/lang/String;Ljava/lang/String;)V" flags=' public abstract' access="1025" id="1978" count="0"/>
+		</class>
+
 		<class name="Calc" supername="java/lang/Object" checksum="3537058653" source="Calc.java" flags=' public'>
 			<meth name="&lt;init&gt;" vmsig="(II)V" flags=' public' access="1" cons="true" length="15">
 				<bl s="0" e="14">

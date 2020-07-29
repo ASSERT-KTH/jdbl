@@ -75,10 +75,6 @@ public class JCovReportReader
     {
         NodeList methods = c.getChildNodes();
 
-        // interface have no child nodes, and we ignore them (coverage does not make sense)
-        if (methods.getLength() == 0) {
-            return;
-        }
         String className = c.getAttributes().getNamedItem("name").getNodeValue();
         usageAnalysis.addEntry(packageName + "/" + className, new HashSet<>());
         for (int i = 0; i < methods.getLength(); i++) {
@@ -103,31 +99,40 @@ public class JCovReportReader
         usageAnalysis.methods(packageName + "/" + className).add(desc);
     }
 
-    private boolean isCovered(Node c, String entity)
+    private boolean isCovered(Node m, String entity)
     {
-        // we look for a child node like <counter type="entity" ... covered="?"> if ? equals "0" it is not covered,
-        // otherwise it is
-        NodeList counters = c.getChildNodes();
+        NodeList counters = m.getChildNodes();
 
-        for (int i = 0; i < counters.getLength(); i++) {
-            Node n = counters.item(i);
-            if (!n.getNodeName().equals("bl")) {
-                continue;
-            }
-
-            NodeList blList = n.getChildNodes();
+        if (counters.getLength() == 0) {
             Node nodeCounter = null;
-            for (int j = 0; j < blList.getLength(); ++j) {
-                Node node = blList.item(j);
-                if (node.getNodeName().equals(entity)) {
-                    nodeCounter = node.getAttributes().getNamedItem("count");
-                    break;
-                }
-            }
+            nodeCounter = m.getAttributes().getNamedItem("count");
             if (nodeCounter == null) {
-                continue;
+                return true;
             } else {
                 return !nodeCounter.getNodeValue().equals("0");
+            }
+        } else {
+
+            for (int i = 0; i < counters.getLength(); i++) {
+                Node n = counters.item(i);
+                if (!n.getNodeName().equals("bl")) {
+                    continue;
+                }
+
+                NodeList blList = n.getChildNodes();
+                Node nodeCounter = null;
+                for (int j = 0; j < blList.getLength(); ++j) {
+                    Node node = blList.item(j);
+                    if (node.getNodeName().equals(entity)) {
+                        nodeCounter = node.getAttributes().getNamedItem("count");
+                        break;
+                    }
+                }
+                if (nodeCounter == null) {
+                    continue;
+                } else {
+                    return !nodeCounter.getNodeValue().equals("0");
+                }
             }
         }
         return true;
