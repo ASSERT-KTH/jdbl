@@ -120,7 +120,7 @@ public class JacocoCoverage extends AbstractCoverage
 
         // Copy the JaCoCo report.xml
         try {
-            FileUtils.copyFileToDirectory(report, new File(mavenProject.getBasedir().getAbsolutePath() + "/.jdbl"));
+            FileUtils.copyFile(report, new File(mavenProject.getBasedir().getAbsolutePath() + "/.jdbl/jacoco.xml"));
         } catch (IOException e) {
             LOGGER.error("Error copying report to " + mavenProject.getBasedir().getAbsolutePath() + "/.jdbl");
         }

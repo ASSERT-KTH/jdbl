@@ -64,7 +64,7 @@ public class JCovCoverage extends AbstractCoverage
 
         // Copy the result.xml
         try {
-            FileUtils.copyFileToDirectory(result, new File(mavenProject.getBasedir().getAbsolutePath() + "/.jdbl"));
+            FileUtils.copyFile(result, new File(mavenProject.getBasedir().getAbsolutePath() + "/.jdbl/jcov.xml"));
         } catch (IOException e) {
             LOGGER.error("Error copying result to " + mavenProject.getBasedir().getAbsolutePath() + "/.jdbl");
         }
