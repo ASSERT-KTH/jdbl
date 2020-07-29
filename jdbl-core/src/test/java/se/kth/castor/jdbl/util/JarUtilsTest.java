@@ -2,8 +2,10 @@ package se.kth.castor.jdbl.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Objects;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,5 +44,14 @@ public class JarUtilsTest
     public void restoreFiles() throws IOException
     {
         org.apache.commons.io.FileUtils.deleteDirectory(outputDir);
+    }
+
+    @Test
+    public void name()
+    {
+        // Collection<File> jarFiles = FileUtils.listFiles(new File("/home/cesarsv/IdeaProjects/jdbl/jdbl-maven-plugin/src/it/dummy-project"
+        //     + "/target"), new String[]{"jar"}, false);
+        //
+        // System.out.println(jarFiles);
     }
 }

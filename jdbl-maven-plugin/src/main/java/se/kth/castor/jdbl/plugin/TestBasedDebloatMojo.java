@@ -31,7 +31,7 @@ import se.kth.castor.jdbl.util.MyFileWriter;
  * Non covered classes are removed from the final jar file, the non covered
  * methods are replaced by an <code>UnsupportedOperationException</code>.
  */
-@Mojo(name = "test-based-debloat", defaultPhase = LifecyclePhase.PREPARE_PACKAGE, threadSafe = true)
+@Mojo(name = "test-based-debloat", defaultPhase = LifecyclePhase.VERIFY, threadSafe = true)
 public class TestBasedDebloatMojo extends AbstractDebloatMojo
 {
     @Override
@@ -172,7 +172,12 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
                 usedClasses,
                 getProject().getBasedir().getAbsolutePath(),
                 getProject().getTestClasspathElements());
+
             myFileUtils.deleteUnusedClasses(outputDirectory);
+
+            // Delete bloated classes in the JAR with dependencies
+            myFileUtils.deleteUnusedClassesInJarWithDependencies(getProject().getBasedir().getAbsolutePath());
+
             this.getLog().info("Total classes removed: " + myFileUtils.nbClassesRemoved());
         } catch (Exception e) {
             this.getLog().error(String.format("Error deleting unused classes: %s", e));
