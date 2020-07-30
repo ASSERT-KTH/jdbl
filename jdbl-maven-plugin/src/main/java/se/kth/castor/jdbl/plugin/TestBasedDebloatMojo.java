@@ -173,30 +173,34 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
 
             for (File jarFile : jarFiles) {
                 if (jarFile.getName().endsWith("-jar-with-dependencies.jar")) {
+
                     String dirPath = projectBaseDir + "/target/" + jarFile.getName().substring(0, jarFile.getName().length() - 4);
                     getLog().info("Removing bloated classes in " + dirPath);
 
                     File dir = new File(dirPath);
                     dir.mkdir();
 
-                    JarFile jar = new JarFile(jarFile);
-                    Enumeration enumEntries = jar.entries();
-                    while (enumEntries.hasMoreElements()) {
-                        JarEntry file = (JarEntry) enumEntries.nextElement();
-                        File f = new File(dirPath + "/" + file.getName());
-                        if (file.isDirectory()) { // if its a directory, create it
-                            f.mkdir();
-                            continue;
-                        }
-                        InputStream is = jar.getInputStream(file); // get the input stream
-                        FileOutputStream fos = new FileOutputStream(f);
-                        while (is.available() > 0) {  // write contents of 'is' to 'fos'
-                            fos.write(is.read());
-                        }
-                        fos.close();
-                        is.close();
-                    }
-                    jar.close();
+
+                    unzipJar(dirPath, jarFile.getAbsolutePath());
+                    //
+                    // JarFile jar = new JarFile(jarFile);
+                    // Enumeration enumEntries = jar.entries();
+                    // while (enumEntries.hasMoreElements()) {
+                    //     JarEntry file = (JarEntry) enumEntries.nextElement();
+                    //     File f = new File(dirPath + "/" + file.getName());
+                    //     if (file.isDirectory()) { // if its a directory, create it
+                    //         f.mkdir();
+                    //         continue;
+                    //     }
+                    //     InputStream is = jar.getInputStream(file); // get the input stream
+                    //     FileOutputStream fos = new FileOutputStream(f);
+                    //     while (is.available() > 0) {  // write contents of 'is' to 'fos'
+                    //         fos.write(is.read());
+                    //     }
+                    //     fos.close();
+                    //     is.close();
+                    // }
+                    // jar.close();
 
                     myFileUtils.deleteUnusedClasses(dirPath, dirPath);
                 }
@@ -205,6 +209,46 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
             this.getLog().info("Total classes removed: " + myFileUtils.nbClassesRemoved());
         } catch (Exception e) {
             this.getLog().error(String.format("Error deleting unused classes: %s", e));
+        }
+    }
+
+    private void unzipJar(String destinationDir, String jarPath) throws IOException {
+        File file = new File(jarPath);
+        JarFile jar = new JarFile(file);
+
+        // fist get all directories,
+        // then make those directory on the destination Path
+        for (Enumeration<JarEntry> enums = jar.entries(); enums.hasMoreElements();) {
+            JarEntry entry = (JarEntry) enums.nextElement();
+
+            String fileName = destinationDir + File.separator + entry.getName();
+            File f = new File(fileName);
+
+            if (fileName.endsWith("/")) {
+                f.mkdirs();
+            }
+
+        }
+
+        //now create all files
+        for (Enumeration<JarEntry> enums = jar.entries(); enums.hasMoreElements();) {
+            JarEntry entry = (JarEntry) enums.nextElement();
+
+            String fileName = destinationDir + File.separator + entry.getName();
+            File f = new File(fileName);
+
+            if (!fileName.endsWith("/")) {
+                InputStream is = jar.getInputStream(entry);
+                FileOutputStream fos = new FileOutputStream(f);
+
+                // write contents of 'is' to 'fos'
+                while (is.available() > 0) {
+                    fos.write(is.read());
+                }
+
+                fos.close();
+                is.close();
+            }
         }
     }
 
