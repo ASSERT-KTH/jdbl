@@ -40,7 +40,7 @@ import se.kth.castor.jdbl.util.ZipUtils;
  * Non covered classes are removed from the final jar file, the non covered
  * methods are replaced by an <code>UnsupportedOperationException</code>.
  */
-@Mojo(name = "test-based-debloat", defaultPhase = LifecyclePhase.VERIFY, threadSafe = true)
+@Mojo(name = "test-based-debloat", defaultPhase = LifecyclePhase.PACKAGE, threadSafe = true)
 public class TestBasedDebloatMojo extends AbstractDebloatMojo
 {
     @Override
