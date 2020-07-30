@@ -6,6 +6,9 @@
 !jdbl-core/src/test/resources/jars/org.jacoco.agent-0.7.9.jar
 !jdbl-core/lib/jcov.jar
 !jdbl-core/lib/jcov_file_saver.jar
+!jdbl-maven-plugin/src/it/dummy-project/.jdbl/dummy-project-1.0-SNAPSHOT-jar-with-dependencies-debloated.jar
+!jdbl-maven-plugin/src/it/dummy-project/.jdbl/dummy-project-1.0-SNAPSHOT-jar-with-dependencies-original.jar
+
 *.war
 *.nar
 *.ear
