@@ -3,9 +3,7 @@ package se.kth.castor.jdbl.util;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -14,16 +12,11 @@ import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collection;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 import java.util.stream.Stream;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -98,7 +91,7 @@ public class MyFileUtils
      *
      * @param currentPath the absolute path of the directory to be processed.
      */
-    public void deleteUnusedClasses(String currentPath, String dirPath) throws IOException
+    public void deleteUnusedClasses(String currentPath) throws IOException
     {
         URLClassLoader urlClassLoader = null;
         MyFileWriter myFileWriter = new MyFileWriter(projectBaseDir);
@@ -115,10 +108,10 @@ public class MyFileUtils
         for (File classFile : list) {
             if (classFile.isDirectory()) {
                 // Recursive call for directories
-                deleteUnusedClasses(classFile.getAbsolutePath(), dirPath);
+                deleteUnusedClasses(classFile.getAbsolutePath());
             } else if (classFile.getName().endsWith(".class")) {
                 String classFilePath = classFile.getAbsolutePath();
-                String currentClassName = getBinaryNameOfClassFiles(classFilePath, dirPath);
+                String currentClassName = getBinaryNameOfTestFile(classFilePath);
                 ClassFileType classFileType = getClassFileType(urlClassLoader, currentClassName, classFilePath);
 
                 if (!classesUsed.contains(currentClassName)) {
@@ -153,7 +146,6 @@ public class MyFileUtils
             }
         }
     }
-
 
     private ClassFileType getClassFileType(URLClassLoader urlClassLoader, String currentClassName, String classFilePath)
         throws FileNotFoundException
@@ -207,11 +199,11 @@ public class MyFileUtils
         return classFileType;
     }
 
-    private String getBinaryNameOfClassFiles(final String classFilePath, final String dirPath)
+    private String getBinaryNameOfTestFile(final String classFilePath)
     {
         return classFilePath
             .replaceAll("/", ".")
-            .substring(dirPath.length() + 1, classFilePath.length() - 6);
+            .substring(outputDirectory.length() + 1, classFilePath.length() - 6);
     }
 
     public int nbClassesRemoved()

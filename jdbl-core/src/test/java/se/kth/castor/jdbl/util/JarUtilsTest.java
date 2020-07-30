@@ -43,5 +43,4 @@ public class JarUtilsTest
     {
         org.apache.commons.io.FileUtils.deleteDirectory(outputDir);
     }
-
 }

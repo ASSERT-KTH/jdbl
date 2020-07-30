@@ -8,7 +8,6 @@ import java.util.Set;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -38,7 +37,7 @@ public class MyFileUtilsTest
     {
         org.apache.commons.io.FileUtils.copyDirectory(inputDir, outputDir);
         MyFileUtils myFileUtils = new MyFileUtils(outputDir.getAbsolutePath(), exclusionSet, classesUsed, projectBaseDir, null);
-        myFileUtils.deleteUnusedClasses(outputDir.getAbsolutePath(), outputDir.getAbsolutePath());
+        myFileUtils.deleteUnusedClasses(outputDir.getAbsolutePath());
         File reportFile = new File(projectBaseDir + ".jdbl/debloat-report.csv");
         assertTrue(reportFile.exists());
         assertEquals(2, new File(outputDir.getAbsolutePath() + "/calc").listFiles().length);

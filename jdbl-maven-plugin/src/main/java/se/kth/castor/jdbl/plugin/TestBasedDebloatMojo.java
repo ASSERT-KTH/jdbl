@@ -1,17 +1,12 @@
 package se.kth.castor.jdbl.plugin;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.time.Instant;
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
@@ -30,6 +25,7 @@ import se.kth.castor.jdbl.debloat.TestBasedMethodDebloat;
 import se.kth.castor.jdbl.test.StackLine;
 import se.kth.castor.jdbl.test.TestResultReader;
 import se.kth.castor.jdbl.test.TestRunner;
+import se.kth.castor.jdbl.util.JarWithDeps;
 import se.kth.castor.jdbl.util.MyFileUtils;
 import se.kth.castor.jdbl.util.MyFileWriter;
 import se.kth.castor.jdbl.util.ZipUtils;
@@ -52,6 +48,8 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
         String projectBaseDir = getProject().getBasedir().getAbsolutePath();
         MyFileWriter myFileWriter = new MyFileWriter(projectBaseDir);
         myFileWriter.resetJDBLReportsDirectory();
+
+        replaceClassesWithClassesInJarWithDependencies(projectBaseDir);
 
         // Run JCov usage analysis
         JCovCoverage jcovCoverage = new JCovCoverage(getProject(), mavenHome, DebloatTypeEnum.TEST_DEBLOAT);
@@ -135,7 +133,7 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
 
         // ----------------------------------------------------
         this.getLog().info("Starting removing unused methods...");
-        this.removeUnusedMethods(mergedUsageAnalysis, failingMethods);
+        this.removeUnusedMethods(outputDirectory, mergedUsageAnalysis, failingMethods);
 
         // ----------------------------------------------------
         try {
@@ -162,6 +160,8 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
     {
         try {
             final String projectBaseDir = getProject().getBasedir().getAbsolutePath();
+            final String projectOutputDirectory = getProject().getBuild().getOutputDirectory();
+
             MyFileUtils myFileUtils = new MyFileUtils(outputDirectory,
                 new HashSet<>(),
                 usedClasses,
@@ -169,42 +169,18 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
                 getProject().getTestClasspathElements());
 
             // Delete bloated classes in the jars with dependencies
-            Collection<File> jarFiles = FileUtils.listFiles(new File(projectBaseDir + "/target"), new String[]{"jar"}, false);
+            String jarPath = JarWithDeps.getInstance().getPath();
 
-            for (File jarFile : jarFiles) {
-                if (jarFile.getName().endsWith("-jar-with-dependencies.jar")) {
+            try {
 
-                    String dirPath = projectBaseDir + "/target/" + jarFile.getName().substring(0, jarFile.getName().length() - 4);
-                    getLog().info("Removing bloated classes in " + dirPath);
-
-                    File dir = new File(dirPath);
-                    dir.mkdir();
-
-
-                    unzipJar(dirPath, jarFile.getAbsolutePath());
-                    //
-                    // JarFile jar = new JarFile(jarFile);
-                    // Enumeration enumEntries = jar.entries();
-                    // while (enumEntries.hasMoreElements()) {
-                    //     JarEntry file = (JarEntry) enumEntries.nextElement();
-                    //     File f = new File(dirPath + "/" + file.getName());
-                    //     if (file.isDirectory()) { // if its a directory, create it
-                    //         f.mkdir();
-                    //         continue;
-                    //     }
-                    //     InputStream is = jar.getInputStream(file); // get the input stream
-                    //     FileOutputStream fos = new FileOutputStream(f);
-                    //     while (is.available() > 0) {  // write contents of 'is' to 'fos'
-                    //         fos.write(is.read());
-                    //     }
-                    //     fos.close();
-                    //     is.close();
-                    // }
-                    // jar.close();
-
-                    myFileUtils.deleteUnusedClasses(dirPath, dirPath);
-                }
+                FileUtils.deleteDirectory(new File(projectOutputDirectory));
+                ZipUtils.unpack(projectOutputDirectory, jarPath);
+            } catch (IOException e) {
+                getLog().error("Error unpacking jar-with-dependencies");
             }
+
+            getLog().info("Removing bloated classes in " + projectOutputDirectory);
+            myFileUtils.deleteUnusedClasses(projectOutputDirectory);
 
             this.getLog().info("Total classes removed: " + myFileUtils.nbClassesRemoved());
         } catch (Exception e) {
@@ -212,96 +188,52 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
         }
     }
 
-    private void unzipJar(String destinationDir, String jarPath) throws IOException {
-        File file = new File(jarPath);
-        JarFile jar = new JarFile(file);
-
-        // fist get all directories,
-        // then make those directory on the destination Path
-        for (Enumeration<JarEntry> enums = jar.entries(); enums.hasMoreElements();) {
-            JarEntry entry = (JarEntry) enums.nextElement();
-
-            String fileName = destinationDir + File.separator + entry.getName();
-            File f = new File(fileName);
-
-            if (fileName.endsWith("/")) {
-                f.mkdirs();
-            }
-
-        }
-
-        //now create all files
-        for (Enumeration<JarEntry> enums = jar.entries(); enums.hasMoreElements();) {
-            JarEntry entry = (JarEntry) enums.nextElement();
-
-            String fileName = destinationDir + File.separator + entry.getName();
-            File f = new File(fileName);
-
-            if (!fileName.endsWith("/")) {
-                InputStream is = jar.getInputStream(entry);
-                FileOutputStream fos = new FileOutputStream(f);
-
-                // write contents of 'is' to 'fos'
-                while (is.available() > 0) {
-                    fos.write(is.read());
-                }
-
-                fos.close();
-                is.close();
-            }
-        }
-    }
-
-    private void removeUnusedMethods(final UsageAnalysis usageAnalysis,
+    private void removeUnusedMethods(final String outputDirectory, final UsageAnalysis usageAnalysis,
         Set<StackLine> failingMethods)
     {
+        final String projectOutputDirectory = getProject().getBuild().getOutputDirectory();
 
-        Collection<File> jarFiles = FileUtils.listFiles(new File(getProject().getBasedir().getAbsolutePath() + "/target"),
-            new String[]{"jar"}, false);
+        String jarPath = JarWithDeps.getInstance().getPath();
+        String dirName = JarWithDeps.getInstance().getName();
+        String dirPath = jarPath.substring(0, jarPath.length() - 4);
 
-        for (File jarFile : jarFiles) {
-            if (jarFile.getName().endsWith("-jar-with-dependencies.jar")) {
+        getLog().info("Removing bloated methods in " + projectOutputDirectory);
+        AbstractMethodDebloat testBasedMethodDebloat = new TestBasedMethodDebloat(
+            projectOutputDirectory,
+            usageAnalysis,
+            getProject().getBasedir().getAbsolutePath(),
+            failingMethods
+        );
 
-                String dirPath = getProject().getBasedir().getAbsolutePath() + "/target/" +
-                    jarFile.getName().substring(0, jarFile.getName().length() - 4);
-
-                getLog().info("Removing bloated methods in " + dirPath);
-                AbstractMethodDebloat testBasedMethodDebloat = new TestBasedMethodDebloat(dirPath,
-                    usageAnalysis,
-                    getProject().getBasedir().getAbsolutePath(), failingMethods);
-                try {
-                    testBasedMethodDebloat.removeUnusedMethods();
-                    this.getLog().info("Total methods in used classes removed: " + testBasedMethodDebloat.nbMethodsRemoved());
-                } catch (IOException e) {
-                    this.getLog().error(String.format("Error: %s", e));
-                }
-
-                try {
-                    final String zipJar = getProject().getBasedir().getAbsolutePath() + "/.jdbl/" +
-                        jarFile.getName().substring(0, jarFile.getName().length() - 4) + "-debloated.jar";
-
-                    getLog().info("Moving debloated jar to " + zipJar);
-                    ZipUtils.pack(dirPath, zipJar);
-
-
-                    final String pathForOriginalJar = getProject().getBasedir().getAbsolutePath() + "/.jdbl/" +
-                        jarFile.getName().substring(0, jarFile.getName().length() - 4) + "-original.jar";
-                    getLog().info("Moving original jar to " + pathForOriginalJar);
-                    FileUtils.copyFile(jarFile, new File(pathForOriginalJar));
-                } catch (IOException e) {
-                    getLog().error("Error packing the debloated JAR.");
-                }
-
-                // Copy debloated
-                try {
-                    final String classesDir = getProject().getBuild().getOutputDirectory();
-                    FileUtils.deleteDirectory(new File(classesDir));
-                    FileUtils.moveDirectory(new File(dirPath), new File(classesDir));
-                } catch (IOException e) {
-                    getLog().error("Error rolling back the compiled classes.");
-                }
-            }
+        try {
+            testBasedMethodDebloat.removeUnusedMethods();
+            this.getLog().info("Total methods in used classes removed: " + testBasedMethodDebloat.nbMethodsRemoved());
+        } catch (IOException e) {
+            this.getLog().error(String.format("Error: %s", e));
         }
+
+        try {
+            final String zipJar = getProject().getBasedir().getAbsolutePath() + "/.jdbl/" + dirName + "-debloated.jar";
+
+            getLog().info("Moving debloated jar to " + zipJar);
+            ZipUtils.pack(projectOutputDirectory, zipJar);
+
+            final String pathForOriginalJar = getProject().getBasedir().getAbsolutePath() + "/.jdbl/" + dirName + "-original.jar";
+
+            getLog().info("Moving original jar to " + pathForOriginalJar);
+            FileUtils.copyFile(new File(jarPath), new File(pathForOriginalJar));
+        } catch (IOException e) {
+            getLog().error("Error packing the debloated JAR.");
+        }
+
+        // Copy debloated
+        // try {
+        //     final String classesDir = getProject().getBuild().getOutputDirectory();
+        //     FileUtils.deleteDirectory(new File(classesDir));
+        //     FileUtils.moveDirectory(new File(dirPath), new File(classesDir));
+        // } catch (IOException e) {
+        //     getLog().error("Error rolling back the compiled classes.");
+        // }
     }
 
     private static Set<String> getUsedClasses(final UsageAnalysis usageAnalysis)
@@ -325,5 +257,18 @@ public class TestBasedDebloatMojo extends AbstractDebloatMojo
         this.getLog().info(String.format("Total used methods: %d",
             usageAnalysis.getAnalysis().values().stream().filter(Objects::nonNull).mapToInt(Set::size).sum()));
         this.getLog().info(getLineSeparator());
+    }
+
+    private void replaceClassesWithClassesInJarWithDependencies(final String projectBaseDir)
+    {
+        Collection<File> jarFiles = FileUtils.listFiles(new File(projectBaseDir + "/target"), new String[]{"jar"}, false);
+
+        for (File jarFile : jarFiles) {
+            if (jarFile.getName().endsWith("-jar-with-dependencies.jar")) {
+                final String jarWithDepsName = jarFile.getName().substring(0, jarFile.getName().length() - 4);
+                final String jarWithDepsPath = jarFile.getAbsolutePath();
+                JarWithDeps.setInstance(jarWithDepsName, jarWithDepsPath);
+            }
+        }
     }
 }

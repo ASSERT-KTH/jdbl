@@ -63,7 +63,7 @@ public class ConservativeDebloatMojo extends AbstractDebloatMojo
          classesUsed,
          getProject().getBasedir().getAbsolutePath(), null);
       try {
-         MyFileUtils.deleteUnusedClasses(outputDirectory, outputDirectory);
+         MyFileUtils.deleteUnusedClasses(outputDirectory);
       } catch (IOException e) {
          this.getLog().error(String.format("Error deleting unused classes: %s", e));
       }

@@ -20,7 +20,7 @@ public class JCovReportReaderTest
         final File xmlJacocoReport = new File("src/test/resources/coverage/result_jcov.xml");
         UsageAnalysis observed = r.getUsedClassesAndMethods(xmlJacocoReport);
         System.out.println(observed.toString());
-        assertEquals(3, observed.getAnalysis().size());
+        assertEquals(2, observed.getAnalysis().size());
         assertEquals(2, observed.getAnalysis().get("calc/Calc").size());
         assertEquals(true, observed.getAnalysis().containsKey("calc/Main"));
     }
