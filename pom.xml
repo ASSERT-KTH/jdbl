@@ -18,7 +18,6 @@
         <java.src.version>1.8</java.src.version>
         <java.test.version>1.8</java.test.version>
         <maven.jacoco.plugin.version>0.8.5</maven.jacoco.plugin.version>
-        <maven.coveralls.plugin.version>4.3.0</maven.coveralls.plugin.version>
     </properties>
 
     <!-- Project description-->
@@ -311,11 +310,6 @@
                 <plugin>
                     <artifactId>maven-project-info-reports-plugin</artifactId>
                     <version>3.0.0</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.eluder.coveralls</groupId>
-                    <artifactId>coveralls-maven-plugin</artifactId>
-                    <version>${maven.coveralls.plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
