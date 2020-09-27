@@ -40,7 +40,7 @@ import se.kth.castor.jdbl.util.MavenUtils;
 /**
  * This class runs JaCoCo via CLI.
  *
- * @see <a https://www.jacoco.org/jacoco/trunk/doc/cli.html</a>
+ * @see <a href="https://www.jacoco.org/jacoco/trunk/doc/cli.html">https://www.jacoco.org/jacoco/trunk/doc/cli.html</a>
  */
 public class JacocoCoverage extends AbstractCoverage
 {

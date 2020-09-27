@@ -52,7 +52,6 @@ import org.apache.bcel.classfile.Method;
  * This information is then used in {@link #linkCalls(Method)} to rename the
  * called {@link Method} properly.
  *
- * @author Matthieu Vergne <matthieu.vergne@gmail.com>
  */
 public class DynamicCallManager
 {

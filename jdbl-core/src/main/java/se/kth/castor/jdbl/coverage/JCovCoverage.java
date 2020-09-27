@@ -18,7 +18,7 @@ import se.kth.castor.jdbl.util.JarUtils;
 import se.kth.castor.jdbl.util.MavenUtils;
 
 /**
- * @https://wiki.openjdk.java.net/display/CodeTools/JCov+FAQ
+ * @see <a> https://wiki.openjdk.java.net/display/CodeTools/JCov+FAQ </a>
  */
 public class JCovCoverage extends AbstractCoverage
 {
