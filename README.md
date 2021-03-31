@@ -1,7 +1,7 @@
 <img align="left" src="https://github.com/castor-software/jdbl/blob/master/logo.svg" height="100px"  alt="JDBL logo"/>
 
 
-[![Build Status](https://travis-ci.org/castor-software/jdbl.svg?branch=master)](https://travis-ci.org/castor-software/jdbl)
+[![build](https://github.com/castor-software/jdbl/actions/workflows/build.yml/badge.svg)](https://github.com/castor-software/jdbl/actions/workflows/build.yml)
 [![Maven Central](https://img.shields.io/maven-central/v/se.kth.castor/jdbl-core.svg)](https://search.maven.org/search?q=g:se.kth.castor%20AND%20a:jdbl*)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=castor-software_jdbl&metric=alert_status)](https://sonarcloud.io/dashboard?id=castor-software_jdbl)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=castor-software_jdbl&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=castor-software_jdbl)
