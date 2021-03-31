@@ -13,7 +13,7 @@
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=castor-software_jdbl&metric=ncloc)](https://sonarcloud.io/dashboard?id=castor-software_jdbl)
 [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=castor-software_jdbl&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=castor-software_jdbl)
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=castor-software_jdbl&metric=sqale_index)](https://sonarcloud.io/dashboard?id=castor-software_jdbl)
-[![Coverage Status](https://coveralls.io/repos/github/castor-software/jdbl/badge.svg)](https://coveralls.io/github/castor-software/jdbl)
+[![codecov](https://codecov.io/gh/castor-software/jdbl/branch/master/graph/badge.svg?token=9tmwm3Pj7y)](https://codecov.io/gh/castor-software/jdbl)
 
 
 <!--
