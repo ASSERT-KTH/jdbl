@@ -13,7 +13,7 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        os: [ ubuntu-latest, windows-latest ]
+        os: [ ubuntu-latest ]
         java: [ 11 ]
     runs-on: ${{ matrix.os }}
     name: Build with Java ${{ matrix.java }} on ${{ matrix.os }}
