@@ -1,7 +1,7 @@
 <img align="left" src="https://github.com/castor-software/jdbl/blob/master/logo.svg" height="100px"  alt="JDBL logo"/>
 
 
-[![Build Status](https://travis-ci.org/castor-software/jdbl.svg?branch=master)](https://travis-ci.org/castor-software/jdbl)
+[![build](https://github.com/castor-software/jdbl/actions/workflows/build.yml/badge.svg)](https://github.com/castor-software/jdbl/actions/workflows/build.yml)
 [![Maven Central](https://img.shields.io/maven-central/v/se.kth.castor/jdbl-core.svg)](https://search.maven.org/search?q=g:se.kth.castor%20AND%20a:jdbl*)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=castor-software_jdbl&metric=alert_status)](https://sonarcloud.io/dashboard?id=castor-software_jdbl)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=castor-software_jdbl&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=castor-software_jdbl)
@@ -13,7 +13,7 @@
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=castor-software_jdbl&metric=ncloc)](https://sonarcloud.io/dashboard?id=castor-software_jdbl)
 [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=castor-software_jdbl&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=castor-software_jdbl)
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=castor-software_jdbl&metric=sqale_index)](https://sonarcloud.io/dashboard?id=castor-software_jdbl)
-[![Coverage Status](https://coveralls.io/repos/github/castor-software/jdbl/badge.svg)](https://coveralls.io/github/castor-software/jdbl)
+[![codecov](https://codecov.io/gh/castor-software/jdbl/branch/master/graph/badge.svg?token=9tmwm3Pj7y)](https://codecov.io/gh/castor-software/jdbl)
 
 
 <!--
@@ -24,13 +24,18 @@
 
 ## What is JDBL?
 
-JDBL is a **J**ava **D**e**BL**oat tool. With JDBL, developers can automatically specialize Java libraries at build-time through dynamic debloat. JDBL executes the library and removes the dependencies, classes, and methods that are not needed to provide the expected output. The result is a smaller bundled file (e.g., JAR or WAR), which is tailored to the specific needs of the client. JDBL is great because it saves space on disk, reduces the attack surface, and improves performance of the client application. JDBL can be used as a Maven plugin (see [usage](https://github.com/castor-software/jdbl/tree/master#usage)), with minimal or zero configuration effort.
+JDBL is a **J**ava **D**e**BL**oat tool. With JDBL, developers can automatically specialize Java libraries at build-time through dynamic debloating. 
+JDBL executes the library and removes the methods, classes, and dependencies that are not needed to provide the expected output. The result is a smaller bundled file (e.g., JAR or WAR), which is tailored to the specific needs of the client. Using JDBL is great because it saves space on disk, reduces the attack surface, and improves performance of the client application. JDBL can be used as a Maven plugin (see [usage](https://github.com/castor-software/jdbl/tree/master#usage)), with minimal or zero configuration effort.
 
 ## How does JDBL work?
 
-JDBL is executed before the `package` phase of the Maven build lifecycle. First, JDBL compiles and [instruments](https://en.wikipedia.org/wiki/Instrumentation_(computer_programming)) the bytecodes of the application and its dependencies. Then, JDBL collects [execution traces](https://en.wikipedia.org/wiki/Tracing_(software)) by executing the application based on a given workload. All the API members (e.g., classes and methods) used during the execution are collected at run-time. For more details about the coverage technique employed by JDBL read this [blog post](https://www.cesarsotovalero.net/2020-06-08-diversity-driven-software-debloat/). JDBL removes the rest of unused API members through bytecode transformations. Finally, the debloated application movest to the Maven `package` phase where the debloated application is bundled as a JAR or WAR file. 
+JDBL is executed before the `package` phase of the Maven build lifecycle. First, JDBL compiles and [instruments](https://en.wikipedia.org/wiki/Instrumentation_(computer_programming)) the bytecodes of the application and its dependencies. 
+Then, JDBL collects accurate coverage information by executing the application based on a given workload. 
+All the API members (e.g., classes and methods) used during the execution are collected at runtime. 
+For more details about the coverage technique employed by JDBL read this [blog post](https://www.cesarsotovalero.net/blog/diversity-driven-software-debloat.html). JDBL removes the rest of unused API members through bytecode transformations using the [ASM](https://asm.ow2.io/) library.
+Finally, the debloated application is validated through the Maven `package` phase and it is bundled as a JAR or WAR file. 
 
-**NOTE:** JDBL produces a smaller, specialized version of the Java application without modifying its source code. The modified version is automatically packaged as a JAR file as resulting from the Maven build lifecycle.
+**NOTE:** JDBL produces a smaller, debloated version of the Java application without modifying its source code. The modified version is automatically packaged as a JAR file as resulting from the Maven build lifecycle.
 
 <!--
 JDBL supports three types of debloating strategies:
@@ -49,7 +54,7 @@ The **conservative-debloat** strategy is the less aggressive approach. It relies
 
 ## Why is JDBL different?
 
-Existing debloat tools for Java (e.g., Proguard) are rather conservative when removing API members because they rely on static analysis. In contrast, JDBL takes advantage of dynamic analysis to shrink all the bytecode that is not used during a particular execution trace. This way, JDBL outperforms competitors by removing more unnecessary while keeping the desired functionality. JDBL is fully automatic; no configuration is required.
+Existing debloating tools for Java (e.g., Proguard) are rather conservative when removing API members because they rely on static analysis. In contrast, JDBL takes advantage of dynamic analysis to shrink all the bytecode that is not used during a particular execution trace. This way, JDBL outperforms competitors by removing more unnecessary while keeping the desired functionality. JDBL is fully automatic; no configuration is required.
 
 ## Usage
 
