@@ -1,4 +1,4 @@
-<img align="left" src="https://github.com/castor-software/jdbl/blob/master/logo.svg" height="100px"  alt="JDBL logo"/>
+# JDBL <img src=".img/logo.svg" align="left" height="135px" alt="DepTrim logo"/>
 
 
 [![build](https://github.com/castor-software/jdbl/actions/workflows/build.yml/badge.svg)](https://github.com/castor-software/jdbl/actions/workflows/build.yml)
